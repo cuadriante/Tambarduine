@@ -20,9 +20,21 @@ def p_term_times(p):
     'term : term TIMES factor'
     p[0] = p[1] * p[3]
 
+def p_term_exponente(p):
+    'term : term EXPONENTE factor'
+    p[0] = p[1] ** p[3]
+
 def p_term_div(p):
     'term : term DIVIDE factor'
     p[0] = p[1] / p[3]
+
+def p_term_mod(p):
+    'term : term MODULO factor'
+    p[0] = p[1] % p[3]
+
+def p_term_divent(p):
+    'term : term DIVENTERA factor'
+    p[0] = p[1] // p[3]
 
 def p_term_factor(p):
     'term : factor'
@@ -43,16 +55,17 @@ def p_error(p):
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE'),
+    ('left', 'TIMES', 'DIVIDE', "MODULO", "DIVENTERA"),
+    ("left", "EXPONENTE")
 )
 
 
 # Build the parser
-parser = yacc.yacc()
+""" parser = yacc.yacc()
 
 
 ast = parser.parse('2 * 3 + 4 * (5 - 6)')
-print(ast)
+print(ast) """
 
 """ while True:
     try:

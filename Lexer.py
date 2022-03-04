@@ -20,7 +20,10 @@ tokens = [
     'PLUS',
     'MINUS',
     'TIMES',
+    "EXPONENTE",
+    "DIVENTERA",
     'DIVIDE',
+    "MODULO",
     'LPAREN',
     'RPAREN',
     "ID",
@@ -33,6 +36,9 @@ t_TIMES   = r'\*'
 t_DIVIDE  = r'/'
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
+t_EXPONENTE = r"\*\*"
+t_MODULO = r"%"
+t_DIVENTERA = r"//"
 
 t_ignore  = ' \t'
 
