@@ -1,6 +1,6 @@
-from Yacc import *
+from src.yacc import *
 
-operacoines = [
+operaciones = [
     "3 + 5 -2",
     "4*3/2",
     "(5-3)*3",
@@ -27,7 +27,7 @@ soluciones = [
 parser = yacc.yacc()
 resultados = []
 
-for i in operacoines:
+for i in operaciones:
     resultados.append(parser.parse(i))
     
 for i in range(len(resultados)):
@@ -35,5 +35,5 @@ for i in range(len(resultados)):
         isCorrecta = True
     else:
         isCorrecta = False
-    print(f"Operación:  {operacoines[i]}  |  Resultado: {resultados[i]}  |  Solución: {soluciones[i]}  |  Correcta: {isCorrecta} ")
+    print(f"Operación:  {operaciones[i]}  |  Resultado: {resultados[i]}  |  Solución: {soluciones[i]}  |  Correcta: {isCorrecta} ")
 
