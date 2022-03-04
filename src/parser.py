@@ -1,5 +1,5 @@
 import ply.yacc as yacc
-from Lexer import tokens
+from lexer import tokens
 
 # Get the token map from the lexer.  This is required.
 
