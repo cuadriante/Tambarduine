@@ -1,4 +1,4 @@
-from src.yacc import *
+from src.parser import *
 
 operaciones = [
     "3 + 5 -2",

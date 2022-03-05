@@ -1,4 +1,5 @@
 import ply.lex as lex
+from ply.lex import TOKEN
 import re
 import codecs
 import os
@@ -7,6 +8,7 @@ import sys
 # List of token names.   This is always required
 tokens = (
     'IN',
+    'BOOL',
     'NUMBER',
     'PLUS',
     'MINUS',
@@ -17,9 +19,16 @@ tokens = (
     'WHOLEDIVIDE',
     'LPAREN',
     'RPAREN',
+    'LBRACE',
+    'RBRACE',
     'ASSIGN',
     'COMMENT',
+    'ID',
+    'VAR',
+    'SEMICOLON',
+    'CCODE',
 )
+
 reserved = {
     "set": "SET",
     "abanico": "ABANICO",
@@ -28,12 +37,13 @@ reserved = {
     "golpe": "GOLPE",
     "vibrato": "VIBRATO",
     "metronomo": "METRONOMO",
-    "print!": "PRINT!",
     "if": "IF",
     "else": "ELSE",
     "while": "WHILE",
     "for": "FOR",
 }
+
+tokens = tokens + tuple(reserved.values())
 
 # Regular expression rules for simple tokens
 t_PLUS = r'\+'
@@ -45,7 +55,33 @@ t_DIVIDE = r'/'
 t_WHOLEDIVIDE = r'//'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_ASSIGN = r','
+t_SEMICOLON = r';'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
 t_ignore = ' \t'
+t_ccode_ignore = " \t\n"
+
+# Declare the state
+states = (
+    ('ccode', 'exclusive'),
+)
+
+# Define a rule so we can track line numbers
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+
+# Error handling rule
+def t_error(t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+
+
+def t_ccode_error(t):
+    print("Illegal character in bracket '%s'" % t.value[0])
+    t.lexer.skip(1)
 
 
 # A regular expression rule with some action code
@@ -55,25 +91,59 @@ def t_NUMBER(t):
     return t
 
 
-# Define a rule so we can track line numbers
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+def t_BOOL(t):
+    r'(1+0)*(1+0)'
+    t.value = int(t.value)
+    return t
 
-# Error handling rule
-def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
 
 def t_COMMENT(t):
     r'\#.*'
     pass
     # No return value. Token discarded
 
-def t_ID(t):
-    r'@[a-zA-Z_0-9?]^3[a-zA-Z_0-9?]*'
-    t.type = reserved.get(t.value, 'ID')  # Check for reserved words
+
+def t_VAR(t):
+    r'@[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
+    t.type = reserved.get(t.value, 'VAR')  # Check for reserved words
     return t
+
+
+def t_ID(t):
+    r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
+    if reserved.get(t.value):
+        var = t.type == reserved.get(t.value, 'ID')  # Check for reserved words
+        return t
+    else:
+        print("Illegal character '%s'" % t.value)
+        t.lexer.skip(1)
+
+
+# Match the first {. Enter ccode state.
+def t_ccode(t):
+    r'\{'
+    t.lexer.code_start = t.lexer.lexpos  # Record the starting position
+    t.lexer.level = 1  # Initial brace level
+    t.lexer.begin('ccode')  # Enter 'ccode' state
+
+
+# Rules for the ccode state
+def t_ccode_lbrace(t):
+    r'\{'
+    t.lexer.level += 1
+
+
+def t_ccode_rbrace(t):
+    r'\}'
+    t.lexer.level -= 1
+
+    # If closing brace, return the code fragment
+    if t.lexer.level == 0:
+        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
+        t.type = "CCODE"
+        t.lexer.lineno += t.value.count('\n')
+        t.lexer.begin('INITIAL')
+        return t
 
 
 def find_doc(direc):
@@ -118,18 +188,3 @@ while True:
     if not token:
         break
     print(token)
-
-""" 
-# Test it out
-data = " 3 + 4 * 10 + -20 *2"
-
-# Give the lexer some input
-lexer.input(data)
-
-# Tokenize
-while True:
-    tok = lexer.token()
-    if not tok: 
-        break      # No more input
-    print(tok)
-     """
