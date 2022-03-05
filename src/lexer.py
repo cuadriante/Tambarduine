@@ -30,10 +30,11 @@ tokens = (
     'RBRACE',
     'ASSIGN',
     'COMMENT',
-    'ID',
+    'RESERVED',
     'VAR',
     'SEMICOLON',
     'CCODE',
+    'FUNCTION',
 )
 
 reserved = {
@@ -132,14 +133,20 @@ def t_VAR(t):
     return t
 
 
-def t_ID(t):
+def t_RESERVED(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
     if reserved.get(t.value):
-        var = t.type == reserved.get(t.value, 'ID')  # Check for reserved words
+        var = t.type == reserved.get(t.value, 'RESERVED')  # Check for reserved words
         return t
     else:
         print("Illegal character '%s'" % t.value)
         t.lexer.skip(1)
+
+def t_FUNCTION(t):
+    r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*()'
+    var = t.type == reserved.get(t.value, 'RESERVED')  # Check for reserved words
+    return t
+
 
 
 # Match the first {. Enter ccode state.
