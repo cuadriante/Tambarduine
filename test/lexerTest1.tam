@@ -1,9 +1,14 @@
 # Test
 bork @data@, 3;
 
-set @SET, 10; asdsadasd
+set @1234, 101;
+
+set @SET, 10;
+asdsadasd;
+
+1 <= 2;
 
 while {
-tengo hambre
-mucha hambre
-}
+if 1 <= 2;
+entons;
+};

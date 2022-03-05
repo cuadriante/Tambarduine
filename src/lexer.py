@@ -17,6 +17,13 @@ tokens = (
     'POWER',
     'DIVIDE',
     'WHOLEDIVIDE',
+    'EQUAL',
+    'EQUALS',
+    'DIFFERENT',
+    'LESSTHAN',
+    'MORETHAN',
+    'LESSTHANE',
+    'MORETHANE',
     'LPAREN',
     'RPAREN',
     'LBRACE',
@@ -41,6 +48,13 @@ reserved = {
     "else": "ELSE",
     "while": "WHILE",
     "for": "FOR",
+    "enCaso": "ENCASO",
+    "entons": "ENTONS",
+    "cuando": "CUANDO",
+    "siNo": "SINO",
+    "finEnCaso": "FINENCASO",
+    "def": "DEF",
+    "exec": "EXEC",
 }
 
 tokens = tokens + tuple(reserved.values())
@@ -53,6 +67,13 @@ t_POWER = r'\*\*'
 t_TIMES = r'\*'
 t_DIVIDE = r'/'
 t_WHOLEDIVIDE = r'//'
+t_EQUAL = r'='
+t_EQUALS = r'=='
+t_DIFFERENT = r'<>'
+t_LESSTHAN = r'<'
+t_MORETHAN = r'>'
+t_LESSTHANE = r'<='
+t_MORETHANE = r'>='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_ASSIGN = r','
@@ -64,7 +85,7 @@ t_ccode_ignore = " \t\n"
 
 # Declare the state
 states = (
-    ('ccode', 'exclusive'),
+    ('ccode', 'inclusive'),
 )
 
 # Define a rule so we can track line numbers
@@ -72,6 +93,9 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+def t_ccode_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
 # Error handling rule
 def t_error(t):
@@ -99,8 +123,7 @@ def t_BOOL(t):
 
 def t_COMMENT(t):
     r'\#.*'
-    pass
-    # No return value. Token discarded
+    pass # No return value. Token discarded
 
 
 def t_VAR(t):
@@ -134,7 +157,7 @@ def t_ccode_lbrace(t):
 
 
 def t_ccode_rbrace(t):
-    r'\}'
+    r'\};'
     t.lexer.level -= 1
 
     # If closing brace, return the code fragment
