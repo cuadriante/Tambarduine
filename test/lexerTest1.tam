@@ -11,7 +11,7 @@ def pain(){
 while {
 if 1 <= 2;
 entons;
-};
+}
 };
 
 exec pain()

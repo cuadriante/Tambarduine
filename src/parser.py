@@ -1,5 +1,18 @@
 import ply.yacc as yacc
+import os
+import codecs
+import re
 from lexer import tokens
+from sys import stdin
+
+precedence = ( # evitar errores del analizador sintactico , definir prioridad de tokens
+    ('right', 'ASSIGN'),
+    ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'TIMES', 'DIVIDE', 'WHOLEDIVIDE', 'MODULE'),
+    ('left', 'POWER'),
+    ('left', 'TRUE', 'FALSE'),
+    )
 
 # Get the token map from the lexer.  This is required.
 
@@ -29,11 +42,11 @@ def p_term_div(p):
     p[0] = p[1] / p[3]
 
 def p_term_mod(p):
-    'term : term MODULO factor'
+    'term : term MODULE factor'
     p[0] = p[1] % p[3]
 
-def p_term_divent(p):
-    'term : term DIVENTERA factor'
+def p_term_wholediv(p):
+    'term : term WHOLEDIVIDE factor'
     p[0] = p[1] // p[3]
 
 def p_term_factor(p):
@@ -52,12 +65,6 @@ def p_factor_expr(p):
 def p_error(p):
     print("Syntax error in input!")
 
-
-precedence = (
-    ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE', "MODULO", "DIVENTERA"),
-    ("left", "EXPONENTE")
-)
 
 
 # Build the parser

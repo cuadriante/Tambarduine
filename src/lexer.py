@@ -35,6 +35,8 @@ tokens = (
     'SEMICOLON',
     'CCODE',
     'FUNCTION',
+    'TRUE',
+    'FALSE',
 )
 
 reserved = {
@@ -83,6 +85,8 @@ t_LBRACE = r'\{'
 t_RBRACE = r'\}'
 t_ignore = ' \t'
 t_ccode_ignore = " \t\n"
+t_TRUE = r'.t'
+T_FALSE = r'.f'
 
 # Declare the state
 states = (
