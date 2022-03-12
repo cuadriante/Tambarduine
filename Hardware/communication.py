@@ -8,11 +8,11 @@ signal = serial.Serial('/dev/ttyACM0', 9600)
 
 
 def led_on():
-    signal.write(bytes('1', 'utf-8'))
+    signal.write(bytes('1', 'utf-8'))  # Envia un string '1' al arduino
 
 
 def led_off():
-    signal.write(bytes('0', 'utf-8'))
+    signal.write(bytes('0', 'utf-8'))  # Envia un string '0' al arduino
 
 
 communicating = True

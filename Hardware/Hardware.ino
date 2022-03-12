@@ -1,7 +1,6 @@
 // Para subir el código desde linux
 // ls -l /dev/ttyACM*
 // sudo chmod a+rw /dev/ttyACM0
-// sudo adduser rijegaro /dev/ttyACM0
 
 int input_value;
 void setup() {
@@ -13,8 +12,8 @@ void setup() {
 }
 
 void loop() {
-  while (!Serial.available());
-  input_value = Serial.readString().toInt();
+  while (!Serial.available()); // No hace nada hasta que no se abra el puerto serial
+  input_value = Serial.readString().toInt(); // Lee el valor recibido y lo convierte a int
   if(input_value == 1){
     led_on();
   }else{
