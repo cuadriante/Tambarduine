@@ -16,6 +16,7 @@ tokens = (
     'TIMES',
     'POWER',
     'DIVIDE',
+    "MODULE",
     'WHOLEDIVIDE',
     'EQUAL',
     'EQUALS',
@@ -26,6 +27,7 @@ tokens = (
     'MORETHANE',
     'LPAREN',
     'RPAREN',
+    "EXPONENTE",
     'LBRACE',
     'RBRACE',
     'ASSIGN',
@@ -69,6 +71,7 @@ t_NEGATIVE = r'-'
 t_POWER = r'\*\*'
 t_TIMES = r'\*'
 t_DIVIDE = r'/'
+t_MODULE = r"%"
 t_WHOLEDIVIDE = r'//'
 t_EQUAL = r'='
 t_EQUALS = r'=='
@@ -139,8 +142,8 @@ def t_VAR(t):
 
 def t_RESERVED(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
-    if reserved.get(t.value):
-        var = t.type == reserved.get(t.value, 'RESERVED')  # Check for reserved words
+    if reserved.get(t.value.lower()):
+        var = t.type == reserved.get(t.value.lower(), 'RESERVED')  # Check for reserved words
         return t
     else:
         print("Illegal character '%s'" % t.value)
@@ -179,7 +182,7 @@ def t_ccode_rbrace(t):
         t.lexer.begin('INITIAL')
         return t
 
-
+""" 
 def find_doc(direc):
     global files
     docs = []
@@ -213,12 +216,21 @@ fp = codecs.open(test, 'r', None, 'strict', - 1)
 # fp = codecs.open(test, "r", "utf-8")
 arr = fp.read()
 fp.close()
+"""
 
 lexer = lex.lex()
-lexer.input(arr)
+#arr = "SET @123, 5;"
+#lexer.input(arr)
 
-while True:
-    token = lexer.token()
-    if not token:
-        break
-    print(token)
+
+
+
+
+def print_lexer():
+    print("--------LISTA DE TOKENS-------")
+    while True:
+        token = lexer.token()
+        if not token:
+            break
+        print(token)
+    print("------------------------------")

@@ -1,5 +1,6 @@
 from ast import parse
 from lib2to3.pgen2.token import NUMBER
+
 from symbolTable import SymbolTable
 import ply.yacc as yacc
 import os
@@ -40,10 +41,9 @@ def p_expression_var(p):
 def p_expression_arith(p):
     'expression : arith-expression'
     p[0] = p[1]
-    
 
 
-#ARITH-EXPRESSION
+#arith-expr
 def p_arith_comp(p):
     '''arith-expression : arith-expression EQUALS term
                 | arith-expression DIFFERENT term
@@ -63,9 +63,11 @@ def p_arith_comp(p):
         p[0] = p[1] <= p[3]
     elif p[2] == ">=":
         p[0] = p[1] >= p[3]
+
 def p_comp_negative(p):
     "arith-expression : NEGATIVE arith-expression"
     p[0] = not p[2]
+
 def p_arith_plus(p):
     'arith-expression : arith-expression PLUS term'
     p[0] = p[1] + p[3]
@@ -75,6 +77,7 @@ def p_arith_minus(p):
 def p_arith_term(p):
     'arith-expression : term'
     p[0] = p[1]
+
 
 #TERM
 def p_term_times(p):
@@ -147,4 +150,7 @@ def get_var_value(var_name):
         return 
     return value
 
-   
+"""
+Itera hasta el infinito comp.
+Y si quito comp y la hago una expresión? 
+"""

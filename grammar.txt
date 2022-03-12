@@ -1,0 +1,35 @@
+
+PARSER:
+
+expr            : RESERVED VAR ASSIGN expr 
+                | arith-expr
+
+arith-expr      : arith-expression (PLUS|MINUS) term
+                | term
+
+term            : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
+                | factor
+
+factor          :NUMBER
+                | VAR
+                | LPAREN factor RPAREN
+
+--------------------------------------------
+
+COPY:
+
+expr            : RESERVED VAR ASSIGN expr 
+                | arith-expr
+
+arith-expr      : arith-expression (PLUS|MINUS) term
+                | arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) term
+                | NEGATIVE arith-expression
+                | term
+
+term            : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
+                | factor
+
+factor          :NUMBER
+                | VAR
+                | LPAREN factor RPAREN
+

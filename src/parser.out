@@ -2,380 +2,1001 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    ABANICO
+    BOOL
+    CCODE
     COMMENT
-    ID
+    CUANDO
+    DEF
+    ELSE
+    ENCASO
+    ENTONS
+    EQUAL
+    EXEC
+    EXPONENTE
+    FALSE
+    FINENCASO
+    FOR
+    FUNCTION
+    GOLPE
+    IF
+    IN
+    LBRACE
+    METRONOMO
+    PERCUTOR
+    RBRACE
+    SEMICOLON
+    SET
+    SINO
+    TRUE
+    VERTICAL
+    VIBRATO
+    WHILE
 
 Grammar
 
 Rule 0     S' -> expression
-Rule 1     expression -> expression PLUS term
-Rule 2     expression -> expression MINUS term
-Rule 3     expression -> term
-Rule 4     term -> term TIMES factor
-Rule 5     term -> term EXPONENTE factor
-Rule 6     term -> term DIVIDE factor
-Rule 7     term -> term MODULO factor
-Rule 8     term -> term DIVENTERA factor
-Rule 9     term -> factor
-Rule 10    factor -> NUMBER
-Rule 11    factor -> LPAREN expression RPAREN
+Rule 1     expression -> RESERVED VAR ASSIGN expression
+Rule 2     expression -> arith-expression
+Rule 3     arith-expression -> arith-expression EQUALS term
+Rule 4     arith-expression -> arith-expression DIFFERENT term
+Rule 5     arith-expression -> arith-expression LESSTHAN term
+Rule 6     arith-expression -> arith-expression MORETHAN term
+Rule 7     arith-expression -> arith-expression LESSTHANE term
+Rule 8     arith-expression -> arith-expression MORETHANE term
+Rule 9     arith-expression -> NEGATIVE arith-expression
+Rule 10    arith-expression -> arith-expression PLUS term
+Rule 11    arith-expression -> arith-expression MINUS term
+Rule 12    arith-expression -> term
+Rule 13    term -> term TIMES factor
+Rule 14    term -> term POWER factor
+Rule 15    term -> term DIVIDE factor
+Rule 16    term -> term MODULE factor
+Rule 17    term -> term WHOLEDIVIDE factor
+Rule 18    term -> factor
+Rule 19    factor -> NUMBER
+Rule 20    factor -> VAR
+Rule 21    factor -> LPAREN expression RPAREN
 
 Terminals, with rules where they appear
 
+ABANICO              : 
+ASSIGN               : 1
+BOOL                 : 
+CCODE                : 
 COMMENT              : 
-DIVENTERA            : 8
-DIVIDE               : 6
-EXPONENTE            : 5
-ID                   : 
-LPAREN               : 11
-MINUS                : 2
-MODULO               : 7
-NUMBER               : 10
-PLUS                 : 1
-RPAREN               : 11
-TIMES                : 4
+CUANDO               : 
+DEF                  : 
+DIFFERENT            : 4
+DIVIDE               : 15
+ELSE                 : 
+ENCASO               : 
+ENTONS               : 
+EQUAL                : 
+EQUALS               : 3
+EXEC                 : 
+EXPONENTE            : 
+FALSE                : 
+FINENCASO            : 
+FOR                  : 
+FUNCTION             : 
+GOLPE                : 
+IF                   : 
+IN                   : 
+LBRACE               : 
+LESSTHAN             : 5
+LESSTHANE            : 7
+LPAREN               : 21
+METRONOMO            : 
+MINUS                : 11
+MODULE               : 16
+MORETHAN             : 6
+MORETHANE            : 8
+NEGATIVE             : 9
+NUMBER               : 19
+PERCUTOR             : 
+PLUS                 : 10
+POWER                : 14
+RBRACE               : 
+RESERVED             : 1
+RPAREN               : 21
+SEMICOLON            : 
+SET                  : 
+SINO                 : 
+TIMES                : 13
+TRUE                 : 
+VAR                  : 1 20
+VERTICAL             : 
+VIBRATO              : 
+WHILE                : 
+WHOLEDIVIDE          : 17
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 11 0
-factor               : 4 5 6 7 8 9
-term                 : 1 2 3 4 5 6 7 8
+arith-expression     : 2 3 4 5 6 7 8 9 10 11
+expression           : 1 21 0
+factor               : 13 14 15 16 17 18
+term                 : 3 4 5 6 7 8 10 11 12 13 14 15 16 17
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . expression
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term EXPONENTE factor
-    (6) term -> . term DIVIDE factor
-    (7) term -> . term MODULO factor
-    (8) term -> . term DIVENTERA factor
-    (9) term -> . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (1) expression -> . RESERVED VAR ASSIGN expression
+    (2) expression -> . arith-expression
+    (3) arith-expression -> . arith-expression EQUALS term
+    (4) arith-expression -> . arith-expression DIFFERENT term
+    (5) arith-expression -> . arith-expression LESSTHAN term
+    (6) arith-expression -> . arith-expression MORETHAN term
+    (7) arith-expression -> . arith-expression LESSTHANE term
+    (8) arith-expression -> . arith-expression MORETHANE term
+    (9) arith-expression -> . NEGATIVE arith-expression
+    (10) arith-expression -> . arith-expression PLUS term
+    (11) arith-expression -> . arith-expression MINUS term
+    (12) arith-expression -> . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    RESERVED        shift and go to state 2
+    NEGATIVE        shift and go to state 6
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
     expression                     shift and go to state 1
-    term                           shift and go to state 2
-    factor                         shift and go to state 3
+    arith-expression               shift and go to state 4
+    term                           shift and go to state 5
+    factor                         shift and go to state 7
 
 state 1
 
     (0) S' -> expression .
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
 
-    PLUS            shift and go to state 6
-    MINUS           shift and go to state 7
 
 
 state 2
 
-    (3) expression -> term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . EXPONENTE factor
-    (6) term -> term . DIVIDE factor
-    (7) term -> term . MODULO factor
-    (8) term -> term . DIVENTERA factor
+    (1) expression -> RESERVED . VAR ASSIGN expression
 
-    PLUS            reduce using rule 3 (expression -> term .)
-    MINUS           reduce using rule 3 (expression -> term .)
-    $end            reduce using rule 3 (expression -> term .)
-    RPAREN          reduce using rule 3 (expression -> term .)
-    TIMES           shift and go to state 8
-    EXPONENTE       shift and go to state 9
-    DIVIDE          shift and go to state 10
-    MODULO          shift and go to state 11
-    DIVENTERA       shift and go to state 12
+    VAR             shift and go to state 10
 
 
 state 3
 
-    (9) term -> factor .
+    (20) factor -> VAR .
 
-    TIMES           reduce using rule 9 (term -> factor .)
-    EXPONENTE       reduce using rule 9 (term -> factor .)
-    DIVIDE          reduce using rule 9 (term -> factor .)
-    MODULO          reduce using rule 9 (term -> factor .)
-    DIVENTERA       reduce using rule 9 (term -> factor .)
-    PLUS            reduce using rule 9 (term -> factor .)
-    MINUS           reduce using rule 9 (term -> factor .)
-    $end            reduce using rule 9 (term -> factor .)
-    RPAREN          reduce using rule 9 (term -> factor .)
+    TIMES           reduce using rule 20 (factor -> VAR .)
+    POWER           reduce using rule 20 (factor -> VAR .)
+    DIVIDE          reduce using rule 20 (factor -> VAR .)
+    MODULE          reduce using rule 20 (factor -> VAR .)
+    WHOLEDIVIDE     reduce using rule 20 (factor -> VAR .)
+    EQUALS          reduce using rule 20 (factor -> VAR .)
+    DIFFERENT       reduce using rule 20 (factor -> VAR .)
+    LESSTHAN        reduce using rule 20 (factor -> VAR .)
+    MORETHAN        reduce using rule 20 (factor -> VAR .)
+    LESSTHANE       reduce using rule 20 (factor -> VAR .)
+    MORETHANE       reduce using rule 20 (factor -> VAR .)
+    PLUS            reduce using rule 20 (factor -> VAR .)
+    MINUS           reduce using rule 20 (factor -> VAR .)
+    $end            reduce using rule 20 (factor -> VAR .)
+    RPAREN          reduce using rule 20 (factor -> VAR .)
 
 
 state 4
 
-    (10) factor -> NUMBER .
+    (2) expression -> arith-expression .
+    (3) arith-expression -> arith-expression . EQUALS term
+    (4) arith-expression -> arith-expression . DIFFERENT term
+    (5) arith-expression -> arith-expression . LESSTHAN term
+    (6) arith-expression -> arith-expression . MORETHAN term
+    (7) arith-expression -> arith-expression . LESSTHANE term
+    (8) arith-expression -> arith-expression . MORETHANE term
+    (10) arith-expression -> arith-expression . PLUS term
+    (11) arith-expression -> arith-expression . MINUS term
 
-    TIMES           reduce using rule 10 (factor -> NUMBER .)
-    EXPONENTE       reduce using rule 10 (factor -> NUMBER .)
-    DIVIDE          reduce using rule 10 (factor -> NUMBER .)
-    MODULO          reduce using rule 10 (factor -> NUMBER .)
-    DIVENTERA       reduce using rule 10 (factor -> NUMBER .)
-    PLUS            reduce using rule 10 (factor -> NUMBER .)
-    MINUS           reduce using rule 10 (factor -> NUMBER .)
-    $end            reduce using rule 10 (factor -> NUMBER .)
-    RPAREN          reduce using rule 10 (factor -> NUMBER .)
+    $end            reduce using rule 2 (expression -> arith-expression .)
+    RPAREN          reduce using rule 2 (expression -> arith-expression .)
+    EQUALS          shift and go to state 11
+    DIFFERENT       shift and go to state 12
+    LESSTHAN        shift and go to state 13
+    MORETHAN        shift and go to state 14
+    LESSTHANE       shift and go to state 15
+    MORETHANE       shift and go to state 16
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
 
 
 state 5
 
-    (11) factor -> LPAREN . expression RPAREN
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term EXPONENTE factor
-    (6) term -> . term DIVIDE factor
-    (7) term -> . term MODULO factor
-    (8) term -> . term DIVENTERA factor
-    (9) term -> . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (12) arith-expression -> term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    EQUALS          reduce using rule 12 (arith-expression -> term .)
+    DIFFERENT       reduce using rule 12 (arith-expression -> term .)
+    LESSTHAN        reduce using rule 12 (arith-expression -> term .)
+    MORETHAN        reduce using rule 12 (arith-expression -> term .)
+    LESSTHANE       reduce using rule 12 (arith-expression -> term .)
+    MORETHANE       reduce using rule 12 (arith-expression -> term .)
+    PLUS            reduce using rule 12 (arith-expression -> term .)
+    MINUS           reduce using rule 12 (arith-expression -> term .)
+    $end            reduce using rule 12 (arith-expression -> term .)
+    RPAREN          reduce using rule 12 (arith-expression -> term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
 
-    expression                     shift and go to state 13
-    term                           shift and go to state 2
-    factor                         shift and go to state 3
 
 state 6
 
-    (1) expression -> expression PLUS . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term EXPONENTE factor
-    (6) term -> . term DIVIDE factor
-    (7) term -> . term MODULO factor
-    (8) term -> . term DIVENTERA factor
-    (9) term -> . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (9) arith-expression -> NEGATIVE . arith-expression
+    (3) arith-expression -> . arith-expression EQUALS term
+    (4) arith-expression -> . arith-expression DIFFERENT term
+    (5) arith-expression -> . arith-expression LESSTHAN term
+    (6) arith-expression -> . arith-expression MORETHAN term
+    (7) arith-expression -> . arith-expression LESSTHANE term
+    (8) arith-expression -> . arith-expression MORETHANE term
+    (9) arith-expression -> . NEGATIVE arith-expression
+    (10) arith-expression -> . arith-expression PLUS term
+    (11) arith-expression -> . arith-expression MINUS term
+    (12) arith-expression -> . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    NEGATIVE        shift and go to state 6
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
-    term                           shift and go to state 14
-    factor                         shift and go to state 3
+    arith-expression               shift and go to state 24
+    term                           shift and go to state 5
+    factor                         shift and go to state 7
 
 state 7
 
-    (2) expression -> expression MINUS . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term EXPONENTE factor
-    (6) term -> . term DIVIDE factor
-    (7) term -> . term MODULO factor
-    (8) term -> . term DIVENTERA factor
-    (9) term -> . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (18) term -> factor .
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    TIMES           reduce using rule 18 (term -> factor .)
+    POWER           reduce using rule 18 (term -> factor .)
+    DIVIDE          reduce using rule 18 (term -> factor .)
+    MODULE          reduce using rule 18 (term -> factor .)
+    WHOLEDIVIDE     reduce using rule 18 (term -> factor .)
+    EQUALS          reduce using rule 18 (term -> factor .)
+    DIFFERENT       reduce using rule 18 (term -> factor .)
+    LESSTHAN        reduce using rule 18 (term -> factor .)
+    MORETHAN        reduce using rule 18 (term -> factor .)
+    LESSTHANE       reduce using rule 18 (term -> factor .)
+    MORETHANE       reduce using rule 18 (term -> factor .)
+    PLUS            reduce using rule 18 (term -> factor .)
+    MINUS           reduce using rule 18 (term -> factor .)
+    $end            reduce using rule 18 (term -> factor .)
+    RPAREN          reduce using rule 18 (term -> factor .)
 
-    term                           shift and go to state 15
-    factor                         shift and go to state 3
 
 state 8
 
-    (4) term -> term TIMES . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (19) factor -> NUMBER .
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    TIMES           reduce using rule 19 (factor -> NUMBER .)
+    POWER           reduce using rule 19 (factor -> NUMBER .)
+    DIVIDE          reduce using rule 19 (factor -> NUMBER .)
+    MODULE          reduce using rule 19 (factor -> NUMBER .)
+    WHOLEDIVIDE     reduce using rule 19 (factor -> NUMBER .)
+    EQUALS          reduce using rule 19 (factor -> NUMBER .)
+    DIFFERENT       reduce using rule 19 (factor -> NUMBER .)
+    LESSTHAN        reduce using rule 19 (factor -> NUMBER .)
+    MORETHAN        reduce using rule 19 (factor -> NUMBER .)
+    LESSTHANE       reduce using rule 19 (factor -> NUMBER .)
+    MORETHANE       reduce using rule 19 (factor -> NUMBER .)
+    PLUS            reduce using rule 19 (factor -> NUMBER .)
+    MINUS           reduce using rule 19 (factor -> NUMBER .)
+    $end            reduce using rule 19 (factor -> NUMBER .)
+    RPAREN          reduce using rule 19 (factor -> NUMBER .)
 
-    factor                         shift and go to state 16
 
 state 9
 
-    (5) term -> term EXPONENTE . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (21) factor -> LPAREN . expression RPAREN
+    (1) expression -> . RESERVED VAR ASSIGN expression
+    (2) expression -> . arith-expression
+    (3) arith-expression -> . arith-expression EQUALS term
+    (4) arith-expression -> . arith-expression DIFFERENT term
+    (5) arith-expression -> . arith-expression LESSTHAN term
+    (6) arith-expression -> . arith-expression MORETHAN term
+    (7) arith-expression -> . arith-expression LESSTHANE term
+    (8) arith-expression -> . arith-expression MORETHANE term
+    (9) arith-expression -> . NEGATIVE arith-expression
+    (10) arith-expression -> . arith-expression PLUS term
+    (11) arith-expression -> . arith-expression MINUS term
+    (12) arith-expression -> . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    RESERVED        shift and go to state 2
+    NEGATIVE        shift and go to state 6
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
-    factor                         shift and go to state 17
+    expression                     shift and go to state 25
+    arith-expression               shift and go to state 4
+    term                           shift and go to state 5
+    factor                         shift and go to state 7
 
 state 10
 
-    (6) term -> term DIVIDE . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (1) expression -> RESERVED VAR . ASSIGN expression
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    ASSIGN          shift and go to state 26
 
-    factor                         shift and go to state 18
 
 state 11
 
-    (7) term -> term MODULO . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (3) arith-expression -> arith-expression EQUALS . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
-    factor                         shift and go to state 19
+    term                           shift and go to state 27
+    factor                         shift and go to state 7
 
 state 12
 
-    (8) term -> term DIVENTERA . factor
-    (10) factor -> . NUMBER
-    (11) factor -> . LPAREN expression RPAREN
+    (4) arith-expression -> arith-expression DIFFERENT . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
-    factor                         shift and go to state 20
+    term                           shift and go to state 28
+    factor                         shift and go to state 7
 
 state 13
 
-    (11) factor -> LPAREN expression . RPAREN
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
+    (5) arith-expression -> arith-expression LESSTHAN . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    RPAREN          shift and go to state 21
-    PLUS            shift and go to state 6
-    MINUS           shift and go to state 7
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    term                           shift and go to state 29
+    factor                         shift and go to state 7
 
 state 14
 
-    (1) expression -> expression PLUS term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . EXPONENTE factor
-    (6) term -> term . DIVIDE factor
-    (7) term -> term . MODULO factor
-    (8) term -> term . DIVENTERA factor
+    (6) arith-expression -> arith-expression MORETHAN . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    PLUS            reduce using rule 1 (expression -> expression PLUS term .)
-    MINUS           reduce using rule 1 (expression -> expression PLUS term .)
-    $end            reduce using rule 1 (expression -> expression PLUS term .)
-    RPAREN          reduce using rule 1 (expression -> expression PLUS term .)
-    TIMES           shift and go to state 8
-    EXPONENTE       shift and go to state 9
-    DIVIDE          shift and go to state 10
-    MODULO          shift and go to state 11
-    DIVENTERA       shift and go to state 12
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    term                           shift and go to state 30
+    factor                         shift and go to state 7
 
 state 15
 
-    (2) expression -> expression MINUS term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . EXPONENTE factor
-    (6) term -> term . DIVIDE factor
-    (7) term -> term . MODULO factor
-    (8) term -> term . DIVENTERA factor
+    (7) arith-expression -> arith-expression LESSTHANE . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    PLUS            reduce using rule 2 (expression -> expression MINUS term .)
-    MINUS           reduce using rule 2 (expression -> expression MINUS term .)
-    $end            reduce using rule 2 (expression -> expression MINUS term .)
-    RPAREN          reduce using rule 2 (expression -> expression MINUS term .)
-    TIMES           shift and go to state 8
-    EXPONENTE       shift and go to state 9
-    DIVIDE          shift and go to state 10
-    MODULO          shift and go to state 11
-    DIVENTERA       shift and go to state 12
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    term                           shift and go to state 31
+    factor                         shift and go to state 7
 
 state 16
 
-    (4) term -> term TIMES factor .
+    (8) arith-expression -> arith-expression MORETHANE . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    TIMES           reduce using rule 4 (term -> term TIMES factor .)
-    EXPONENTE       reduce using rule 4 (term -> term TIMES factor .)
-    DIVIDE          reduce using rule 4 (term -> term TIMES factor .)
-    MODULO          reduce using rule 4 (term -> term TIMES factor .)
-    DIVENTERA       reduce using rule 4 (term -> term TIMES factor .)
-    PLUS            reduce using rule 4 (term -> term TIMES factor .)
-    MINUS           reduce using rule 4 (term -> term TIMES factor .)
-    $end            reduce using rule 4 (term -> term TIMES factor .)
-    RPAREN          reduce using rule 4 (term -> term TIMES factor .)
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    term                           shift and go to state 32
+    factor                         shift and go to state 7
 
 state 17
 
-    (5) term -> term EXPONENTE factor .
+    (10) arith-expression -> arith-expression PLUS . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    TIMES           reduce using rule 5 (term -> term EXPONENTE factor .)
-    EXPONENTE       reduce using rule 5 (term -> term EXPONENTE factor .)
-    DIVIDE          reduce using rule 5 (term -> term EXPONENTE factor .)
-    MODULO          reduce using rule 5 (term -> term EXPONENTE factor .)
-    DIVENTERA       reduce using rule 5 (term -> term EXPONENTE factor .)
-    PLUS            reduce using rule 5 (term -> term EXPONENTE factor .)
-    MINUS           reduce using rule 5 (term -> term EXPONENTE factor .)
-    $end            reduce using rule 5 (term -> term EXPONENTE factor .)
-    RPAREN          reduce using rule 5 (term -> term EXPONENTE factor .)
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    term                           shift and go to state 33
+    factor                         shift and go to state 7
 
 state 18
 
-    (6) term -> term DIVIDE factor .
+    (11) arith-expression -> arith-expression MINUS . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    TIMES           reduce using rule 6 (term -> term DIVIDE factor .)
-    EXPONENTE       reduce using rule 6 (term -> term DIVIDE factor .)
-    DIVIDE          reduce using rule 6 (term -> term DIVIDE factor .)
-    MODULO          reduce using rule 6 (term -> term DIVIDE factor .)
-    DIVENTERA       reduce using rule 6 (term -> term DIVIDE factor .)
-    PLUS            reduce using rule 6 (term -> term DIVIDE factor .)
-    MINUS           reduce using rule 6 (term -> term DIVIDE factor .)
-    $end            reduce using rule 6 (term -> term DIVIDE factor .)
-    RPAREN          reduce using rule 6 (term -> term DIVIDE factor .)
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    term                           shift and go to state 34
+    factor                         shift and go to state 7
 
 state 19
 
-    (7) term -> term MODULO factor .
+    (13) term -> term TIMES . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    TIMES           reduce using rule 7 (term -> term MODULO factor .)
-    EXPONENTE       reduce using rule 7 (term -> term MODULO factor .)
-    DIVIDE          reduce using rule 7 (term -> term MODULO factor .)
-    MODULO          reduce using rule 7 (term -> term MODULO factor .)
-    DIVENTERA       reduce using rule 7 (term -> term MODULO factor .)
-    PLUS            reduce using rule 7 (term -> term MODULO factor .)
-    MINUS           reduce using rule 7 (term -> term MODULO factor .)
-    $end            reduce using rule 7 (term -> term MODULO factor .)
-    RPAREN          reduce using rule 7 (term -> term MODULO factor .)
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    factor                         shift and go to state 35
 
 state 20
 
-    (8) term -> term DIVENTERA factor .
+    (14) term -> term POWER . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    TIMES           reduce using rule 8 (term -> term DIVENTERA factor .)
-    EXPONENTE       reduce using rule 8 (term -> term DIVENTERA factor .)
-    DIVIDE          reduce using rule 8 (term -> term DIVENTERA factor .)
-    MODULO          reduce using rule 8 (term -> term DIVENTERA factor .)
-    DIVENTERA       reduce using rule 8 (term -> term DIVENTERA factor .)
-    PLUS            reduce using rule 8 (term -> term DIVENTERA factor .)
-    MINUS           reduce using rule 8 (term -> term DIVENTERA factor .)
-    $end            reduce using rule 8 (term -> term DIVENTERA factor .)
-    RPAREN          reduce using rule 8 (term -> term DIVENTERA factor .)
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
 
+    factor                         shift and go to state 36
 
 state 21
 
-    (11) factor -> LPAREN expression RPAREN .
+    (15) term -> term DIVIDE . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
 
-    TIMES           reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    EXPONENTE       reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    MODULO          reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    DIVENTERA       reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    $end            reduce using rule 11 (factor -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 11 (factor -> LPAREN expression RPAREN .)
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
+
+    factor                         shift and go to state 37
+
+state 22
+
+    (16) term -> term MODULE . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
+
+    factor                         shift and go to state 38
+
+state 23
+
+    (17) term -> term WHOLEDIVIDE . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
+
+    factor                         shift and go to state 39
+
+state 24
+
+    (9) arith-expression -> NEGATIVE arith-expression .
+    (3) arith-expression -> arith-expression . EQUALS term
+    (4) arith-expression -> arith-expression . DIFFERENT term
+    (5) arith-expression -> arith-expression . LESSTHAN term
+    (6) arith-expression -> arith-expression . MORETHAN term
+    (7) arith-expression -> arith-expression . LESSTHANE term
+    (8) arith-expression -> arith-expression . MORETHANE term
+    (10) arith-expression -> arith-expression . PLUS term
+    (11) arith-expression -> arith-expression . MINUS term
+
+    EQUALS          reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    DIFFERENT       reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    LESSTHAN        reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    MORETHAN        reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    LESSTHANE       reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    MORETHANE       reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    $end            reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    RPAREN          reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .)
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
+
+  ! PLUS            [ reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .) ]
+  ! MINUS           [ reduce using rule 9 (arith-expression -> NEGATIVE arith-expression .) ]
+  ! EQUALS          [ shift and go to state 11 ]
+  ! DIFFERENT       [ shift and go to state 12 ]
+  ! LESSTHAN        [ shift and go to state 13 ]
+  ! MORETHAN        [ shift and go to state 14 ]
+  ! LESSTHANE       [ shift and go to state 15 ]
+  ! MORETHANE       [ shift and go to state 16 ]
+
+
+state 25
+
+    (21) factor -> LPAREN expression . RPAREN
+
+    RPAREN          shift and go to state 40
+
+
+state 26
+
+    (1) expression -> RESERVED VAR ASSIGN . expression
+    (1) expression -> . RESERVED VAR ASSIGN expression
+    (2) expression -> . arith-expression
+    (3) arith-expression -> . arith-expression EQUALS term
+    (4) arith-expression -> . arith-expression DIFFERENT term
+    (5) arith-expression -> . arith-expression LESSTHAN term
+    (6) arith-expression -> . arith-expression MORETHAN term
+    (7) arith-expression -> . arith-expression LESSTHANE term
+    (8) arith-expression -> . arith-expression MORETHANE term
+    (9) arith-expression -> . NEGATIVE arith-expression
+    (10) arith-expression -> . arith-expression PLUS term
+    (11) arith-expression -> . arith-expression MINUS term
+    (12) arith-expression -> . term
+    (13) term -> . term TIMES factor
+    (14) term -> . term POWER factor
+    (15) term -> . term DIVIDE factor
+    (16) term -> . term MODULE factor
+    (17) term -> . term WHOLEDIVIDE factor
+    (18) term -> . factor
+    (19) factor -> . NUMBER
+    (20) factor -> . VAR
+    (21) factor -> . LPAREN expression RPAREN
+
+    RESERVED        shift and go to state 2
+    NEGATIVE        shift and go to state 6
+    NUMBER          shift and go to state 8
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 41
+    arith-expression               shift and go to state 4
+    term                           shift and go to state 5
+    factor                         shift and go to state 7
+
+state 27
+
+    (3) arith-expression -> arith-expression EQUALS term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    DIFFERENT       reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    LESSTHAN        reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    MORETHAN        reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    LESSTHANE       reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    MORETHANE       reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    PLUS            reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    MINUS           reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    $end            reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    RPAREN          reduce using rule 3 (arith-expression -> arith-expression EQUALS term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 28
+
+    (4) arith-expression -> arith-expression DIFFERENT term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    DIFFERENT       reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    LESSTHAN        reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    MORETHAN        reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    LESSTHANE       reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    MORETHANE       reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    PLUS            reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    MINUS           reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    $end            reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    RPAREN          reduce using rule 4 (arith-expression -> arith-expression DIFFERENT term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 29
+
+    (5) arith-expression -> arith-expression LESSTHAN term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    DIFFERENT       reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    LESSTHAN        reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    MORETHAN        reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    LESSTHANE       reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    MORETHANE       reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    PLUS            reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    MINUS           reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    $end            reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    RPAREN          reduce using rule 5 (arith-expression -> arith-expression LESSTHAN term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 30
+
+    (6) arith-expression -> arith-expression MORETHAN term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    DIFFERENT       reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    LESSTHAN        reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    MORETHAN        reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    LESSTHANE       reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    MORETHANE       reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    PLUS            reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    MINUS           reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    $end            reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    RPAREN          reduce using rule 6 (arith-expression -> arith-expression MORETHAN term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 31
+
+    (7) arith-expression -> arith-expression LESSTHANE term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    DIFFERENT       reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    LESSTHAN        reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    MORETHAN        reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    LESSTHANE       reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    MORETHANE       reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    PLUS            reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    MINUS           reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    $end            reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    RPAREN          reduce using rule 7 (arith-expression -> arith-expression LESSTHANE term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 32
+
+    (8) arith-expression -> arith-expression MORETHANE term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    DIFFERENT       reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    LESSTHAN        reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    MORETHAN        reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    LESSTHANE       reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    MORETHANE       reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    PLUS            reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    MINUS           reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    $end            reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    RPAREN          reduce using rule 8 (arith-expression -> arith-expression MORETHANE term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 33
+
+    (10) arith-expression -> arith-expression PLUS term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    DIFFERENT       reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    LESSTHAN        reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    MORETHAN        reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    LESSTHANE       reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    MORETHANE       reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    PLUS            reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    MINUS           reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    $end            reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    RPAREN          reduce using rule 10 (arith-expression -> arith-expression PLUS term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 34
+
+    (11) arith-expression -> arith-expression MINUS term .
+    (13) term -> term . TIMES factor
+    (14) term -> term . POWER factor
+    (15) term -> term . DIVIDE factor
+    (16) term -> term . MODULE factor
+    (17) term -> term . WHOLEDIVIDE factor
+
+    EQUALS          reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    DIFFERENT       reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    LESSTHAN        reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    MORETHAN        reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    LESSTHANE       reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    MORETHANE       reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    PLUS            reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    MINUS           reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    $end            reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    RPAREN          reduce using rule 11 (arith-expression -> arith-expression MINUS term .)
+    TIMES           shift and go to state 19
+    POWER           shift and go to state 20
+    DIVIDE          shift and go to state 21
+    MODULE          shift and go to state 22
+    WHOLEDIVIDE     shift and go to state 23
+
+
+state 35
+
+    (13) term -> term TIMES factor .
+
+    TIMES           reduce using rule 13 (term -> term TIMES factor .)
+    POWER           reduce using rule 13 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 13 (term -> term TIMES factor .)
+    MODULE          reduce using rule 13 (term -> term TIMES factor .)
+    WHOLEDIVIDE     reduce using rule 13 (term -> term TIMES factor .)
+    EQUALS          reduce using rule 13 (term -> term TIMES factor .)
+    DIFFERENT       reduce using rule 13 (term -> term TIMES factor .)
+    LESSTHAN        reduce using rule 13 (term -> term TIMES factor .)
+    MORETHAN        reduce using rule 13 (term -> term TIMES factor .)
+    LESSTHANE       reduce using rule 13 (term -> term TIMES factor .)
+    MORETHANE       reduce using rule 13 (term -> term TIMES factor .)
+    PLUS            reduce using rule 13 (term -> term TIMES factor .)
+    MINUS           reduce using rule 13 (term -> term TIMES factor .)
+    $end            reduce using rule 13 (term -> term TIMES factor .)
+    RPAREN          reduce using rule 13 (term -> term TIMES factor .)
+
+
+state 36
+
+    (14) term -> term POWER factor .
+
+    TIMES           reduce using rule 14 (term -> term POWER factor .)
+    POWER           reduce using rule 14 (term -> term POWER factor .)
+    DIVIDE          reduce using rule 14 (term -> term POWER factor .)
+    MODULE          reduce using rule 14 (term -> term POWER factor .)
+    WHOLEDIVIDE     reduce using rule 14 (term -> term POWER factor .)
+    EQUALS          reduce using rule 14 (term -> term POWER factor .)
+    DIFFERENT       reduce using rule 14 (term -> term POWER factor .)
+    LESSTHAN        reduce using rule 14 (term -> term POWER factor .)
+    MORETHAN        reduce using rule 14 (term -> term POWER factor .)
+    LESSTHANE       reduce using rule 14 (term -> term POWER factor .)
+    MORETHANE       reduce using rule 14 (term -> term POWER factor .)
+    PLUS            reduce using rule 14 (term -> term POWER factor .)
+    MINUS           reduce using rule 14 (term -> term POWER factor .)
+    $end            reduce using rule 14 (term -> term POWER factor .)
+    RPAREN          reduce using rule 14 (term -> term POWER factor .)
+
+
+state 37
+
+    (15) term -> term DIVIDE factor .
+
+    TIMES           reduce using rule 15 (term -> term DIVIDE factor .)
+    POWER           reduce using rule 15 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 15 (term -> term DIVIDE factor .)
+    MODULE          reduce using rule 15 (term -> term DIVIDE factor .)
+    WHOLEDIVIDE     reduce using rule 15 (term -> term DIVIDE factor .)
+    EQUALS          reduce using rule 15 (term -> term DIVIDE factor .)
+    DIFFERENT       reduce using rule 15 (term -> term DIVIDE factor .)
+    LESSTHAN        reduce using rule 15 (term -> term DIVIDE factor .)
+    MORETHAN        reduce using rule 15 (term -> term DIVIDE factor .)
+    LESSTHANE       reduce using rule 15 (term -> term DIVIDE factor .)
+    MORETHANE       reduce using rule 15 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 15 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 15 (term -> term DIVIDE factor .)
+    $end            reduce using rule 15 (term -> term DIVIDE factor .)
+    RPAREN          reduce using rule 15 (term -> term DIVIDE factor .)
+
+
+state 38
+
+    (16) term -> term MODULE factor .
+
+    TIMES           reduce using rule 16 (term -> term MODULE factor .)
+    POWER           reduce using rule 16 (term -> term MODULE factor .)
+    DIVIDE          reduce using rule 16 (term -> term MODULE factor .)
+    MODULE          reduce using rule 16 (term -> term MODULE factor .)
+    WHOLEDIVIDE     reduce using rule 16 (term -> term MODULE factor .)
+    EQUALS          reduce using rule 16 (term -> term MODULE factor .)
+    DIFFERENT       reduce using rule 16 (term -> term MODULE factor .)
+    LESSTHAN        reduce using rule 16 (term -> term MODULE factor .)
+    MORETHAN        reduce using rule 16 (term -> term MODULE factor .)
+    LESSTHANE       reduce using rule 16 (term -> term MODULE factor .)
+    MORETHANE       reduce using rule 16 (term -> term MODULE factor .)
+    PLUS            reduce using rule 16 (term -> term MODULE factor .)
+    MINUS           reduce using rule 16 (term -> term MODULE factor .)
+    $end            reduce using rule 16 (term -> term MODULE factor .)
+    RPAREN          reduce using rule 16 (term -> term MODULE factor .)
+
+
+state 39
+
+    (17) term -> term WHOLEDIVIDE factor .
+
+    TIMES           reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    POWER           reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    DIVIDE          reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    MODULE          reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    WHOLEDIVIDE     reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    EQUALS          reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    DIFFERENT       reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    LESSTHAN        reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    MORETHAN        reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    LESSTHANE       reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    MORETHANE       reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    PLUS            reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    MINUS           reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    $end            reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+    RPAREN          reduce using rule 17 (term -> term WHOLEDIVIDE factor .)
+
+
+state 40
+
+    (21) factor -> LPAREN expression RPAREN .
+
+    TIMES           reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    POWER           reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    MODULE          reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    WHOLEDIVIDE     reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    EQUALS          reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    DIFFERENT       reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    LESSTHAN        reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    MORETHAN        reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    LESSTHANE       reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    MORETHANE       reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    $end            reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+
+
+state 41
+
+    (1) expression -> RESERVED VAR ASSIGN expression .
+
+    $end            reduce using rule 1 (expression -> RESERVED VAR ASSIGN expression .)
+    RPAREN          reduce using rule 1 (expression -> RESERVED VAR ASSIGN expression .)
 
