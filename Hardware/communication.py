@@ -1,5 +1,5 @@
 import os
-import serial
+import serial  # pip install pyserial
 
 os.system('cls || clear')
 
@@ -17,8 +17,8 @@ def led_off():
 
 communicating = True
 while (communicating):
-    """ Si pone un 0 apaga el led, si pone un 1 lo enciende, si pone 
-    cualquier otra cosa lo apaga y deja de comunicarse con el arduino """
+    # Si pone un 0 apaga el led, si pone un 1 lo enciende, si pone
+    # cualquier otra cosa lo apaga y deja de comunicarse con el arduino
     input_number = input('Enter a number: ')
 
     try:
@@ -32,5 +32,6 @@ while (communicating):
             led_on()
         else:
             led_off()
-            print('Communication closed')
+            signal.close()
             communicating = False
+            print('Communication closed')
