@@ -1,10 +1,12 @@
 
-expr            : RESERVED VAR ASSIGN expr 
+expr            : RESERVED:SET VAR ASSIGN expr 
                 | arith-expr
+                | condit
 
+condition       : arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
+                | NEGATIVE condition
+                
 arith-expr      : arith-expression (PLUS|MINUS) term
-                | arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) term
-                | NEGATIVE arith-expression
                 | term
 
 term            : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
@@ -14,3 +16,27 @@ factor          :NUMBER
                 | VAR
                 | LPAREN factor RPAREN
 
+
+-------------------------------------------------
+
+expr            : RESERVED:SET VAR ASSIGN expr 
+                | arith-expr
+                | condit
+                | RESERVED LBRACEcondition expression RBRACE"
+                | RESERVED LBRACE expression RBRACE
+
+if-expr         : IF condition LBRACE expression RBRACE
+                | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
+
+condition       : arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
+                | NEGATIVE condition
+                
+arith-expr      : arith-expression (PLUS|MINUS) term
+                | term
+
+term            : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
+                | factor
+
+factor          :NUMBER
+                | VAR
+                | LPAREN factor RPAREN

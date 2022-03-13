@@ -1,6 +1,6 @@
 from numpy import True_, size
 from sympy import true
-from parser import *
+from parserCop import *
 
 operaciones = [
     ("3 + 5 -2", 6),
@@ -12,11 +12,11 @@ operaciones = [
     ("2**3", 8),
     ("3*4 + 2**2", 16),
     ("(2+1)**2", 9),
-    ("4 == 4", True),
+    ("5*(10//5 + 3) + 24 == 7**2", True),
     (" 5 == 7", False),
     ("4 <> 2", True),
     ("6 <> 6", False),
-    ("7 < 10", True),
+    ("7 + 5 < 10", False),
     ("10 > 7", True),
     ("8<=10", True),
     ("10>=10", True),

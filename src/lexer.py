@@ -1,3 +1,4 @@
+from numpy import array
 import ply.lex as lex
 from ply.lex import TOKEN
 import re
@@ -62,7 +63,31 @@ reserved = {
     "exec": "EXEC",
 }
 
+"""
+reserved = {
+    "SET",
+    "ABANICO",
+    "VERTICAL",
+    "PERCUTOR",
+    "GOLPE",
+    "VIBRATO",
+    "METRONOMO",
+    "IF",
+    "ELSE",
+    "WHILE",
+    "FOR",
+    "ENCASO",
+    "ENTONS",
+    "CUANDO",
+    "SINO",
+    "FINENCASO",
+    "DEF",
+    "EXEC",
+}"""
+
 tokens = tokens + tuple(reserved.values())
+#tokens = tokens + reserved
+#print(tokens)
 
 # Regular expression rules for simple tokens
 t_PLUS = r'\+'
@@ -218,15 +243,11 @@ arr = fp.read()
 fp.close()
 """
 
+
 lexer = lex.lex()
-#arr = "SET @123, 5;"
-#lexer.input(arr)
 
-
-
-
-
-def print_lexer():
+def print_lexer(texto):
+    lexer.input(texto)
     print("--------LISTA DE TOKENS-------")
     while True:
         token = lexer.token()

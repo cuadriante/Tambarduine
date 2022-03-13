@@ -40,17 +40,18 @@ def p_expression_var(p):
 def p_expression_arith(p):
     'expression : arith-expression'
     p[0] = p[1]
-    
+def p_expression_comp(p):
+    'expression : comp-expression'
+    p[0] = p[1]
 
-
-#ARITH-EXPRESSION
-def p_arith_comp(p):
-    '''arith-expression : arith-expression EQUALS term
-                | arith-expression DIFFERENT term
-                | arith-expression LESSTHAN term
-                | arith-expression MORETHAN term
-                | arith-expression LESSTHANE term
-                | arith-expression MORETHANE term'''
+#COMP-EXPR
+def p_comp_arith(p):
+    '''comp-expression : arith-expression EQUALS arith-expression
+                | arith-expression DIFFERENT arith-expression
+                | arith-expression LESSTHAN arith-expression
+                | arith-expression MORETHAN arith-expression
+                | arith-expression LESSTHANE arith-expression
+                | arith-expression MORETHANE arith-expression'''
     if p[2] == "==":
         p[0] = p[1] == p[3]
     elif p[2] == "<>":
@@ -66,6 +67,9 @@ def p_arith_comp(p):
 def p_comp_negative(p):
     "arith-expression : NEGATIVE arith-expression"
     p[0] = not p[2]
+
+
+#arith-expr
 def p_arith_plus(p):
     'arith-expression : arith-expression PLUS term'
     p[0] = p[1] + p[3]
@@ -75,6 +79,7 @@ def p_arith_minus(p):
 def p_arith_term(p):
     'arith-expression : term'
     p[0] = p[1]
+
 
 #TERM
 def p_term_times(p):
@@ -146,5 +151,3 @@ def get_var_value(var_name):
         print("NO se encontró la variable")
         return 
     return value
-
-   
