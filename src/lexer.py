@@ -55,6 +55,8 @@ reserved = {
     "else": "ELSE",
     "while": "WHILE",
     "for": "FOR",
+    "to": "TO",
+    "Step" : "STEP",
     "enCaso": "ENCASO",
     "entons": "ENTONS",
     "cuando": "CUANDO",
@@ -64,27 +66,7 @@ reserved = {
     "exec": "EXEC",
 }
 
-"""
-reserved = {
-    "SET",
-    "ABANICO",
-    "VERTICAL",
-    "PERCUTOR",
-    "GOLPE",
-    "VIBRATO",
-    "METRONOMO",
-    "IF",
-    "ELSE",
-    "WHILE",
-    "FOR",
-    "ENCASO",
-    "ENTONS",
-    "CUANDO",
-    "SINO",
-    "FINENCASO",
-    "DEF",
-    "EXEC",
-}"""
+
 
 tokens = tokens + tuple(reserved.values())
 # tokens = tokens + reserved

@@ -48,6 +48,10 @@ def p_expression_comp(p):
 def p_expression_if(p):
     'expression : if-expression'
     p[0] = p[1]
+def p_expression_for(p):
+    'expression : for-loop'
+    p[0] = p[1]
+
 
 
 
@@ -78,7 +82,17 @@ def p_if_else(p):
     else:
         print("error")
 
+"""
+FOR
+"""
+#"if-expression : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
+def p_if(p):
+    "for-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE"
+    print("Hola")
 
+"""
+WHILE
+"""
 
 
 #condition

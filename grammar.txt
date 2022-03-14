@@ -1,7 +1,10 @@
-
 expr            : RESERVED:SET VAR ASSIGN expr 
                 | arith-expr
-                | condit
+                | condition
+                | if-expr
+
+if-expr         : IF condition LBRACE expression RBRACE
+                | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
 
 condition       : arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
                 | NEGATIVE condition
@@ -16,14 +19,15 @@ factor          :NUMBER
                 | VAR
                 | LPAREN factor RPAREN
 
-
--------------------------------------------------
+----------------------------------------------------------------------------
 
 expr            : RESERVED:SET VAR ASSIGN expr 
                 | arith-expr
-                | condit
-                | RESERVED LBRACEcondition expression RBRACE"
-                | RESERVED LBRACE expression RBRACE
+                | condition
+                | if-expr
+                | for-loop
+
+for-loop        : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE
 
 if-expr         : IF condition LBRACE expression RBRACE
                 | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE

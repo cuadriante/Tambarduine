@@ -1,13 +1,16 @@
-from parserCop import *
+from parser import *
 from lexer import *
 
 code = []
-code.append("SET @var1, 5")
+"""
+code.append("SET @var1, 7")
 code.append("@var1") 
-code.append("if 90 < 7 1} else 0}") 
-#texto = "if 90 < 7 1} else 0}"
+code.append("if 1 < 7 {1 } else {0}")
+code.append("SET, @var1, 7")  """
 
-#print_lexer(texto)
+texto = "for @var1 to @var1 Step { 5}"
+
+print_lexer(texto)
 #code.append(texto)
 
 parser = yacc.yacc()

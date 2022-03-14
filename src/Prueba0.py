@@ -1,6 +1,4 @@
-from numpy import True_, size
-from sympy import true
-from parserCop import *
+from parser import *
 
 operaciones = [
     ("3 + 5 -2", 6),
@@ -29,7 +27,7 @@ resultados = []
 for i in operaciones:
     resultados.append(parser.parse(i[0]))
     
-for i in range(size(operaciones)//2 -1):
+for i in range(len(operaciones) -1):
     if resultados[i] == operaciones[i][1]:
         isCorrecta = True
     else:

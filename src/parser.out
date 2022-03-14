@@ -19,14 +19,16 @@ Unused terminals:
     FOR
     FUNCTION
     GOLPE
+    ID
     IF
-    IN
-    LBRACE
+    In
     METRONOMO
     PERCUTOR
     SEMICOLON
     SET
     SINO
+    STEP
+    TO
     TRUE
     VERTICAL
     VIBRATO
@@ -39,8 +41,8 @@ Rule 1     expression -> RESERVED VAR ASSIGN expression
 Rule 2     expression -> arith-expression
 Rule 3     expression -> condition
 Rule 4     expression -> if-expression
-Rule 5     if-expression -> RESERVED condition expression RBRACE
-Rule 6     if-expression -> RESERVED condition expression RBRACE RESERVED expression RBRACE
+Rule 5     if-expression -> RESERVED condition LBRACE expression RBRACE
+Rule 6     if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
 Rule 7     condition -> arith-expression EQUALS arith-expression
 Rule 8     condition -> arith-expression DIFFERENT arith-expression
 Rule 9     condition -> arith-expression LESSTHAN arith-expression
@@ -84,9 +86,10 @@ FINENCASO            :
 FOR                  : 
 FUNCTION             : 
 GOLPE                : 
+ID                   : 
 IF                   : 
-IN                   : 
-LBRACE               : 
+In                   : 
+LBRACE               : 5 6 6
 LESSTHAN             : 9
 LESSTHANE            : 11
 LPAREN               : 25
@@ -106,7 +109,9 @@ RPAREN               : 25
 SEMICOLON            : 
 SET                  : 
 SINO                 : 
+STEP                 : 
 TIMES                : 17
+TO                   : 
 TRUE                 : 
 VAR                  : 1 24
 VERTICAL             : 
@@ -143,8 +148,8 @@ state 0
     (11) condition -> . arith-expression LESSTHANE arith-expression
     (12) condition -> . arith-expression MORETHANE arith-expression
     (13) condition -> . NEGATIVE condition
-    (5) if-expression -> . RESERVED condition expression RBRACE
-    (6) if-expression -> . RESERVED condition expression RBRACE RESERVED expression RBRACE
+    (5) if-expression -> . RESERVED condition LBRACE expression RBRACE
+    (6) if-expression -> . RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
     (17) term -> . term TIMES factor
     (18) term -> . term POWER factor
     (19) term -> . term DIVIDE factor
@@ -177,8 +182,8 @@ state 1
 state 2
 
     (1) expression -> RESERVED . VAR ASSIGN expression
-    (5) if-expression -> RESERVED . condition expression RBRACE
-    (6) if-expression -> RESERVED . condition expression RBRACE RESERVED expression RBRACE
+    (5) if-expression -> RESERVED . condition LBRACE expression RBRACE
+    (6) if-expression -> RESERVED . condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
     (7) condition -> . arith-expression EQUALS arith-expression
     (8) condition -> . arith-expression DIFFERENT arith-expression
     (9) condition -> . arith-expression LESSTHAN arith-expression
@@ -228,12 +233,8 @@ state 3
     MORETHANE       reduce using rule 24 (factor -> VAR .)
     $end            reduce using rule 24 (factor -> VAR .)
     RPAREN          reduce using rule 24 (factor -> VAR .)
+    LBRACE          reduce using rule 24 (factor -> VAR .)
     RBRACE          reduce using rule 24 (factor -> VAR .)
-    RESERVED        reduce using rule 24 (factor -> VAR .)
-    NEGATIVE        reduce using rule 24 (factor -> VAR .)
-    NUMBER          reduce using rule 24 (factor -> VAR .)
-    VAR             reduce using rule 24 (factor -> VAR .)
-    LPAREN          reduce using rule 24 (factor -> VAR .)
 
 
 state 4
@@ -298,12 +299,8 @@ state 7
     MORETHANE       reduce using rule 16 (arith-expression -> term .)
     $end            reduce using rule 16 (arith-expression -> term .)
     RPAREN          reduce using rule 16 (arith-expression -> term .)
+    LBRACE          reduce using rule 16 (arith-expression -> term .)
     RBRACE          reduce using rule 16 (arith-expression -> term .)
-    RESERVED        reduce using rule 16 (arith-expression -> term .)
-    NEGATIVE        reduce using rule 16 (arith-expression -> term .)
-    NUMBER          reduce using rule 16 (arith-expression -> term .)
-    VAR             reduce using rule 16 (arith-expression -> term .)
-    LPAREN          reduce using rule 16 (arith-expression -> term .)
     TIMES           shift and go to state 23
     POWER           shift and go to state 24
     DIVIDE          shift and go to state 25
@@ -363,12 +360,8 @@ state 9
     MORETHANE       reduce using rule 22 (term -> factor .)
     $end            reduce using rule 22 (term -> factor .)
     RPAREN          reduce using rule 22 (term -> factor .)
+    LBRACE          reduce using rule 22 (term -> factor .)
     RBRACE          reduce using rule 22 (term -> factor .)
-    RESERVED        reduce using rule 22 (term -> factor .)
-    NEGATIVE        reduce using rule 22 (term -> factor .)
-    NUMBER          reduce using rule 22 (term -> factor .)
-    VAR             reduce using rule 22 (term -> factor .)
-    LPAREN          reduce using rule 22 (term -> factor .)
 
 
 state 10
@@ -390,12 +383,8 @@ state 10
     MORETHANE       reduce using rule 23 (factor -> NUMBER .)
     $end            reduce using rule 23 (factor -> NUMBER .)
     RPAREN          reduce using rule 23 (factor -> NUMBER .)
+    LBRACE          reduce using rule 23 (factor -> NUMBER .)
     RBRACE          reduce using rule 23 (factor -> NUMBER .)
-    RESERVED        reduce using rule 23 (factor -> NUMBER .)
-    NEGATIVE        reduce using rule 23 (factor -> NUMBER .)
-    NUMBER          reduce using rule 23 (factor -> NUMBER .)
-    VAR             reduce using rule 23 (factor -> NUMBER .)
-    LPAREN          reduce using rule 23 (factor -> NUMBER .)
 
 
 state 11
@@ -415,8 +404,8 @@ state 11
     (11) condition -> . arith-expression LESSTHANE arith-expression
     (12) condition -> . arith-expression MORETHANE arith-expression
     (13) condition -> . NEGATIVE condition
-    (5) if-expression -> . RESERVED condition expression RBRACE
-    (6) if-expression -> . RESERVED condition expression RBRACE RESERVED expression RBRACE
+    (5) if-expression -> . RESERVED condition LBRACE expression RBRACE
+    (6) if-expression -> . RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
     (17) term -> . term TIMES factor
     (18) term -> . term POWER factor
     (19) term -> . term DIVIDE factor
@@ -463,46 +452,11 @@ state 12
 
 state 13
 
-    (5) if-expression -> RESERVED condition . expression RBRACE
-    (6) if-expression -> RESERVED condition . expression RBRACE RESERVED expression RBRACE
-    (1) expression -> . RESERVED VAR ASSIGN expression
-    (2) expression -> . arith-expression
-    (3) expression -> . condition
-    (4) expression -> . if-expression
-    (14) arith-expression -> . arith-expression PLUS term
-    (15) arith-expression -> . arith-expression MINUS term
-    (16) arith-expression -> . term
-    (7) condition -> . arith-expression EQUALS arith-expression
-    (8) condition -> . arith-expression DIFFERENT arith-expression
-    (9) condition -> . arith-expression LESSTHAN arith-expression
-    (10) condition -> . arith-expression MORETHAN arith-expression
-    (11) condition -> . arith-expression LESSTHANE arith-expression
-    (12) condition -> . arith-expression MORETHANE arith-expression
-    (13) condition -> . NEGATIVE condition
-    (5) if-expression -> . RESERVED condition expression RBRACE
-    (6) if-expression -> . RESERVED condition expression RBRACE RESERVED expression RBRACE
-    (17) term -> . term TIMES factor
-    (18) term -> . term POWER factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . term MODULE factor
-    (21) term -> . term WHOLEDIVIDE factor
-    (22) term -> . factor
-    (23) factor -> . NUMBER
-    (24) factor -> . VAR
-    (25) factor -> . LPAREN expression RPAREN
+    (5) if-expression -> RESERVED condition . LBRACE expression RBRACE
+    (6) if-expression -> RESERVED condition . LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
 
-    RESERVED        shift and go to state 2
-    NEGATIVE        shift and go to state 8
-    NUMBER          shift and go to state 10
-    VAR             shift and go to state 3
-    LPAREN          shift and go to state 11
+    LBRACE          shift and go to state 31
 
-    condition                      shift and go to state 5
-    expression                     shift and go to state 31
-    arith-expression               shift and go to state 4
-    if-expression                  shift and go to state 6
-    term                           shift and go to state 7
-    factor                         shift and go to state 9
 
 state 14
 
@@ -779,11 +733,7 @@ state 28
     (13) condition -> NEGATIVE condition .
 
     $end            reduce using rule 13 (condition -> NEGATIVE condition .)
-    RESERVED        reduce using rule 13 (condition -> NEGATIVE condition .)
-    NEGATIVE        reduce using rule 13 (condition -> NEGATIVE condition .)
-    NUMBER          reduce using rule 13 (condition -> NEGATIVE condition .)
-    VAR             reduce using rule 13 (condition -> NEGATIVE condition .)
-    LPAREN          reduce using rule 13 (condition -> NEGATIVE condition .)
+    LBRACE          reduce using rule 13 (condition -> NEGATIVE condition .)
     RPAREN          reduce using rule 13 (condition -> NEGATIVE condition .)
     RBRACE          reduce using rule 13 (condition -> NEGATIVE condition .)
 
@@ -812,8 +762,8 @@ state 30
     (11) condition -> . arith-expression LESSTHANE arith-expression
     (12) condition -> . arith-expression MORETHANE arith-expression
     (13) condition -> . NEGATIVE condition
-    (5) if-expression -> . RESERVED condition expression RBRACE
-    (6) if-expression -> . RESERVED condition expression RBRACE RESERVED expression RBRACE
+    (5) if-expression -> . RESERVED condition LBRACE expression RBRACE
+    (6) if-expression -> . RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
     (17) term -> . term TIMES factor
     (18) term -> . term POWER factor
     (19) term -> . term DIVIDE factor
@@ -839,11 +789,46 @@ state 30
 
 state 31
 
-    (5) if-expression -> RESERVED condition expression . RBRACE
-    (6) if-expression -> RESERVED condition expression . RBRACE RESERVED expression RBRACE
+    (5) if-expression -> RESERVED condition LBRACE . expression RBRACE
+    (6) if-expression -> RESERVED condition LBRACE . expression RBRACE RESERVED LBRACE expression RBRACE
+    (1) expression -> . RESERVED VAR ASSIGN expression
+    (2) expression -> . arith-expression
+    (3) expression -> . condition
+    (4) expression -> . if-expression
+    (14) arith-expression -> . arith-expression PLUS term
+    (15) arith-expression -> . arith-expression MINUS term
+    (16) arith-expression -> . term
+    (7) condition -> . arith-expression EQUALS arith-expression
+    (8) condition -> . arith-expression DIFFERENT arith-expression
+    (9) condition -> . arith-expression LESSTHAN arith-expression
+    (10) condition -> . arith-expression MORETHAN arith-expression
+    (11) condition -> . arith-expression LESSTHANE arith-expression
+    (12) condition -> . arith-expression MORETHANE arith-expression
+    (13) condition -> . NEGATIVE condition
+    (5) if-expression -> . RESERVED condition LBRACE expression RBRACE
+    (6) if-expression -> . RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
+    (17) term -> . term TIMES factor
+    (18) term -> . term POWER factor
+    (19) term -> . term DIVIDE factor
+    (20) term -> . term MODULE factor
+    (21) term -> . term WHOLEDIVIDE factor
+    (22) term -> . factor
+    (23) factor -> . NUMBER
+    (24) factor -> . VAR
+    (25) factor -> . LPAREN expression RPAREN
 
-    RBRACE          shift and go to state 47
+    RESERVED        shift and go to state 2
+    NEGATIVE        shift and go to state 8
+    NUMBER          shift and go to state 10
+    VAR             shift and go to state 3
+    LPAREN          shift and go to state 11
 
+    condition                      shift and go to state 5
+    expression                     shift and go to state 47
+    arith-expression               shift and go to state 4
+    if-expression                  shift and go to state 6
+    term                           shift and go to state 7
+    factor                         shift and go to state 9
 
 state 32
 
@@ -864,12 +849,8 @@ state 32
     MORETHANE       reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
     $end            reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
     RPAREN          reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
+    LBRACE          reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
     RBRACE          reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
-    RESERVED        reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
-    NEGATIVE        reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
-    NUMBER          reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
-    VAR             reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
-    LPAREN          reduce using rule 14 (arith-expression -> arith-expression PLUS term .)
     TIMES           shift and go to state 23
     POWER           shift and go to state 24
     DIVIDE          shift and go to state 25
@@ -896,12 +877,8 @@ state 33
     MORETHANE       reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
     $end            reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
     RPAREN          reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
+    LBRACE          reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
     RBRACE          reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
-    RESERVED        reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
-    NEGATIVE        reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
-    NUMBER          reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
-    VAR             reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
-    LPAREN          reduce using rule 15 (arith-expression -> arith-expression MINUS term .)
     TIMES           shift and go to state 23
     POWER           shift and go to state 24
     DIVIDE          shift and go to state 25
@@ -916,11 +893,7 @@ state 34
     (15) arith-expression -> arith-expression . MINUS term
 
     $end            reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
-    RESERVED        reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
-    NEGATIVE        reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
-    NUMBER          reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
-    VAR             reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
-    LPAREN          reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
+    LBRACE          reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
     RPAREN          reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
     RBRACE          reduce using rule 7 (condition -> arith-expression EQUALS arith-expression .)
     PLUS            shift and go to state 15
@@ -934,11 +907,7 @@ state 35
     (15) arith-expression -> arith-expression . MINUS term
 
     $end            reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
-    RESERVED        reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
-    NEGATIVE        reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
-    NUMBER          reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
-    VAR             reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
-    LPAREN          reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
+    LBRACE          reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
     RPAREN          reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
     RBRACE          reduce using rule 8 (condition -> arith-expression DIFFERENT arith-expression .)
     PLUS            shift and go to state 15
@@ -952,11 +921,7 @@ state 36
     (15) arith-expression -> arith-expression . MINUS term
 
     $end            reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
-    RESERVED        reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
-    NEGATIVE        reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
-    NUMBER          reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
-    VAR             reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
-    LPAREN          reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
+    LBRACE          reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
     RPAREN          reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
     RBRACE          reduce using rule 9 (condition -> arith-expression LESSTHAN arith-expression .)
     PLUS            shift and go to state 15
@@ -970,11 +935,7 @@ state 37
     (15) arith-expression -> arith-expression . MINUS term
 
     $end            reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
-    RESERVED        reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
-    NEGATIVE        reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
-    NUMBER          reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
-    VAR             reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
-    LPAREN          reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
+    LBRACE          reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
     RPAREN          reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
     RBRACE          reduce using rule 10 (condition -> arith-expression MORETHAN arith-expression .)
     PLUS            shift and go to state 15
@@ -988,11 +949,7 @@ state 38
     (15) arith-expression -> arith-expression . MINUS term
 
     $end            reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
-    RESERVED        reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
-    NEGATIVE        reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
-    NUMBER          reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
-    VAR             reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
-    LPAREN          reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
+    LBRACE          reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
     RPAREN          reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
     RBRACE          reduce using rule 11 (condition -> arith-expression LESSTHANE arith-expression .)
     PLUS            shift and go to state 15
@@ -1006,11 +963,7 @@ state 39
     (15) arith-expression -> arith-expression . MINUS term
 
     $end            reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
-    RESERVED        reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
-    NEGATIVE        reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
-    NUMBER          reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
-    VAR             reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
-    LPAREN          reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
+    LBRACE          reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
     RPAREN          reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
     RBRACE          reduce using rule 12 (condition -> arith-expression MORETHANE arith-expression .)
     PLUS            shift and go to state 15
@@ -1036,12 +989,8 @@ state 40
     MORETHANE       reduce using rule 17 (term -> term TIMES factor .)
     $end            reduce using rule 17 (term -> term TIMES factor .)
     RPAREN          reduce using rule 17 (term -> term TIMES factor .)
+    LBRACE          reduce using rule 17 (term -> term TIMES factor .)
     RBRACE          reduce using rule 17 (term -> term TIMES factor .)
-    RESERVED        reduce using rule 17 (term -> term TIMES factor .)
-    NEGATIVE        reduce using rule 17 (term -> term TIMES factor .)
-    NUMBER          reduce using rule 17 (term -> term TIMES factor .)
-    VAR             reduce using rule 17 (term -> term TIMES factor .)
-    LPAREN          reduce using rule 17 (term -> term TIMES factor .)
 
 
 state 41
@@ -1063,12 +1012,8 @@ state 41
     MORETHANE       reduce using rule 18 (term -> term POWER factor .)
     $end            reduce using rule 18 (term -> term POWER factor .)
     RPAREN          reduce using rule 18 (term -> term POWER factor .)
+    LBRACE          reduce using rule 18 (term -> term POWER factor .)
     RBRACE          reduce using rule 18 (term -> term POWER factor .)
-    RESERVED        reduce using rule 18 (term -> term POWER factor .)
-    NEGATIVE        reduce using rule 18 (term -> term POWER factor .)
-    NUMBER          reduce using rule 18 (term -> term POWER factor .)
-    VAR             reduce using rule 18 (term -> term POWER factor .)
-    LPAREN          reduce using rule 18 (term -> term POWER factor .)
 
 
 state 42
@@ -1090,12 +1035,8 @@ state 42
     MORETHANE       reduce using rule 19 (term -> term DIVIDE factor .)
     $end            reduce using rule 19 (term -> term DIVIDE factor .)
     RPAREN          reduce using rule 19 (term -> term DIVIDE factor .)
+    LBRACE          reduce using rule 19 (term -> term DIVIDE factor .)
     RBRACE          reduce using rule 19 (term -> term DIVIDE factor .)
-    RESERVED        reduce using rule 19 (term -> term DIVIDE factor .)
-    NEGATIVE        reduce using rule 19 (term -> term DIVIDE factor .)
-    NUMBER          reduce using rule 19 (term -> term DIVIDE factor .)
-    VAR             reduce using rule 19 (term -> term DIVIDE factor .)
-    LPAREN          reduce using rule 19 (term -> term DIVIDE factor .)
 
 
 state 43
@@ -1117,12 +1058,8 @@ state 43
     MORETHANE       reduce using rule 20 (term -> term MODULE factor .)
     $end            reduce using rule 20 (term -> term MODULE factor .)
     RPAREN          reduce using rule 20 (term -> term MODULE factor .)
+    LBRACE          reduce using rule 20 (term -> term MODULE factor .)
     RBRACE          reduce using rule 20 (term -> term MODULE factor .)
-    RESERVED        reduce using rule 20 (term -> term MODULE factor .)
-    NEGATIVE        reduce using rule 20 (term -> term MODULE factor .)
-    NUMBER          reduce using rule 20 (term -> term MODULE factor .)
-    VAR             reduce using rule 20 (term -> term MODULE factor .)
-    LPAREN          reduce using rule 20 (term -> term MODULE factor .)
 
 
 state 44
@@ -1144,12 +1081,8 @@ state 44
     MORETHANE       reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
     $end            reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
     RPAREN          reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
+    LBRACE          reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
     RBRACE          reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
-    RESERVED        reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
-    NEGATIVE        reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
-    NUMBER          reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
-    VAR             reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
-    LPAREN          reduce using rule 21 (term -> term WHOLEDIVIDE factor .)
 
 
 state 45
@@ -1171,12 +1104,8 @@ state 45
     MORETHANE       reduce using rule 25 (factor -> LPAREN expression RPAREN .)
     $end            reduce using rule 25 (factor -> LPAREN expression RPAREN .)
     RPAREN          reduce using rule 25 (factor -> LPAREN expression RPAREN .)
+    LBRACE          reduce using rule 25 (factor -> LPAREN expression RPAREN .)
     RBRACE          reduce using rule 25 (factor -> LPAREN expression RPAREN .)
-    RESERVED        reduce using rule 25 (factor -> LPAREN expression RPAREN .)
-    NEGATIVE        reduce using rule 25 (factor -> LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 25 (factor -> LPAREN expression RPAREN .)
-    VAR             reduce using rule 25 (factor -> LPAREN expression RPAREN .)
-    LPAREN          reduce using rule 25 (factor -> LPAREN expression RPAREN .)
 
 
 state 46
@@ -1190,18 +1119,33 @@ state 46
 
 state 47
 
-    (5) if-expression -> RESERVED condition expression RBRACE .
-    (6) if-expression -> RESERVED condition expression RBRACE . RESERVED expression RBRACE
+    (5) if-expression -> RESERVED condition LBRACE expression . RBRACE
+    (6) if-expression -> RESERVED condition LBRACE expression . RBRACE RESERVED LBRACE expression RBRACE
 
-    $end            reduce using rule 5 (if-expression -> RESERVED condition expression RBRACE .)
-    RPAREN          reduce using rule 5 (if-expression -> RESERVED condition expression RBRACE .)
-    RBRACE          reduce using rule 5 (if-expression -> RESERVED condition expression RBRACE .)
-    RESERVED        shift and go to state 48
+    RBRACE          shift and go to state 48
 
 
 state 48
 
-    (6) if-expression -> RESERVED condition expression RBRACE RESERVED . expression RBRACE
+    (5) if-expression -> RESERVED condition LBRACE expression RBRACE .
+    (6) if-expression -> RESERVED condition LBRACE expression RBRACE . RESERVED LBRACE expression RBRACE
+
+    $end            reduce using rule 5 (if-expression -> RESERVED condition LBRACE expression RBRACE .)
+    RPAREN          reduce using rule 5 (if-expression -> RESERVED condition LBRACE expression RBRACE .)
+    RBRACE          reduce using rule 5 (if-expression -> RESERVED condition LBRACE expression RBRACE .)
+    RESERVED        shift and go to state 49
+
+
+state 49
+
+    (6) if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED . LBRACE expression RBRACE
+
+    LBRACE          shift and go to state 50
+
+
+state 50
+
+    (6) if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE . expression RBRACE
     (1) expression -> . RESERVED VAR ASSIGN expression
     (2) expression -> . arith-expression
     (3) expression -> . condition
@@ -1216,8 +1160,8 @@ state 48
     (11) condition -> . arith-expression LESSTHANE arith-expression
     (12) condition -> . arith-expression MORETHANE arith-expression
     (13) condition -> . NEGATIVE condition
-    (5) if-expression -> . RESERVED condition expression RBRACE
-    (6) if-expression -> . RESERVED condition expression RBRACE RESERVED expression RBRACE
+    (5) if-expression -> . RESERVED condition LBRACE expression RBRACE
+    (6) if-expression -> . RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE
     (17) term -> . term TIMES factor
     (18) term -> . term POWER factor
     (19) term -> . term DIVIDE factor
@@ -1235,24 +1179,24 @@ state 48
     LPAREN          shift and go to state 11
 
     condition                      shift and go to state 5
-    expression                     shift and go to state 49
+    expression                     shift and go to state 51
     arith-expression               shift and go to state 4
     if-expression                  shift and go to state 6
     term                           shift and go to state 7
     factor                         shift and go to state 9
 
-state 49
+state 51
 
-    (6) if-expression -> RESERVED condition expression RBRACE RESERVED expression . RBRACE
+    (6) if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression . RBRACE
 
-    RBRACE          shift and go to state 50
+    RBRACE          shift and go to state 52
 
 
-state 50
+state 52
 
-    (6) if-expression -> RESERVED condition expression RBRACE RESERVED expression RBRACE .
+    (6) if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE .
 
-    $end            reduce using rule 6 (if-expression -> RESERVED condition expression RBRACE RESERVED expression RBRACE .)
-    RPAREN          reduce using rule 6 (if-expression -> RESERVED condition expression RBRACE RESERVED expression RBRACE .)
-    RBRACE          reduce using rule 6 (if-expression -> RESERVED condition expression RBRACE RESERVED expression RBRACE .)
+    $end            reduce using rule 6 (if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE .)
+    RPAREN          reduce using rule 6 (if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE .)
+    RBRACE          reduce using rule 6 (if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE .)
 

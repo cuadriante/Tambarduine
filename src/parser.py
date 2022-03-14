@@ -1,10 +1,11 @@
 from ast import parse
+from cgi import print_arguments
 from lib2to3.pgen2.token import NUMBER
+
 from symbolTable import SymbolTable
 import ply.yacc as yacc
 import os
 import codecs
-import re
 from lexer import tokens
 from sys import stdin
 
@@ -41,12 +42,47 @@ def p_expression_arith(p):
     'expression : arith-expression'
     p[0] = p[1]
 def p_expression_comp(p):
-    'expression : comp-expression'
+    'expression : condition'
+    p[0] = p[1]
+def p_expression_if(p):
+    'expression : if-expression'
     p[0] = p[1]
 
-#COMP-EXPR
-def p_comp_arith(p):
-    '''comp-expression : arith-expression EQUALS arith-expression
+
+
+
+"""
+IF
+"""
+#"if-expression : IF condition LBRACE expression RBRACE"
+def p_if(p):
+    "if-expression : RESERVED condition LBRACE expression RBRACE"
+    if(p[1] == "if"):
+        condicion = p[2]
+        if(condicion == True):
+            
+            valor = p[4]
+            p[0] = valor
+        else:
+            pass
+    else:
+        print("error")
+#"if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
+def p_if_else(p):
+    "if-expression : RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE"
+    if(p[1] == "if" and p[6]=="else"):
+        condicion = p[3]
+        if(condicion == True):
+            p[0] = p[4]
+        else:
+            p[0] = p[8]
+    else:
+        print("error")
+
+
+#condition
+def p_cond_arith(p):
+    '''condition : arith-expression EQUALS arith-expression
                 | arith-expression DIFFERENT arith-expression
                 | arith-expression LESSTHAN arith-expression
                 | arith-expression MORETHAN arith-expression
@@ -64,8 +100,8 @@ def p_comp_arith(p):
         p[0] = p[1] <= p[3]
     elif p[2] == ">=":
         p[0] = p[1] >= p[3]
-def p_comp_negative(p):
-    "arith-expression : NEGATIVE arith-expression"
+def p_cond_negative(p):
+    "condition : NEGATIVE condition"
     p[0] = not p[2]
 
 
@@ -79,6 +115,8 @@ def p_arith_minus(p):
 def p_arith_term(p):
     'arith-expression : term'
     p[0] = p[1]
+
+
 
 
 #TERM
@@ -113,9 +151,18 @@ def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
     p[0] = p[2]
 
-# Error rule for syntax errors
+""" # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input!")
+    print("Syntax error in input!") """
+
+def p_error(p):
+
+    if p == None:
+        token = "end of file"
+    else:
+        token = f"{p.type}({p.value}) on line {p.lineno}"
+
+    print(f"Syntax error: Unexpected {token}")
 
 
 
@@ -151,3 +198,5 @@ def get_var_value(var_name):
         print("NO se encontró la variable")
         return 
     return value
+
+
