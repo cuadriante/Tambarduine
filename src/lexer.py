@@ -86,8 +86,8 @@ reserved = {
 }"""
 
 tokens = tokens + tuple(reserved.values())
-#tokens = tokens + reserved
-#print(tokens)
+# tokens = tokens + reserved
+# print(tokens)
 
 # Regular expression rules for simple tokens
 t_PLUS = r'\+'
@@ -121,14 +121,17 @@ states = (
     ('ccode', 'inclusive'),
 )
 
+
 # Define a rule so we can track line numbers
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+
 def t_ccode_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+
 
 # Error handling rule
 def t_error(t):
@@ -156,7 +159,7 @@ def t_BOOL(t):
 
 def t_COMMENT(t):
     r'\#.*'
-    pass # No return value. Token discarded
+    pass  # No return value. Token discarded
 
 
 def t_VAR(t):
@@ -174,13 +177,13 @@ def t_RESERVED(t):
         print("Illegal character '%s'" % t.value)
         t.lexer.skip(1)
 
+
 def t_FUNCTION(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*()'
     var = t.type == reserved.get(t.value, 'RESERVED')  # Check for reserved words
     return t
 
-
-
+'''
 # Match the first {. Enter ccode state.
 def t_ccode(t):
     r'\{'
@@ -206,6 +209,7 @@ def t_ccode_rbrace(t):
         t.lexer.lineno += t.value.count('\n')
         t.lexer.begin('INITIAL')
         return t
+'''
 
 """ 
 def find_doc(direc):
@@ -243,8 +247,8 @@ arr = fp.read()
 fp.close()
 """
 
-
 lexer = lex.lex()
+
 
 def print_lexer(texto):
     lexer.input(texto)
