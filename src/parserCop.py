@@ -10,18 +10,21 @@ import re
 from lexer import tokens
 from sys import stdin
 
+
 class VarAccessNode:
-	def __init__(self, var_name_tok):
-		self.var_name_tok = var_name_tok
+    def __init__(self, var_name_tok):
+        self.var_name_tok = var_name_tok
+
 
 class VarAssignNode:
-	def __init__(self, var_name_tok, value_node):
-		self.var_name_tok = var_name_tok
-		self.value_node = value_node
+    def __init__(self, var_name_tok, value_node):
+        self.var_name_tok = var_name_tok
+        self.value_node = value_node
+
 
 symbol_table = SymbolTable()
 
-precedence = ( # evitar errores del analizador sintactico , definir prioridad de tokens
+precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
     ('right', 'ASSIGN'),
     ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
     ("left", "NEGATIVE"),
@@ -29,7 +32,7 @@ precedence = ( # evitar errores del analizador sintactico , definir prioridad de
     ('left', 'TIMES', 'DIVIDE', 'WHOLEDIVIDE', 'MODULE'),
     ('left', 'POWER'),
     ('left', 'TRUE', 'FALSE'),
-    )
+)
 
 
 def p_program(p):
@@ -38,11 +41,11 @@ def p_program(p):
 
 
 def p_block(p):
-    '''block : constDecl varDecl procDecl statement'''
+    """block : constDecl varDecl procDecl statement"""
     p[0] = ["block", p[1], p[2], p[3], p[4]]
 
 
-#EXPR
+# EXPR
 def p_expression_var(p):
     """expression : RESERVED VAR ASSIGN expression SEMICOLON"""
     if p[1] == "SET":
@@ -64,10 +67,11 @@ def p_expression_comp(p):
 def p_expression_if(p):
     """expression : if-expression"""
     p[0] = p[1]
+
+
 def p_expression_for(p):
     'expression : for-loop'
     p[0] = p[1]
-
 
 
 # IF-expression
@@ -98,17 +102,23 @@ def p_if_else(p):
     else:
         print("error")
 
+
 """
 FOR
 """
-#"if-expression : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
+
+
+# "if-expression : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
 def p_if(p):
     "for-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE"
     print("Hola")
 
+
 """
 WHILE
 """
+
+
 # condition
 def p_cond_arith(p):
     '''condition : arith-expression EQUALS arith-expression
@@ -132,72 +142,77 @@ def p_cond_arith(p):
 
 
 def p_cond_negative(p):
-    "condition : NEGATIVE condition"
+    """condition : NEGATIVE condition"""
     p[0] = not p[2]
 
 
 # arith-expr
 def p_arith_plus(p):
-    'arith-expression : arith-expression PLUS term'
+    """arith-expression : arith-expression PLUS term"""
     p[0] = p[1] + p[3]
 
 
 def p_arith_minus(p):
-    'arith-expression : arith-expression MINUS term'
+    """arith-expression : arith-expression MINUS term"""
     p[0] = p[1] - p[3]
 
 
 def p_arith_term(p):
-    'arith-expression : term'
+    """arith-expression : term"""
     p[0] = p[1]
 
 
 # TERM
 def p_term_times(p):
-    'term : term TIMES factor'
+    """term : term TIMES factor"""
     p[0] = p[1] * p[3]
 
 
 def p_term_power(p):
-    'term : term POWER factor'
+    """term : term POWER factor"""
     p[0] = p[1] ** p[3]
 
 
 def p_term_div(p):
-    'term : term DIVIDE factor'
+    """term : term DIVIDE factor"""
     p[0] = p[1] / p[3]
 
 
 def p_term_mod(p):
-    'term : term MODULE factor'
+    """term : term MODULE factor"""
     p[0] = p[1] % p[3]
 
 
 def p_term_wholediv(p):
-    'term : term WHOLEDIVIDE factor'
+    """term : term WHOLEDIVIDE factor"""
     p[0] = p[1] // p[3]
 
 
 def p_term_factor(p):
-    'term : factor'
+    """term : factor"""
     p[0] = p[1]
 
 
 # FACTOR
 def p_factor_num(p):
-    'factor : NUMBER'
+    """factor : NUMBER"""
     p[0] = p[1]
 
 
 def p_factor_var(p):
-    "factor : VAR"
+    """factor : VAR"""
     value = get_var_value(p[1])
     p[0] = value
 
 
 def p_factor_expr(p):
-    'factor : LPAREN expression RPAREN'
+    """factor : LPAREN expression RPAREN"""
     p[0] = p[2]
+
+
+""" # Error rule for syntax errors
+def p_error(p):
+    print("Syntax error in input!") """
 
 
 def p_error(p):
