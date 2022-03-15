@@ -1,49 +1,28 @@
-from ast import parse
-from cgi import print_arguments
-from lib2to3.pgen2.token import NUMBER
-
-from symbolTable import SymbolTable
-import ply.yacc as yacc
-import os
-import codecs
-import re
-from lexer import tokens
-from sys import stdin
-
-class VarAccessNode:
-	def __init__(self, var_name_tok):
-		self.var_name_tok = var_name_tok
-
-class VarAssignNode:
-	def __init__(self, var_name_tok, value_node):
-		self.var_name_tok = var_name_tok
-		self.value_node = value_node
-
-symbol_table = SymbolTable()
-
-precedence = ( # evitar errores del analizador sintactico , definir prioridad de tokens
-    ('right', 'ASSIGN'),
-    ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
-    ("left", "NEGATIVE"),
-    ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE', 'WHOLEDIVIDE', 'MODULE'),
-    ('left', 'POWER'),
-    ('left', 'TRUE', 'FALSE'),
-    )
+txt = " "
+cont = 0
 
 
-def p_program(p):
+def increaseCont():
+    global cont
+    cont += 1
+    return "%d" % cont
+
+
+class Node():
+    pass
+
+
+class Program(Node):
     """program = block"""
     p[0] = ["program", p[1]]
 
 
-def p_block(p):
+class Block(Node):
     '''block : constDecl varDecl procDecl statement'''
     p[0] = ["block", p[1], p[2], p[3], p[4]]
 
-
-#EXPR
-def p_expression_var(p):
+# EXPR
+class ExpressionVar(Node):
     """expression : RESERVED VAR ASSIGN expression SEMICOLON"""
     if p[1] == "SET":
         var_name = p[2]
@@ -51,28 +30,24 @@ def p_expression_var(p):
         add_var(var_name, value)
 
 
-def p_expression_arith(p):
+class ExpressionArith(Node):
     """expression : arith-expression"""
     p[0] = p[1]
 
 
-def p_expression_comp(p):
+class ExpressionComp(Node):
     """expression : condition"""
     p[0] = p[1]
 
 
-def p_expression_if(p):
+class ExpressionIf(Node):
     """expression : if-expression"""
     p[0] = p[1]
-def p_expression_for(p):
-    'expression : for-loop'
-    p[0] = p[1]
-
 
 
 # IF-expression
 # "if-expression : IF condition LBRACE expression RBRACE"
-def p_if(p):
+class If(ExpressionIf):
     """if-expression : RESERVED condition expression RBRACE"""
     if (p[1] == "if"):
         condicion = p[3]
@@ -87,7 +62,7 @@ def p_if(p):
 
 
 # "if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
-def p_if_else(p):
+class IfElse(ExpressionIf):
     "if-expression : RESERVED condition expression RBRACE RESERVED expression RBRACE"
     if (p[1] == "if" and p[5] == "else"):
         condicion = p[3]
@@ -98,19 +73,9 @@ def p_if_else(p):
     else:
         print("error")
 
-"""
-FOR
-"""
-#"if-expression : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
-def p_if(p):
-    "for-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE"
-    print("Hola")
 
-"""
-WHILE
-"""
 # condition
-def p_cond_arith(p):
+class CondArith(ExpressionArith):
     '''condition : arith-expression EQUALS arith-expression
                 | arith-expression DIFFERENT arith-expression
                 | arith-expression LESSTHAN arith-expression
@@ -131,34 +96,34 @@ def p_cond_arith(p):
         p[0] = p[1] >= p[3]
 
 
-def p_cond_negative(p):
+class CondNegative(Node):
     "condition : NEGATIVE condition"
     p[0] = not p[2]
 
 
 # arith-expr
-def p_arith_plus(p):
+class ArithPlus(ExpressionArith):
     'arith-expression : arith-expression PLUS term'
     p[0] = p[1] + p[3]
 
 
-def p_arith_minus(p):
+class ArithMinus(ExpressionArith):
     'arith-expression : arith-expression MINUS term'
     p[0] = p[1] - p[3]
 
 
-def p_arith_term(p):
+class ArithTerm(ExpressionArith):
     'arith-expression : term'
     p[0] = p[1]
 
 
 # TERM
-def p_term_times(p):
+class TermTimes(Node):
     'term : term TIMES factor'
     p[0] = p[1] * p[3]
 
 
-def p_term_power(p):
+class TermPower(p):
     'term : term POWER factor'
     p[0] = p[1] ** p[3]
 
