@@ -44,7 +44,7 @@ tokens = (
 )
 
 reserved = {
-    "principal" : "PRINCIPAL",
+    "principal": "PRINCIPAL",
     "set": "SET",
     "abanico": "ABANICO",
     "vertical": "VERTICAL",
@@ -66,7 +66,6 @@ reserved = {
     "def": "DEF",
     "exec": "EXEC",
 }
-
 
 
 tokens = tokens + tuple(reserved.values())
@@ -136,8 +135,8 @@ def t_NUMBER(t):
 
 
 def t_BOOL(t):
-    r'(1+0)*(1+0)'
-    t.value = int(t.value)
+    r'((t|T)rue)|((f|F)alse)'
+    t.value = 1 if (t.value == 'true' or t.value == 'True') else 0
     return t
 
 

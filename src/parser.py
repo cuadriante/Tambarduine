@@ -12,18 +12,21 @@ import re
 from lexer import tokens
 from sys import stdin
 
+
 class VarAccessNode:
-	def __init__(self, var_name_tok):
-		self.var_name_tok = var_name_tok
+    def __init__(self, var_name_tok):
+        self.var_name_tok = var_name_tok
+
 
 class VarAssignNode:
-	def __init__(self, var_name_tok, value_node):
-		self.var_name_tok = var_name_tok
-		self.value_node = value_node
+    def __init__(self, var_name_tok, value_node):
+        self.var_name_tok = var_name_tok
+        self.value_node = value_node
+
 
 symbol_table = SymbolTable()
 
-precedence = ( # evitar errores del analizador sintactico , definir prioridad de tokens
+precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
     ('right', 'ASSIGN'),
     ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
     ("left", "NEGATIVE"),
@@ -31,19 +34,22 @@ precedence = ( # evitar errores del analizador sintactico , definir prioridad de
     ('left', 'TIMES', 'DIVIDE', 'WHOLEDIVIDE', 'MODULE'),
     ('left', 'POWER'),
     ('left', 'TRUE', 'FALSE'),
-    )
-    
+)
 
-#ROOT
+
+# ROOT
 def p_program(p):
     "program : block"
     p[0] = p[1]
 
-#BLOCK
-#bloack : functions main
+# BLOCK
+# bloack : functions main
+
+
 def p_block(p):
     "block : main"
     p[0] = p[1]
+
 
 """ 
 #FUNCTIONS
@@ -51,17 +57,20 @@ def p_functions(p):
     "functions : empty"
 """
 
-#MAIN
+# MAIN
+
+
 def p_main(p):
     "main : line"
     p[0] = p[1]
 
 
-#line 
+# line
 def p_line(p):
     """line : expression
         | var_decl"""
     p[0] = p[1]
+
 
 """ #expression_list
 def p_expression_list(p):
@@ -70,12 +79,14 @@ def p_expression_list(p):
     p[0] = p[1]
 """
 
-#VAR-DECL
+# VAR-DECL
+
+
 def p_var_decl(p):
     """var_decl : SET var_assigment_list SEMICOLON"""
-    
 
-#VAR-ASSIGMENT-LIST
+
+# VAR-ASSIGMENT-LIST
 def p_var_assigment(p):
     """var_assigment_list : VAR ASSIGN expression """
     print("una")
@@ -83,39 +94,50 @@ def p_var_assigment(p):
     value = p[3]
     add_var(var_name, value)
 
+
 def p_var_assigment_list(p):
-    """var_assigment_list : var_assigment_list VAR ASSIGN expression """ 
+    """var_assigment_list : var_assigment_list VAR ASSIGN expression """
     print("multiple")
     var_name = p[2]
     value = p[4]
     add_var(var_name, value)
 
-#EXPR
+# EXPR
+
+
 def p_expression_arith(p):
     'expression : arith-expression'
     p[0] = p[1]
+
+
+def p_expression_boolean(p):
+    'expression : boolean'
+    p[0] = p[1]
+
+
 def p_expression_comp(p):
     'expression : condition'
     p[0] = p[1]
+
+
 def p_expression_if(p):
     'expression : if-expression'
     p[0] = p[1]
+
+
 def p_expression_for(p):
     'expression : for-loop'
     p[0] = p[1]
 
 
-
-
-
-#IF-expression
+# IF-expression
 #"if-expression : IF condition LBRACE expression RBRACE"
 def p_if(p):
     "if-expression : RESERVED condition expression RBRACE"
     if(p[1] == "if"):
         condicion = p[3]
         if(p[2] == condicion):
-            
+
             valor = p[2]
             p[0] = valor
         else:
@@ -123,9 +145,11 @@ def p_if(p):
     else:
         print("error")
 #"if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
+
+
 def p_if_else(p):
     "if-expression : RESERVED condition expression RBRACE RESERVED expression RBRACE"
-    if(p[1] == "if" and p[5]=="else"):
+    if(p[1] == "if" and p[5] == "else"):
         condicion = p[3]
         if(p[2] == condicion):
             p[0] = p[3]
@@ -134,9 +158,12 @@ def p_if_else(p):
     else:
         print("error")
 
+
 """
 FOR
 """
+
+
 def p_for(p):
     "for-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE"
     print("Hola")
@@ -147,9 +174,7 @@ def p_for(p):
         add_var(variable_name, 0)
 
 
-
-
-#condition
+# condition
 def p_cond_arith(p):
     '''condition : arith-expression EQUALS arith-expression
                 | arith-expression DIFFERENT arith-expression
@@ -169,56 +194,82 @@ def p_cond_arith(p):
         p[0] = p[1] <= p[3]
     elif p[2] == ">=":
         p[0] = p[1] >= p[3]
+
+
 def p_cond_negative(p):
     "condition : NEGATIVE condition"
     p[0] = not p[2]
 
 
-#arith-expr
+# arith-expr
 def p_arith_plus(p):
     'arith-expression : arith-expression PLUS term'
     p[0] = p[1] + p[3]
+
+
 def p_arith_minus(p):
     'arith-expression : arith-expression MINUS term'
     p[0] = p[1] - p[3]
+
+
 def p_arith_term(p):
     'arith-expression : term'
     p[0] = p[1]
 
 
-
-
-#TERM
+# TERM
 def p_term_times(p):
     'term : term TIMES factor'
     p[0] = p[1] * p[3]
+
+
 def p_term_exponente(p):
     'term : term POWER factor'
     p[0] = p[1] ** p[3]
+
+
 def p_term_div(p):
     'term : term DIVIDE factor'
     p[0] = p[1] / p[3]
+
+
 def p_term_mod(p):
     'term : term MODULE factor'
     p[0] = p[1] % p[3]
+
+
 def p_term_wholediv(p):
     'term : term WHOLEDIVIDE factor'
     p[0] = p[1] // p[3]
+
+
 def p_term_factor(p):
     'term : factor'
     p[0] = p[1]
 
-#FACTOR
+# FACTOR
+
+
 def p_factor_num(p):
     'factor : NUMBER'
     p[0] = p[1]
+
+
 def p_factor_var(p):
     "factor : VAR"
     value = get_var_value(p[1])
     p[0] = value
+
+
 def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
     p[0] = p[2]
+
+
+def p_factor_boolean(p):
+    'boolean : BOOL'
+    p[0] = p[1]
+
 
 def p_error(p):
 
@@ -229,6 +280,7 @@ def p_error(p):
 
     print(f"Syntax error: Unexpected {token}")
 
+
 """ def p_empty(p):
     '''
     empty :
@@ -238,17 +290,19 @@ def p_error(p):
 """
 Agrega una variable a la tabla de valores
 """
+
+
 def add_var(var_name, value):
     symbol_table.set(var_name, value)
+
 
 """
 Retorna el valor de una variable
 """
+
+
 def get_var_value(var_name):
     value = symbol_table.get(var_name)
     if not value:
-        return 
+        return
     return value
-
-
-

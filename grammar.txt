@@ -11,6 +11,7 @@ var_assigment_list  : VAR ASSIGN expression
 
 expr                : 
                     | arith-expr
+                    | boolean
                     | condition
                     | if-expr
                     | for-loop
@@ -32,3 +33,5 @@ term                : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
 factor              :NUMBER
                     | VAR
                     | LPAREN factor RPAREN
+
+boolean             : BOOL
