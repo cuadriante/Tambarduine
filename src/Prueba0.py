@@ -1,4 +1,4 @@
-from parser import *
+from parserCop import *
 
 operaciones = [
     ("3 + 5 -2", 6),

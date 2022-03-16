@@ -2,10 +2,13 @@ from ast import parse
 from cgi import print_arguments
 from lib2to3.pgen2.token import NUMBER
 
+from matplotlib.pyplot import get
+
 from symbolTable import SymbolTable
 import ply.yacc as yacc
 import os
 import codecs
+import re
 from lexer import tokens
 from sys import stdin
 
@@ -31,13 +34,63 @@ precedence = ( # evitar errores del analizador sintactico , definir prioridad de
     )
     
 
+#ROOT
+def p_program(p):
+    "program : block"
+    p[0] = p[1]
+
+#BLOCK
+#bloack : functions main
+def p_block(p):
+    "block : main"
+    p[0] = p[1]
+
+""" 
+#FUNCTIONS
+def p_functions(p):
+    "functions : empty"
+"""
+
+#MAIN
+def p_main(p):
+    "main : line"
+    p[0] = p[1]
+
+
+#line 
+def p_line(p):
+    """line : expression
+        | var_decl"""
+    p[0] = p[1]
+
+""" #expression_list
+def p_expression_list(p):
+    expression_list : expression
+                    |expression_list expression
+    p[0] = p[1]
+"""
+
+#VAR-DECL
+def p_var_decl(p):
+    """var_decl : SET var_assigment_list SEMICOLON"""
+    
+
+#VAR-ASSIGMENT-LIST
+def p_var_assigment(p):
+    """var_assigment_list : VAR ASSIGN expression """
+    print("una")
+    var_name = p[1]
+    value = p[3]
+    add_var(var_name, value)
+
+def p_var_assigment_list(p):
+    """var_assigment_list : var_assigment_list VAR ASSIGN expression """ 
+    print("multiple")
+    var_name = p[2]
+    value = p[4]
+    add_var(var_name, value)
+
 #EXPR
-def p_expression_var(p):
-    "expression : RESERVED VAR ASSIGN expression"
-    if p[1] == "SET":
-        var_name = p[2]
-        value = p[4]
-        add_var(var_name, value)
 def p_expression_arith(p):
     'expression : arith-expression'
     p[0] = p[1]
@@ -47,21 +100,23 @@ def p_expression_comp(p):
 def p_expression_if(p):
     'expression : if-expression'
     p[0] = p[1]
+def p_expression_for(p):
+    'expression : for-loop'
+    p[0] = p[1]
 
 
 
 
-"""
-IF
-"""
+
+#IF-expression
 #"if-expression : IF condition LBRACE expression RBRACE"
 def p_if(p):
-    "if-expression : RESERVED condition LBRACE expression RBRACE"
+    "if-expression : RESERVED condition expression RBRACE"
     if(p[1] == "if"):
-        condicion = p[2]
-        if(condicion == True):
+        condicion = p[3]
+        if(p[2] == condicion):
             
-            valor = p[4]
+            valor = p[2]
             p[0] = valor
         else:
             pass
@@ -69,15 +124,29 @@ def p_if(p):
         print("error")
 #"if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
 def p_if_else(p):
-    "if-expression : RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE"
-    if(p[1] == "if" and p[6]=="else"):
+    "if-expression : RESERVED condition expression RBRACE RESERVED expression RBRACE"
+    if(p[1] == "if" and p[5]=="else"):
         condicion = p[3]
-        if(condicion == True):
-            p[0] = p[4]
+        if(p[2] == condicion):
+            p[0] = p[3]
         else:
-            p[0] = p[8]
+            p[0] = p[6]
     else:
         print("error")
+
+"""
+FOR
+"""
+def p_for(p):
+    "for-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE"
+    print("Hola")
+    variable_name = p[2]
+    if get_var_value(variable_name):
+        pass
+    else:
+        add_var(variable_name, 0)
+
+
 
 
 #condition
@@ -151,10 +220,6 @@ def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
     p[0] = p[2]
 
-""" # Error rule for syntax errors
-def p_error(p):
-    print("Syntax error in input!") """
-
 def p_error(p):
 
     if p == None:
@@ -164,24 +229,11 @@ def p_error(p):
 
     print(f"Syntax error: Unexpected {token}")
 
-
-
-# Build the parser
-
-
-
-""" ast = parser.parse('2 * 3 + 4 * (5 - 6)')
-print(ast) """
-
-""" while True:
-    try:
-        s = input('calc > ')
-    except EOFError:
-        break
-    if not s: continue
-    result = parser.parse(s)
-    print(result)
-"""
+""" def p_empty(p):
+    '''
+    empty :
+    '''
+    pass """
 
 """
 Agrega una variable a la tabla de valores
@@ -195,8 +247,8 @@ Retorna el valor de una variable
 def get_var_value(var_name):
     value = symbol_table.get(var_name)
     if not value:
-        print("NO se encontró la variable")
         return 
     return value
+
 
 

@@ -1,46 +1,34 @@
-expr            : RESERVED:SET VAR ASSIGN expr 
-                | arith-expr
-                | condition
-                | if-expr
+program             : block
 
-if-expr         : IF condition LBRACE expression RBRACE
-                | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
+block               : main
 
-condition       : arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
-                | NEGATIVE condition
+main                : line
+
+var_decl            : RESERVED:SET VAR ASSIGN expr SEMICOLON
+
+var_assigment_list  : VAR ASSIGN expression
+                    | var_assigment_list VAR ASSIGN expression
+
+expr                : 
+                    | arith-expr
+                    | condition
+                    | if-expr
+                    | for-loop
+
+if-expr             : IF condition LBRACE expression RBRACE
+                    | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
+
+for-loop            : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE                
+
+condition           : arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
+                    | NEGATIVE condition
                 
-arith-expr      : arith-expression (PLUS|MINUS) term
-                | term
+arith-expr          : arith-expression (PLUS|MINUS) term
+                    | term
 
-term            : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
-                | factor
+term                : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
+                    | factor
 
-factor          :NUMBER
-                | VAR
-                | LPAREN factor RPAREN
-
-----------------------------------------------------------------------------
-
-expr            : RESERVED:SET VAR ASSIGN expr 
-                | arith-expr
-                | condition
-                | if-expr
-                | for-loop
-
-for-loop        : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE
-
-if-expr         : IF condition LBRACE expression RBRACE
-                | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
-
-condition       : arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
-                | NEGATIVE condition
-                
-arith-expr      : arith-expression (PLUS|MINUS) term
-                | term
-
-term            : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
-                | factor
-
-factor          :NUMBER
-                | VAR
-                | LPAREN factor RPAREN
+factor              :NUMBER
+                    | VAR
+                    | LPAREN factor RPAREN

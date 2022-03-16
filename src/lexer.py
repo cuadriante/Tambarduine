@@ -44,6 +44,7 @@ tokens = (
 )
 
 reserved = {
+    "principal" : "PRINCIPAL",
     "set": "SET",
     "abanico": "ABANICO",
     "vertical": "VERTICAL",

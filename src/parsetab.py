@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'rightASSIGNleftLESSTHANLESSTHANEMORETHANMORETHANEleftNEGATIVEleftPLUSMINUSleftTIMESDIVIDEWHOLEDIVIDEMODULEleftPOWERleftTRUEFALSEABANICO ASSIGN BOOL CCODE COMMENT CUANDO DEF DIFFERENT DIVIDE ELSE ENCASO ENTONS EQUAL EQUALS EXEC EXPONENTE FALSE FINENCASO FOR FUNCTION GOLPE ID IF In LBRACE LESSTHAN LESSTHANE LPAREN METRONOMO MINUS MODULE MORETHAN MORETHANE NEGATIVE NUMBER PERCUTOR PLUS POWER RBRACE RESERVED RPAREN SEMICOLON SET SINO STEP TIMES TO TRUE VAR VERTICAL VIBRATO WHILE WHOLEDIVIDEexpression : RESERVED VAR ASSIGN expressionexpression : arith-expressionexpression : conditionexpression : if-expressionif-expression : RESERVED condition LBRACE expression RBRACEif-expression : RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACEcondition : arith-expression EQUALS arith-expression\n                | arith-expression DIFFERENT arith-expression\n                | arith-expression LESSTHAN arith-expression\n                | arith-expression MORETHAN arith-expression\n                | arith-expression LESSTHANE arith-expression\n                | arith-expression MORETHANE arith-expressioncondition : NEGATIVE conditionarith-expression : arith-expression PLUS termarith-expression : arith-expression MINUS termarith-expression : termterm : term TIMES factorterm : term POWER factorterm : term DIVIDE factorterm : term MODULE factorterm : term WHOLEDIVIDE factorterm : factorfactor : NUMBERfactor : VARfactor : LPAREN expression RPAREN'
+_lr_signature = 'rightASSIGNleftLESSTHANLESSTHANEMORETHANMORETHANEleftNEGATIVEleftPLUSMINUSleftTIMESDIVIDEWHOLEDIVIDEMODULEleftPOWERleftTRUEFALSEABANICO ASSIGN BOOL CCODE COMMENT CUANDO DEF DIFFERENT DIVIDE ELSE ENCASO ENTONS EQUAL EQUALS EXEC EXPONENTE FALSE FINENCASO FOR FUNCTION GOLPE ID IF In LBRACE LESSTHAN LESSTHANE LPAREN METRONOMO MINUS MODULE MORETHAN MORETHANE NEGATIVE NUMBER PERCUTOR PLUS POWER PRINCIPAL RBRACE RESERVED RPAREN SEMICOLON SET SINO STEP TIMES TO TRUE VAR VERTICAL VIBRATO WHILE WHOLEDIVIDEprogram : blockblock : mainmain : lineline : expression\n        | var_declvar_decl : SET var_assigment_list SEMICOLONvar_assigment_list : VAR ASSIGN expression var_assigment_list : var_assigment_list VAR ASSIGN expression expression : arith-expressionexpression : conditionexpression : if-expressionexpression : for-loopif-expression : RESERVED condition expression RBRACEif-expression : RESERVED condition expression RBRACE RESERVED expression RBRACEfor-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACEcondition : arith-expression EQUALS arith-expression\n                | arith-expression DIFFERENT arith-expression\n                | arith-expression LESSTHAN arith-expression\n                | arith-expression MORETHAN arith-expression\n                | arith-expression LESSTHANE arith-expression\n                | arith-expression MORETHANE arith-expressioncondition : NEGATIVE conditionarith-expression : arith-expression PLUS termarith-expression : arith-expression MINUS termarith-expression : termterm : term TIMES factorterm : term POWER factorterm : term DIVIDE factorterm : term MODULE factorterm : term WHOLEDIVIDE factorterm : factorfactor : NUMBERfactor : VARfactor : LPAREN expression RPAREN'
     
-_lr_action_items = {'RESERVED':([0,11,30,31,48,50,],[2,2,2,2,49,2,]),'NEGATIVE':([0,2,8,11,30,31,50,],[8,8,8,8,8,8,8,]),'NUMBER':([0,2,8,11,15,16,17,18,19,20,21,22,23,24,25,26,27,30,31,50,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'VAR':([0,2,8,11,15,16,17,18,19,20,21,22,23,24,25,26,27,30,31,50,],[3,12,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,]),'LPAREN':([0,2,8,11,15,16,17,18,19,20,21,22,23,24,25,26,27,30,31,50,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'$end':([1,3,4,5,6,7,9,10,28,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,52,],[0,-24,-2,-3,-4,-16,-22,-23,-13,-14,-15,-7,-8,-9,-10,-11,-12,-17,-18,-19,-20,-21,-25,-1,-5,-6,]),'TIMES':([3,7,9,10,12,32,33,40,41,42,43,44,45,],[-24,23,-22,-23,-24,23,23,-17,-18,-19,-20,-21,-25,]),'POWER':([3,7,9,10,12,32,33,40,41,42,43,44,45,],[-24,24,-22,-23,-24,24,24,-17,-18,-19,-20,-21,-25,]),'DIVIDE':([3,7,9,10,12,32,33,40,41,42,43,44,45,],[-24,25,-22,-23,-24,25,25,-17,-18,-19,-20,-21,-25,]),'MODULE':([3,7,9,10,12,32,33,40,41,42,43,44,45,],[-24,26,-22,-23,-24,26,26,-17,-18,-19,-20,-21,-25,]),'WHOLEDIVIDE':([3,7,9,10,12,32,33,40,41,42,43,44,45,],[-24,27,-22,-23,-24,27,27,-17,-18,-19,-20,-21,-25,]),'PLUS':([3,4,7,9,10,12,14,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[-24,15,-16,-22,-23,-24,15,-14,-15,15,15,15,15,15,15,-17,-18,-19,-20,-21,-25,]),'MINUS':([3,4,7,9,10,12,14,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[-24,16,-16,-22,-23,-24,16,-14,-15,16,16,16,16,16,16,-17,-18,-19,-20,-21,-25,]),'EQUALS':([3,4,7,9,10,12,14,32,33,40,41,42,43,44,45,],[-24,17,-16,-22,-23,-24,17,-14,-15,-17,-18,-19,-20,-21,-25,]),'DIFFERENT':([3,4,7,9,10,12,14,32,33,40,41,42,43,44,45,],[-24,18,-16,-22,-23,-24,18,-14,-15,-17,-18,-19,-20,-21,-25,]),'LESSTHAN':([3,4,7,9,10,12,14,32,33,40,41,42,43,44,45,],[-24,19,-16,-22,-23,-24,19,-14,-15,-17,-18,-19,-20,-21,-25,]),'MORETHAN':([3,4,7,9,10,12,14,32,33,40,41,42,43,44,45,],[-24,20,-16,-22,-23,-24,20,-14,-15,-17,-18,-19,-20,-21,-25,]),'LESSTHANE':([3,4,7,9,10,12,14,32,33,40,41,42,43,44,45,],[-24,21,-16,-22,-23,-24,21,-14,-15,-17,-18,-19,-20,-21,-25,]),'MORETHANE':([3,4,7,9,10,12,14,32,33,40,41,42,43,44,45,],[-24,22,-16,-22,-23,-24,22,-14,-15,-17,-18,-19,-20,-21,-25,]),'RPAREN':([3,4,5,6,7,9,10,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,52,],[-24,-2,-3,-4,-16,-22,-23,-13,45,-14,-15,-7,-8,-9,-10,-11,-12,-17,-18,-19,-20,-21,-25,-1,-5,-6,]),'LBRACE':([3,7,9,10,13,28,32,33,34,35,36,37,38,39,40,41,42,43,44,45,49,],[-24,-16,-22,-23,31,-13,-14,-15,-7,-8,-9,-10,-11,-12,-17,-18,-19,-20,-21,-25,50,]),'RBRACE':([3,4,5,6,7,9,10,28,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,51,52,],[-24,-2,-3,-4,-16,-22,-23,-13,-14,-15,-7,-8,-9,-10,-11,-12,-17,-18,-19,-20,-21,-25,-1,48,-5,52,-6,]),'ASSIGN':([12,],[30,]),}
+_lr_action_items = {'SET':([0,],[11,]),'NEGATIVE':([0,12,13,14,15,16,17,18,34,36,39,40,41,42,43,44,45,46,49,50,51,52,53,54,57,58,63,66,],[13,-25,13,13,-33,-31,-32,13,-22,13,-23,-24,-16,-17,-18,-19,-20,-21,13,-26,-27,-28,-29,-30,-34,13,13,13,]),'RESERVED':([0,12,15,16,17,18,34,36,37,39,40,41,42,43,44,45,46,49,50,51,52,53,54,57,58,60,61,63,66,],[14,-25,-33,-31,-32,14,-22,14,56,-23,-24,-16,-17,-18,-19,-20,-21,14,-26,-27,-28,-29,-30,-34,14,63,64,14,14,]),'NUMBER':([0,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,29,30,31,32,33,34,36,39,40,41,42,43,44,45,46,49,50,51,52,53,54,56,57,58,63,64,66,],[17,-25,17,17,-33,-31,-32,17,17,17,17,17,17,17,17,17,17,17,17,17,17,-22,17,-23,-24,-16,-17,-18,-19,-20,-21,17,-26,-27,-28,-29,-30,17,-34,17,17,66,17,]),'VAR':([0,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,36,39,40,41,42,43,44,45,46,49,50,51,52,53,54,56,57,58,59,60,62,63,66,67,69,],[15,-9,-10,-11,-12,28,-25,15,37,-33,-31,-32,15,15,15,15,15,15,15,15,15,48,15,15,15,15,15,-22,15,-23,-24,-16,-17,-18,-19,-20,-21,15,-26,-27,-28,-29,-30,15,-34,15,-7,-13,-8,15,15,-14,-15,]),'LPAREN':([0,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,29,30,31,32,33,34,36,39,40,41,42,43,44,45,46,49,50,51,52,53,54,56,57,58,63,66,],[18,-25,18,18,-33,-31,-32,18,18,18,18,18,18,18,18,18,18,18,18,18,18,-22,18,-23,-24,-16,-17,-18,-19,-20,-21,18,-26,-27,-28,-29,-30,18,-34,18,18,18,]),'$end':([1,2,3,4,5,6,7,8,9,10,12,15,16,17,34,39,40,41,42,43,44,45,46,47,50,51,52,53,54,57,60,67,69,],[0,-1,-2,-3,-4,-5,-9,-10,-11,-12,-25,-33,-31,-32,-22,-23,-24,-16,-17,-18,-19,-20,-21,-6,-26,-27,-28,-29,-30,-34,-13,-14,-15,]),'RPAREN':([7,8,9,10,12,15,16,17,34,38,39,40,41,42,43,44,45,46,50,51,52,53,54,57,60,67,69,],[-9,-10,-11,-12,-25,-33,-31,-32,-22,57,-23,-24,-16,-17,-18,-19,-20,-21,-26,-27,-28,-29,-30,-34,-13,-14,-15,]),'RBRACE':([7,8,9,10,12,15,16,17,34,39,40,41,42,43,44,45,46,50,51,52,53,54,55,57,60,65,67,68,69,],[-9,-10,-11,-12,-25,-33,-31,-32,-22,-23,-24,-16,-17,-18,-19,-20,-21,-26,-27,-28,-29,-30,60,-34,-13,67,-14,69,-15,]),'SEMICOLON':([7,8,9,10,12,15,16,17,27,34,39,40,41,42,43,44,45,46,50,51,52,53,54,57,59,60,62,67,69,],[-9,-10,-11,-12,-25,-33,-31,-32,47,-22,-23,-24,-16,-17,-18,-19,-20,-21,-26,-27,-28,-29,-30,-34,-7,-13,-8,-14,-15,]),'PLUS':([7,12,15,16,17,35,37,39,40,41,42,43,44,45,46,50,51,52,53,54,57,],[19,-25,-33,-31,-32,19,-33,-23,-24,19,19,19,19,19,19,-26,-27,-28,-29,-30,-34,]),'MINUS':([7,12,15,16,17,35,37,39,40,41,42,43,44,45,46,50,51,52,53,54,57,],[20,-25,-33,-31,-32,20,-33,-23,-24,20,20,20,20,20,20,-26,-27,-28,-29,-30,-34,]),'EQUALS':([7,12,15,16,17,35,37,39,40,50,51,52,53,54,57,],[21,-25,-33,-31,-32,21,-33,-23,-24,-26,-27,-28,-29,-30,-34,]),'DIFFERENT':([7,12,15,16,17,35,37,39,40,50,51,52,53,54,57,],[22,-25,-33,-31,-32,22,-33,-23,-24,-26,-27,-28,-29,-30,-34,]),'LESSTHAN':([7,12,15,16,17,35,37,39,40,50,51,52,53,54,57,],[23,-25,-33,-31,-32,23,-33,-23,-24,-26,-27,-28,-29,-30,-34,]),'MORETHAN':([7,12,15,16,17,35,37,39,40,50,51,52,53,54,57,],[24,-25,-33,-31,-32,24,-33,-23,-24,-26,-27,-28,-29,-30,-34,]),'LESSTHANE':([7,12,15,16,17,35,37,39,40,50,51,52,53,54,57,],[25,-25,-33,-31,-32,25,-33,-23,-24,-26,-27,-28,-29,-30,-34,]),'MORETHANE':([7,12,15,16,17,35,37,39,40,50,51,52,53,54,57,],[26,-25,-33,-31,-32,26,-33,-23,-24,-26,-27,-28,-29,-30,-34,]),'TIMES':([12,15,16,17,37,39,40,50,51,52,53,54,57,],[29,-33,-31,-32,-33,29,29,-26,-27,-28,-29,-30,-34,]),'POWER':([12,15,16,17,37,39,40,50,51,52,53,54,57,],[30,-33,-31,-32,-33,30,30,-26,-27,-28,-29,-30,-34,]),'DIVIDE':([12,15,16,17,37,39,40,50,51,52,53,54,57,],[31,-33,-31,-32,-33,31,31,-26,-27,-28,-29,-30,-34,]),'MODULE':([12,15,16,17,37,39,40,50,51,52,53,54,57,],[32,-33,-31,-32,-33,32,32,-26,-27,-28,-29,-30,-34,]),'WHOLEDIVIDE':([12,15,16,17,37,39,40,50,51,52,53,54,57,],[33,-33,-31,-32,-33,33,33,-26,-27,-28,-29,-30,-34,]),'ASSIGN':([28,48,],[49,58,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,11,30,31,50,],[1,29,46,47,51,]),'arith-expression':([0,2,8,11,17,18,19,20,21,22,30,31,50,],[4,14,14,4,34,35,36,37,38,39,4,4,4,]),'condition':([0,2,8,11,30,31,50,],[5,13,28,5,5,5,5,]),'if-expression':([0,11,30,31,50,],[6,6,6,6,6,]),'term':([0,2,8,11,15,16,17,18,19,20,21,22,30,31,50,],[7,7,7,7,32,33,7,7,7,7,7,7,7,7,7,]),'factor':([0,2,8,11,15,16,17,18,19,20,21,22,23,24,25,26,27,30,31,50,],[9,9,9,9,9,9,9,9,9,9,9,9,40,41,42,43,44,9,9,9,]),}
+_lr_goto_items = {'program':([0,],[1,]),'block':([0,],[2,]),'main':([0,],[3,]),'line':([0,],[4,]),'expression':([0,18,36,49,58,63,66,],[5,38,55,59,62,65,68,]),'var_decl':([0,],[6,]),'arith-expression':([0,13,14,18,21,22,23,24,25,26,36,49,58,63,66,],[7,35,35,7,41,42,43,44,45,46,7,7,7,7,7,]),'condition':([0,13,14,18,36,49,58,63,66,],[8,34,36,8,8,8,8,8,8,]),'if-expression':([0,18,36,49,58,63,66,],[9,9,9,9,9,9,9,]),'for-loop':([0,18,36,49,58,63,66,],[10,10,10,10,10,10,10,]),'term':([0,13,14,18,19,20,21,22,23,24,25,26,36,49,58,63,66,],[12,12,12,12,39,40,12,12,12,12,12,12,12,12,12,12,12,]),'factor':([0,13,14,18,19,20,21,22,23,24,25,26,29,30,31,32,33,36,49,56,58,63,66,],[16,16,16,16,16,16,16,16,16,16,16,16,50,51,52,53,54,16,16,61,16,16,16,]),'var_assigment_list':([11,],[27,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,30 +26,39 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> expression","S'",1,None,None,None),
-  ('expression -> RESERVED VAR ASSIGN expression','expression',4,'p_expression_var','parser.py',36),
-  ('expression -> arith-expression','expression',1,'p_expression_arith','parser.py',42),
-  ('expression -> condition','expression',1,'p_expression_comp','parser.py',45),
-  ('expression -> if-expression','expression',1,'p_expression_if','parser.py',48),
-  ('if-expression -> RESERVED condition LBRACE expression RBRACE','if-expression',5,'p_if','parser.py',59),
-  ('if-expression -> RESERVED condition LBRACE expression RBRACE RESERVED LBRACE expression RBRACE','if-expression',9,'p_if_else','parser.py',72),
-  ('condition -> arith-expression EQUALS arith-expression','condition',3,'p_cond_arith','parser.py',85),
-  ('condition -> arith-expression DIFFERENT arith-expression','condition',3,'p_cond_arith','parser.py',86),
-  ('condition -> arith-expression LESSTHAN arith-expression','condition',3,'p_cond_arith','parser.py',87),
-  ('condition -> arith-expression MORETHAN arith-expression','condition',3,'p_cond_arith','parser.py',88),
-  ('condition -> arith-expression LESSTHANE arith-expression','condition',3,'p_cond_arith','parser.py',89),
-  ('condition -> arith-expression MORETHANE arith-expression','condition',3,'p_cond_arith','parser.py',90),
-  ('condition -> NEGATIVE condition','condition',2,'p_cond_negative','parser.py',104),
-  ('arith-expression -> arith-expression PLUS term','arith-expression',3,'p_arith_plus','parser.py',110),
-  ('arith-expression -> arith-expression MINUS term','arith-expression',3,'p_arith_minus','parser.py',113),
-  ('arith-expression -> term','arith-expression',1,'p_arith_term','parser.py',116),
-  ('term -> term TIMES factor','term',3,'p_term_times','parser.py',124),
-  ('term -> term POWER factor','term',3,'p_term_exponente','parser.py',127),
-  ('term -> term DIVIDE factor','term',3,'p_term_div','parser.py',130),
-  ('term -> term MODULE factor','term',3,'p_term_mod','parser.py',133),
-  ('term -> term WHOLEDIVIDE factor','term',3,'p_term_wholediv','parser.py',136),
-  ('term -> factor','term',1,'p_term_factor','parser.py',139),
-  ('factor -> NUMBER','factor',1,'p_factor_num','parser.py',144),
-  ('factor -> VAR','factor',1,'p_factor_var','parser.py',147),
-  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_expr','parser.py',151),
+  ("S' -> program","S'",1,None,None,None),
+  ('program -> block','program',1,'p_program','parserCop.py',39),
+  ('block -> main','block',1,'p_block','parserCop.py',45),
+  ('main -> line','main',1,'p_main','parserCop.py',56),
+  ('line -> expression','line',1,'p_line','parserCop.py',62),
+  ('line -> var_decl','line',1,'p_line','parserCop.py',63),
+  ('var_decl -> SET var_assigment_list SEMICOLON','var_decl',3,'p_var_decl','parserCop.py',75),
+  ('var_assigment_list -> VAR ASSIGN expression','var_assigment_list',3,'p_var_assigment','parserCop.py',81),
+  ('var_assigment_list -> var_assigment_list VAR ASSIGN expression','var_assigment_list',4,'p_var_assigment_list','parserCop.py',88),
+  ('expression -> arith-expression','expression',1,'p_expression_arith','parserCop.py',96),
+  ('expression -> condition','expression',1,'p_expression_comp','parserCop.py',99),
+  ('expression -> if-expression','expression',1,'p_expression_if','parserCop.py',102),
+  ('expression -> for-loop','expression',1,'p_expression_for','parserCop.py',105),
+  ('if-expression -> RESERVED condition expression RBRACE','if-expression',4,'p_if','parserCop.py',115),
+  ('if-expression -> RESERVED condition expression RBRACE RESERVED expression RBRACE','if-expression',7,'p_if_else','parserCop.py',128),
+  ('for-loop -> RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE','for-loop',8,'p_for','parserCop.py',142),
+  ('condition -> arith-expression EQUALS arith-expression','condition',3,'p_cond_arith','parserCop.py',155),
+  ('condition -> arith-expression DIFFERENT arith-expression','condition',3,'p_cond_arith','parserCop.py',156),
+  ('condition -> arith-expression LESSTHAN arith-expression','condition',3,'p_cond_arith','parserCop.py',157),
+  ('condition -> arith-expression MORETHAN arith-expression','condition',3,'p_cond_arith','parserCop.py',158),
+  ('condition -> arith-expression LESSTHANE arith-expression','condition',3,'p_cond_arith','parserCop.py',159),
+  ('condition -> arith-expression MORETHANE arith-expression','condition',3,'p_cond_arith','parserCop.py',160),
+  ('condition -> NEGATIVE condition','condition',2,'p_cond_negative','parserCop.py',174),
+  ('arith-expression -> arith-expression PLUS term','arith-expression',3,'p_arith_plus','parserCop.py',180),
+  ('arith-expression -> arith-expression MINUS term','arith-expression',3,'p_arith_minus','parserCop.py',183),
+  ('arith-expression -> term','arith-expression',1,'p_arith_term','parserCop.py',186),
+  ('term -> term TIMES factor','term',3,'p_term_times','parserCop.py',194),
+  ('term -> term POWER factor','term',3,'p_term_exponente','parserCop.py',197),
+  ('term -> term DIVIDE factor','term',3,'p_term_div','parserCop.py',200),
+  ('term -> term MODULE factor','term',3,'p_term_mod','parserCop.py',203),
+  ('term -> term WHOLEDIVIDE factor','term',3,'p_term_wholediv','parserCop.py',206),
+  ('term -> factor','term',1,'p_term_factor','parserCop.py',209),
+  ('factor -> NUMBER','factor',1,'p_factor_num','parserCop.py',214),
+  ('factor -> VAR','factor',1,'p_factor_var','parserCop.py',217),
+  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_expr','parserCop.py',221),
 ]
