@@ -56,7 +56,7 @@ reserved = {
     "while": "WHILE",
     "for": "FOR",
     "to": "TO",
-    "Step" : "STEP",
+    "step": "STEP",
     "enCaso": "ENCASO",
     "entons": "ENTONS",
     "cuando": "CUANDO",
@@ -146,13 +146,13 @@ def t_COMMENT(t):
 
 
 def t_VAR(t):
-    r'@[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
+    r'@[a-zA-Z_0-9?][a-zA-Z_0-9?][a-zA-Z_0-9?][a-zA-Z_0-9?]*'
     t.type = reserved.get(t.value, 'VAR')  # Check for reserved words
     return t
 
 
 def t_ID(t):
-    r'[a-zA-Z_0-9?][a-zA-Z_0-9?][a-zA-Z_0-9?][a-zA-Z_0-9?]*'
+    r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
 
     if t.value.lower() in reserved:
         t.value = t.value.upper()
@@ -163,13 +163,14 @@ def t_ID(t):
         t.lexer.skip(1)
 
 
-
-def t_FUNCTION(t):
+'''def t_FUNCTION(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*()'
     var = t.type == reserved.get(t.value, 'FUNCTION')  # Check for reserved words
     return t
+'''
 
-    '''
+
+'''
 # Match the first {. Enter ccode state.
 def t_ccode(t):
     r'\{'
@@ -195,7 +196,8 @@ def t_ccode_rbrace(t):
         t.lexer.lineno += t.value.count('\n')
         t.lexer.begin('INITIAL')
         return t
-    '''
+
+
 
 """ 
 def find_doc(direc):
@@ -232,7 +234,7 @@ fp = codecs.open(test, 'r', None, 'strict', - 1)
 arr = fp.read()
 fp.close()
 """
-
+'''
 lexer = lex.lex()
 
 
