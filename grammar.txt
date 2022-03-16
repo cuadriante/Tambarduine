@@ -9,6 +9,8 @@ var_decl            : RESERVED:SET VAR ASSIGN expr SEMICOLON
 var_assigment_list  : VAR ASSIGN expression
                     | var_assigment_list VAR ASSIGN expression
 
+boolean_neg         : SET VAR NEG SEMICOLON
+
 expr                : 
                     | arith-expr
                     | boolean

@@ -10,6 +10,7 @@ import sys
 tokens = (
     'In',
     'BOOL',
+    'NEG',
     'ID',
     'NUMBER',
     'PLUS',
@@ -137,6 +138,11 @@ def t_NUMBER(t):
 def t_BOOL(t):
     r'((t|T)rue)|((f|F)alse)'
     t.value = 1 if (t.value == 'true' or t.value == 'True') else 0
+    return t
+
+
+def t_NEG(t):
+    r'.Neg'
     return t
 
 

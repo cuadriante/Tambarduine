@@ -42,6 +42,7 @@ def p_program(p):
     "program : block"
     p[0] = p[1]
 
+
 # BLOCK
 # bloack : functions main
 
@@ -66,9 +67,14 @@ def p_main(p):
 
 
 # line
-def p_line(p):
+def p_line_expr(p):
     """line : expression
         | var_decl"""
+    p[0] = p[1]
+
+
+def p_line_boolean_neg(p):
+    "line : boolean_neg"
     p[0] = p[1]
 
 
@@ -102,6 +108,12 @@ def p_var_assigment_list(p):
     value = p[4]
     add_var(var_name, value)
 
+
+# Negacion
+def p_boolean_(p):
+    'boolean_neg : SET VAR NEG SEMICOLON'
+    p[0] = 'Negao papi'
+
 # EXPR
 
 
@@ -111,7 +123,7 @@ def p_expression_arith(p):
 
 
 def p_expression_boolean(p):
-    'expression : boolean'
+    'expression : BOOL'
     p[0] = p[1]
 
 
@@ -264,11 +276,6 @@ def p_factor_var(p):
 def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
     p[0] = p[2]
-
-
-def p_factor_boolean(p):
-    'boolean : BOOL'
-    p[0] = p[1]
 
 
 def p_error(p):
