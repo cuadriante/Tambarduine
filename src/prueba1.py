@@ -1,4 +1,4 @@
-from parserCop import *
+from parser import *
 from lexer import *
 
 code = []
