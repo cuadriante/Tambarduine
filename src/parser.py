@@ -78,6 +78,14 @@ def p_line_boolean_neg(p):
     p[0] = p[1]
 
 
+def p_line_boolean_to_true(p):
+    "line : boolean_true"
+    p[0] = p[1]
+
+
+def p_line_boolean_to_false(p):
+    "line : boolean_false"
+    p[0] = p[1]
 
 
 # VAR-DECL
@@ -112,7 +120,16 @@ def p_boolean_neg(p):
         symbol_table.cambiar_valor(p[2], 1)
 
 
-# EXPR
+def p_boolean_to_true(p):
+    'boolean_true : SET VAR TRUE SEMICOLON'
+    symbol_table.cambiar_valor(p[2], 1)
+
+
+def p_boolean_to_false(p):
+    'boolean_false : SET VAR FALSE SEMICOLON'
+    symbol_table.cambiar_valor(p[2], 0)
+
+    # EXPR
 
 
 def p_expression_arith(p):
@@ -151,6 +168,7 @@ def p_if(p):
     else:
         pass
 
+
 def p_if_else(p):
     "if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
     condicion = p[2]
@@ -159,12 +177,15 @@ def p_if_else(p):
     else:
         p[0] = p[8]
 
+
 """
 FOR
 """
-#Sin variable declarada antes
+# Sin variable declarada antes
+
+
 def p_for(p):
-    "for-loop : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE" 
+    "for-loop : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
     variable_name = p[2]
     if symbol_table.get(variable_name):
         pass

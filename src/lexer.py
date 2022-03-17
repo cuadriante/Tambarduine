@@ -97,8 +97,8 @@ t_LBRACE = r'\{'
 t_RBRACE = r'\}'
 t_ignore = ' \t'
 t_ccode_ignore = " \t\n"
-t_TRUE = r'.t'
-T_FALSE = r'.f'
+t_TRUE = r'.T'
+t_FALSE = r'.F'
 
 # Declare the state
 states = (
