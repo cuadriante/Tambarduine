@@ -44,7 +44,8 @@ factor              :NUMBER
 
 print               : PRINT LPAREN params RPAREN SEMICOLON
 
-params              : param -> Trabajando en esto
+params              : param
+                    | params ASSIGN param
 
 param               : NUMBER
                     | VAR

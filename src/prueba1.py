@@ -29,7 +29,7 @@ parser = yacc.yacc()
 #     # print(result)
 
 
-'''Hay que correr la prueba desde src para que encuentra prueba.txt'''
+'''Hay que correr la prueba desde src para que encuentre prueba.txt'''
 
 archivo = open('prueba.txt')
 codigo = archivo.read()

@@ -51,13 +51,6 @@ def p_block(p):
     "block : main"
     p[0] = p[1]
 
-
-"""
-# FUNCTIONS
-def p_functions(p):
-    "functions : empty"
-"""
-
 # MAIN
 
 
@@ -93,14 +86,24 @@ def p_line_print(p):
     p[0] = p[1]
 
 
-def p_print(p):
+def p_print_params(p):
     "print : PRINT LPAREN params RPAREN SEMICOLON"
     p[0] = p[3]
 
 
+def p_print_param(p):
+    "print : PRINT LPAREN param RPAREN SEMICOLON"
+    p[0] = p[3]
+
+
 def p_params(p):
-    'params : param'
+    "params : param"
     p[0] = p[1]
+
+
+def p_params_list(p):
+    "param : params ASSIGN param"
+    p[0] = str(p[1]) + ' ' + str(p[3])
 
 
 def p_param_num(p):
@@ -116,7 +119,9 @@ def p_params_var(p):
 
 def p_params_string(p):
     "param : STRING"
-    p[0] = p[1]
+    string_con_comillas = p[1]
+    # string_sin_comillas = string_con_comillas.split('"')[1]
+    p[0] = string_con_comillas
 
 
 # VAR-DECL
@@ -134,7 +139,7 @@ def p_var_assigment(p):
 
 
 def p_var_assigment_list(p):
-    """var_assigment_list : var_assigment_list VAR ASSIGN expression """
+    """var_assigment_list : var_assigment_list SEMICOLON VAR ASSIGN expression """
     print("multiple")
     var_name = p[2]
     value = p[4]
@@ -327,11 +332,10 @@ def p_error(p):
     print(f"Syntax error: Unexpected {token}")
 
 
-""" def p_empty(p):
-    '''
-    empty :
-    '''
-    pass """
+def p_empty(p):
+    'empty :'
+    pass
+
 
 """
 Agrega una variable a la tabla de valores

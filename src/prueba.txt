@@ -1,9 +1,3 @@
-SET @var1, 15;
-print(@var1);
-print(1341);
-print("Prueba string");
+SET @var1, 15; SET @var2, true; SET @var3, 13113;
 
-SET @var2, true;
-print(@var2);
-SET @var2.F;
-print(@var2);
+print(@var1, @var2, @var3, "hola mundo", 5432);
