@@ -4,8 +4,10 @@ from lexer import *
 code = []
 
 
+code.append("SET @var1, True;")
+code.append("@var1")
 code.append("SET @var1.Neg;")
-# code.append("SET @var1, true;")
+code.append("@var2")
 # code.append("SET @var2, 7-3;")
 # code.append("SET @234, 8 @luz, 56;")
 # code.append("@234")

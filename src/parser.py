@@ -95,7 +95,6 @@ def p_var_decl(p):
 # VAR-ASSIGMENT-LIST
 def p_var_assigment(p):
     """var_assigment_list : VAR ASSIGN expression """
-    print("una")
     var_name = p[1]
     value = p[3]
     add_var(var_name, value)
@@ -110,9 +109,15 @@ def p_var_assigment_list(p):
 
 
 # Negacion
-def p_boolean_(p):
+def p_boolean_neg(p):
     'boolean_neg : SET VAR NEG SEMICOLON'
-    p[0] = 'Negao papi'
+    valor_original = symbol_table.get(p[2])
+
+    if valor_original == 1:
+        symbol_table.cambiar_valor(p[2], 0)
+    else:
+        symbol_table.cambiar_valor(p[2], 1)
+
 
 # EXPR
 
@@ -180,7 +185,7 @@ def p_for(p):
     "for-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE"
     print("Hola")
     variable_name = p[2]
-    if get_var_value(variable_name):
+    if symbol_table.get(variable_name):
         pass
     else:
         add_var(variable_name, 0)
@@ -269,7 +274,7 @@ def p_factor_num(p):
 
 def p_factor_var(p):
     "factor : VAR"
-    value = get_var_value(p[1])
+    value = symbol_table.get(p[1])
     p[0] = value
 
 
@@ -301,15 +306,3 @@ Agrega una variable a la tabla de valores
 
 def add_var(var_name, value):
     symbol_table.set(var_name, value)
-
-
-"""
-Retorna el valor de una variable
-"""
-
-
-def get_var_value(var_name):
-    value = symbol_table.get(var_name)
-    if not value:
-        return
-    return value
