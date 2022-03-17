@@ -12,7 +12,8 @@ class SymbolTable:
         if value == None and self.parent:
             return self.parent(name)
         elif value == None and self.parent == None:
-            raise Exception("No existe una variable con el nombre ingresado")
+            raise Exception(
+                "No existe una variable con el identificador " + name)
         else:
             return value
 

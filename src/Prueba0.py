@@ -1,4 +1,4 @@
-from parserCop import *
+from parser import *
 
 operaciones = [
     ("3 + 5 -2", 6),
@@ -26,11 +26,11 @@ resultados = []
 
 for i in operaciones:
     resultados.append(parser.parse(i[0]))
-    
-for i in range(len(operaciones) -1):
+
+for i in range(len(operaciones) - 1):
     if resultados[i] == operaciones[i][1]:
         isCorrecta = True
     else:
         isCorrecta = False
-    print(f"Operación:  {operaciones[i][0]}  |  Resultado: {resultados[i]}  |  Solución: {operaciones[i][1]}  |  Correcta: {isCorrecta} ")
-
+    print(
+        f"Operación:  {operaciones[i][0]}  |  Resultado: {resultados[i]}  |  Solución: {operaciones[i][1]}  |  Correcta: {isCorrecta} ")
