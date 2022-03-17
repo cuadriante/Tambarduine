@@ -78,16 +78,9 @@ def p_line_boolean_neg(p):
     p[0] = p[1]
 
 
-""" #expression_list
-def p_expression_list(p):
-    expression_list : expression
-                    |expression_list expression
-    p[0] = p[1]
-"""
+
 
 # VAR-DECL
-
-
 def p_var_decl(p):
     """var_decl : SET var_assigment_list SEMICOLON"""
 
@@ -148,42 +141,30 @@ def p_expression_for(p):
 
 
 # IF-expression
-#"if-expression : IF condition LBRACE expression RBRACE"
 def p_if(p):
-    "if-expression : RESERVED condition expression RBRACE"
-    if(p[1] == "if"):
-        condicion = p[3]
-        if(p[2] == condicion):
+    "if-expression : IF condition LBRACE expression RBRACE"
+    condicion = p[2]
+    if(condicion == True):
 
-            valor = p[2]
-            p[0] = valor
-        else:
-            pass
+        valor = p[4]
+        p[0] = valor
     else:
-        print("error")
-#"if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
-
+        pass
 
 def p_if_else(p):
-    "if-expression : RESERVED condition expression RBRACE RESERVED expression RBRACE"
-    if(p[1] == "if" and p[5] == "else"):
-        condicion = p[3]
-        if(p[2] == condicion):
-            p[0] = p[3]
-        else:
-            p[0] = p[6]
+    "if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
+    condicion = p[2]
+    if(condicion == True):
+        p[0] = p[4]
     else:
-        print("error")
-
+        p[0] = p[8]
 
 """
 FOR
 """
-
-
+#Sin variable declarada antes
 def p_for(p):
-    "for-loop : RESERVED VAR RESERVED factor RESERVED NUMBER expression RBRACE"
-    print("Hola")
+    "for-loop : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE" 
     variable_name = p[2]
     if symbol_table.get(variable_name):
         pass
