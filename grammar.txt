@@ -4,6 +4,12 @@ block               : main
 
 main                : line
 
+line                : expr
+                    | boolean_neg
+                    | boolean_to_true
+                    | boolean_to_false
+                    | print
+
 var_decl            : RESERVED:SET VAR ASSIGN expr SEMICOLON
 
 var_assigment_list  : VAR ASSIGN expression
@@ -13,7 +19,7 @@ boolean_neg         : SET VAR NEG SEMICOLON
 
 expr                : 
                     | arith-expr
-                    | boolean
+                    | BOOL
                     | condition
                     | if-expr
                     | for-loop
@@ -36,4 +42,10 @@ factor              :NUMBER
                     | VAR
                     | LPAREN factor RPAREN
 
-boolean             : BOOL
+print               : PRINT LPAREN params RPAREN SEMICOLON
+
+params              : param -> Trabajando en esto
+
+param               : NUMBER
+                    | VAR
+                    | STRING

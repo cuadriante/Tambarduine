@@ -1,3 +1,9 @@
-SET @var1, True;
-SET @var2, False;
+SET @var1, 15;
+print(@var1);
+print(1341);
+print("Prueba string");
 
+SET @var2, true;
+print(@var2);
+SET @var2.F;
+print(@var2);

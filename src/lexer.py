@@ -9,8 +9,6 @@ import sys
 # List of token names.   This is always required
 tokens = (
     'In',
-    'BOOL',
-    'NEG',
     'ID',
     'NUMBER',
     'PLUS',
@@ -40,8 +38,11 @@ tokens = (
     'SEMICOLON',
     'CCODE',
     'FUNCTION',
+    'BOOL',
+    'NEG',
     'TRUE',
     'FALSE',
+    'STRING',
 )
 
 reserved = {
@@ -64,8 +65,9 @@ reserved = {
     "cuando": "CUANDO",
     "siNo": "SINO",
     "finEnCaso": "FINENCASO",
-    "def": "DEF",
     "exec": "EXEC",
+    "def": "DEF",
+    "print": "PRINT"
 }
 
 
@@ -99,6 +101,8 @@ t_ignore = ' \t'
 t_ccode_ignore = " \t\n"
 t_TRUE = r'.T'
 t_FALSE = r'.F'
+t_PRINT = r'print'
+t_STRING = r'".*"'
 
 # Declare the state
 states = (
@@ -127,8 +131,9 @@ def t_ccode_error(t):
     print("Illegal character in bracket '%s'" % t.value[0])
     t.lexer.skip(1)
 
-
 # A regular expression rule with some action code
+
+
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)

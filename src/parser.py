@@ -52,8 +52,8 @@ def p_block(p):
     p[0] = p[1]
 
 
-""" 
-#FUNCTIONS
+"""
+# FUNCTIONS
 def p_functions(p):
     "functions : empty"
 """
@@ -88,7 +88,39 @@ def p_line_boolean_to_false(p):
     p[0] = p[1]
 
 
+def p_line_print(p):
+    "line : print"
+    p[0] = p[1]
+
+
+def p_print(p):
+    "print : PRINT LPAREN params RPAREN SEMICOLON"
+    p[0] = p[3]
+
+
+def p_params(p):
+    'params : param'
+    p[0] = p[1]
+
+
+def p_param_num(p):
+    "param : NUMBER"
+    p[0] = p[1]
+
+
+def p_params_var(p):
+    "param : VAR"
+    value = symbol_table.get(p[1])
+    p[0] = value
+
+
+def p_params_string(p):
+    "param : STRING"
+    p[0] = p[1]
+
+
 # VAR-DECL
+
 def p_var_decl(p):
     """var_decl : SET var_assigment_list SEMICOLON"""
 
