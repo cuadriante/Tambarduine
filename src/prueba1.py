@@ -24,14 +24,18 @@ parser = yacc.yacc()
 
 archivo = open('prueba.txt')
 codigo = archivo.read()
-instrucciones = codigo.split(';')
+# instrucciones = codigo.split(';')
 
 # print_lexer(codigo)
 # print(parser.parse(codigo))
 
-for i in range(len(instrucciones) - 1):
-    instruccion = instrucciones[i] + ';'
-    print(instruccion)
-    # print_lexer(instruccion)
-    result = parser.parse(instruccion)
-    print(result)
+print_lexer(codigo)
+result = parser.parse(codigo)
+print(result)
+
+# for i in range(len(instrucciones) - 1):
+#     instruccion = instrucciones[i] + ';'
+#     print(instruccion)
+#     print_lexer(codigo)
+#     result = parser.parse(instruccion)
+#     print(result)

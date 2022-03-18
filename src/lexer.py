@@ -40,8 +40,6 @@ tokens = (
     'SEMICOLON',
     'CCODE',
     'FUNCTION',
-    'BOOL',
-    'NEG',
     'TRUE',
     'FALSE',
     'STRING',
@@ -183,36 +181,36 @@ def t_ID(t):
 '''
 
 
-'''
-# Match the first {. Enter ccode state.
-def t_ccode(t):
-    r'\{'
-    t.lexer.code_start = t.lexer.lexpos  # Record the starting position
-    t.lexer.level = 1  # Initial brace level
-    t.lexer.begin('ccode')  # Enter 'ccode' state
+
+# # Match the first {. Enter ccode state.
+# def t_ccode(t):
+#     r'\{'
+#     t.lexer.code_start = t.lexer.lexpos  # Record the starting position
+#     t.lexer.level = 1  # Initial brace level
+#     t.lexer.begin('ccode')  # Enter 'ccode' state
 
 
-# Rules for the ccode state
-def t_ccode_lbrace(t):
-    r'\{'
-    t.lexer.level += 1
+# # Rules for the ccode state
+# def t_ccode_lbrace(t):
+#     r'\{'
+#     t.lexer.level += 1
 
 
-def t_ccode_rbrace(t):
-    r'\};'
-    t.lexer.level -= 1
+# def t_ccode_rbrace(t):
+#     r'\};'
+#     t.lexer.level -= 1
 
-    # If closing brace, return the code fragment
-    if t.lexer.level == 0:
-        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
-        t.type = "CCODE"
-        t.lexer.lineno += t.value.count('\n')
-        t.lexer.begin('INITIAL')
-        return t
+#     # If closing brace, return the code fragment
+#     if t.lexer.level == 0:
+#         t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
+#         t.type = "CCODE"
+#         t.lexer.lineno += t.value.count('\n')
+#         t.lexer.begin('INITIAL')
+#         return t
 
 
 
-""" 
+"""
 def find_doc(direc):
     global files
     docs = []
@@ -236,6 +234,7 @@ def find_doc(direc):
 
         print("Executing \"%s\" \n" % files[int(doc_number) - 1])
 
+
     return files[int(doc_number) - 1]
 
 
@@ -247,7 +246,6 @@ fp = codecs.open(test, 'r', None, 'strict', - 1)
 arr = fp.read()
 fp.close()
 """
-'''
 lexer = lex.lex()
 
 

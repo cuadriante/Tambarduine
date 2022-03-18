@@ -47,9 +47,14 @@ def p_program(p):
 # bloack : functions main
 
 
-def p_block(p):
+def p_block_main(p):
     "block : main"
     p[0] = p[1]
+
+# def p_block_functions(p):
+#     "block : function"
+#     p[0] = p[1]
+
 
 # MAIN
 
@@ -59,13 +64,24 @@ def p_main(p):
 
 
 # line
+# var_decls
 def p_line(p):
     """line : expression
-        | var_decl
         | boolean_neg
-        | en_caso"""
+        | statements"""
     p[0] = p[1]
 
+def p_statements(p):
+    """statements : statement
+                    | statement statement"""
+
+
+def p_statement(p):
+    """statement : var_decls
+                | if_statement
+                | for_loop
+                | en_caso"""
+    p[0] = p[1]
 
 def p_line_boolean_to_true(p):
     "line : boolean_true"
@@ -79,24 +95,13 @@ def p_line_boolean_to_false(p):
 # VAR-DECL
 
 def p_var_decl(p):
-    """var_decl : SET var_assigment_list SEMICOLON"""
+    """var_decl : SET VAR ASSIGN expression SEMICOLON"""
+    p[0] = p[4]
 
-
-# VAR-ASSIGMENT-LIST
-def p_var_assigment(p):
-    """var_assigment_list : VAR ASSIGN expression """
-    var_name = p[1]
-    value = p[3]
-    add_var(var_name, value)
-
-
-def p_var_assigment_list(p):
-    """var_assigment_list : var_assigment_list SEMICOLON VAR ASSIGN expression """
-    print("multiple")
-    var_name = p[2]
-    value = p[4]
-    add_var(var_name, value)
-
+def p_var_decls(p):
+    """var_decls : var_decl SET VAR ASSIGN expression SEMICOLON
+                | var_decl"""
+    p[0] = (p[1],p[5])
 
 # Parametros
 def p_params(p):
@@ -166,25 +171,16 @@ def p_expression_comp(p):
     p[0] = p[1]
 
 
-def p_expression_if(p):
-    'expression : if-expression'
-    p[0] = p[1]
-
-
-def p_expression_for(p):
-    'expression : for-loop'
-    p[0] = p[1]
-
-
 def p_expression_print(p):
     "expression : print"
     p[0] = p[1]
 
-# IF-expression
+# IF
 
 
 def p_if(p):
-    "if-expression : IF condition LBRACE expression RBRACE"
+    "if_statement : IF condition LBRACE expression RBRACE"
+    print("if")
     condicion = p[2]
     if(condicion == True):
 
@@ -195,7 +191,8 @@ def p_if(p):
 
 
 def p_if_else(p):
-    "if-expression : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
+    "if_statement : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
+    print("elseif")
     condicion = p[2]
     if(condicion == True):
         p[0] = p[4]
@@ -206,11 +203,8 @@ def p_if_else(p):
 """
 FOR
 """
-# Sin variable declarada antes
-
-
 def p_for(p):
-    "for-loop : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
+    "for_loop : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
     variable_name = p[2]
     if symbol_table.get(variable_name):
         pass
@@ -243,6 +237,7 @@ def p_swich_1_list(p):
 
 def p_cond_arith(p):
     "condition : arith-expression semi_condition"
+    print("condition")
     if p[2][0] == "==":
         p[0] = p[1] == p[2][1]
     elif p[2][0] == "<>":

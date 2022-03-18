@@ -9,11 +9,9 @@ line                : expr
                     | boolean_to_true
                     | boolean_to_false
                     | print
+                    | statements
 
-var_decl            : RESERVED:SET VAR ASSIGN expr SEMICOLON
 
-var_assigment_list  : VAR ASSIGN expression
-                    | var_assigment_list VAR ASSIGN expression
 
 boolean_neg         : SET VAR NEG SEMICOLON
 
@@ -21,13 +19,34 @@ expr                :
                     | arith-expr
                     | BOOL
                     | condition
-                    | if-expr
-                    | for-loop
 
-if-expr             : IF condition LBRACE expression RBRACE
+
+statements          : statement
+                    | statement statement
+
+statement           : if_statement
+                    | for_loop
+                    | en_caso
+                    | var_decls 
+
+
+
+
+var_decls           : var_decl SET VAR ASSIGN expr SEMICOLON
+                    | var_decl
+
+var_decl            : SET VAR ASSIGN expr SEMICOLON
+
+
+
+if_statement        : IF condition LBRACE expression RBRACE
                     | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
 
-for-loop            : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE      
+
+
+for_loop            : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE      
+
+
 
 en_caso             : ENCASO switch_list_0 SINO LBRACE expression RBRACE FINENCASO SEMICOLON
                     | ENCASO expression switch_list_1 SINO LBRACE expression RBRACE FINENCASO SEMICOLON
@@ -38,11 +57,18 @@ switch_list_0       : CUANDO VAR condition expression ENTONS LBRACE expression R
 switch_list_1       : CUANDO condition expression ENTONS LBRACE expression RBRACE
                     | switch_list_1 CUANDO condition expression ENTONS LBRACE expression RBRACE
 
+
+
+
 condition           : arith-expression semi_condition
                     | NEGATIVE condition
 
 semi_condition      : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
-                
+
+
+
+
+
 arith-expr          : arith-expression (PLUS|MINUS) term
                     | term
 

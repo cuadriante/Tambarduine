@@ -1,18 +1,2 @@
-# Test
-bork @data@, 3
-
-set @1234, 101;
-
-set @SET, 10;
-asdsadasd;
-
-1 <= 2;
-def pain(){
-while {
-if 1 <= 2;
-entons;
-}
-};
-
-
-exec pain()
+SET @var1, 4;
+SET @var2, 6;

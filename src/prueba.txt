@@ -1,3 +1,2 @@
-SET @var1, 15; SET @var2, true; SET @var3, 13113;
-
-print(@var1, @var2, @var3, "hola mundo", 5432);
+if 1 < 7 {1 } else {0}
+if 1 < 7 {1 } else {0}

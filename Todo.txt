@@ -1,5 +1,0 @@
--Agregar true o false como posible valor de la variable.
--El compilador devuelve True o False. Debería ser en minuscula (true/false).
--Devolver el número de linea cuando hay un error.
--No está implementado el ";".
--Cuando se opera una variable no se verifica el tipo.
