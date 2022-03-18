@@ -27,10 +27,21 @@ expr                :
 if-expr             : IF condition LBRACE expression RBRACE
                     | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
 
-for-loop            : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE                
+for-loop            : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE      
 
-condition           : arith-expression (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
+en_caso             : ENCASO switch_list_0 SINO LBRACE expression RBRACE FINENCASO SEMICOLON
+                    | ENCASO expression switch_list_1 SINO LBRACE expression RBRACE FINENCASO SEMICOLON
+                
+switch_list_0       : CUANDO VAR condition expression ENTONS LBRACE expression RBRACE
+                    | switch_list_0 CUANDO VAR condition expression ENTONS LBRACE expression RBRACE
+
+switch_list_1       : CUANDO condition expression ENTONS LBRACE expression RBRACE
+                    | switch_list_1 CUANDO condition expression ENTONS LBRACE expression RBRACE
+
+condition           : arith-expression semi_condition
                     | NEGATIVE condition
+
+semi_condition      : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
                 
 arith-expr          : arith-expression (PLUS|MINUS) term
                     | term

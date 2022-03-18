@@ -8,7 +8,9 @@ import sys
 
 # List of token names.   This is always required
 tokens = (
-    'In',
+    'IN',
+    'BOOL',
+    'NEG',
     'ID',
     'NUMBER',
     'PLUS',
@@ -60,11 +62,11 @@ reserved = {
     "for": "FOR",
     "to": "TO",
     "step": "STEP",
-    "enCaso": "ENCASO",
+    "encaso": "ENCASO",
     "entons": "ENTONS",
     "cuando": "CUANDO",
-    "siNo": "SINO",
-    "finEnCaso": "FINENCASO",
+    "sino": "SINO",
+    "finencaso": "FINENCASO",
     "exec": "EXEC",
     "def": "DEF",
     "print": "PRINT"

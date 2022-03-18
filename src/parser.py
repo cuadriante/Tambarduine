@@ -53,21 +53,17 @@ def p_block(p):
 
 # MAIN
 
-
 def p_main(p):
     "main : line"
     p[0] = p[1]
 
 
 # line
-def p_line_expr(p):
+def p_line(p):
     """line : expression
-        | var_decl"""
-    p[0] = p[1]
-
-
-def p_line_boolean_neg(p):
-    "line : boolean_neg"
+        | var_decl
+        | boolean_neg
+        | en_caso"""
     p[0] = p[1]
 
 
@@ -79,7 +75,6 @@ def p_line_boolean_to_true(p):
 def p_line_boolean_to_false(p):
     "line : boolean_false"
     p[0] = p[1]
-
 
 # VAR-DECL
 
@@ -226,34 +221,58 @@ def p_for(p):
 def p_print(p):
     "print : PRINT LPAREN params RPAREN SEMICOLON"
     p[0] = p[3]
+    
+#en_caso
+def p_en_caso_0(p):
+    "en_caso : ENCASO switch_list_0 SINO LBRACE expression RBRACE FINENCASO SEMICOLON"
+def p_swich_0(p):
+    "switch_list_0 : CUANDO condition ENTONS LBRACE expression RBRACE"
+def p_swich_0_list(p):
+    "switch_list_0 : switch_list_0 CUANDO condition ENTONS LBRACE expression RBRACE"
+
+def p_en_caso_1(p):
+    "en_caso : ENCASO expression switch_list_1 SINO LBRACE expression RBRACE FINENCASO SEMICOLON"
+def p_switch_1(p):
+    "switch_list_1 : CUANDO semi_condition ENTONS LBRACE expression RBRACE"
+def p_swich_1_list(p):
+    "switch_list_1 : switch_list_1 CUANDO semi_condition ENTONS LBRACE expression RBRACE"
+
 
 # condition
 
 
 def p_cond_arith(p):
-    '''condition : arith-expression EQUALS arith-expression
-                | arith-expression DIFFERENT arith-expression
-                | arith-expression LESSTHAN arith-expression
-                | arith-expression MORETHAN arith-expression
-                | arith-expression LESSTHANE arith-expression
-                | arith-expression MORETHANE arith-expression'''
-    if p[2] == "==":
-        p[0] = p[1] == p[3]
-    elif p[2] == "<>":
-        p[0] = p[1] != p[3]
-    elif p[2] == "<":
-        p[0] = p[1] < p[3]
-    elif p[2] == ">":
-        p[0] = p[1] > p[3]
-    elif p[2] == "<=":
-        p[0] = p[1] <= p[3]
-    elif p[2] == ">=":
-        p[0] = p[1] >= p[3]
+    "condition : arith-expression semi_condition"
+    if p[2][0] == "==":
+        p[0] = p[1] == p[2][1]
+    elif p[2][0] == "<>":
+        p[0] = p[1] != p[2][1]
+    elif p[2][0] == "<":
+        p[0] = p[1] < p[2][1]
+    elif p[2][0] == ">":
+        p[0] = p[1] > p[2][1]
+    elif p[2][0] == "<=":
+        p[0] = p[1] <= p[2][1]
+    elif p[2][0] == ">=":
+        p[0] = p[1] >= p[2][1]
 
 
 def p_cond_negative(p):
     "condition : NEGATIVE condition"
     p[0] = not p[2]
+
+#semi_condition
+def p_semi_condition(p):
+    """semi_condition : EQUALS arith-expression
+                | DIFFERENT arith-expression
+                | LESSTHAN arith-expression
+                | MORETHAN arith-expression
+                | LESSTHANE arith-expression
+                | MORETHANE arith-expression"""
+    print("semi_condition")
+    p[0] = (p[1],p[2])
+
+
 
 
 # arith-expr
