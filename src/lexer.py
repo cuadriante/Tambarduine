@@ -1,11 +1,3 @@
-from numpy import array
-import ply.lex as lex
-from ply.lex import TOKEN
-import re
-import codecs
-import os
-import sys
-
 # List of token names.   This is always required
 tokens = (
     'IN',
@@ -181,7 +173,6 @@ def t_ID(t):
 '''
 
 
-
 # # Match the first {. Enter ccode state.
 # def t_ccode(t):
 #     r'\{'
@@ -207,7 +198,6 @@ def t_ID(t):
 #         t.lexer.lineno += t.value.count('\n')
 #         t.lexer.begin('INITIAL')
 #         return t
-
 
 
 """
@@ -246,15 +236,3 @@ fp = codecs.open(test, 'r', None, 'strict', - 1)
 arr = fp.read()
 fp.close()
 """
-lexer = lex.lex()
-
-
-def print_lexer(texto):
-    lexer.input(texto)
-    print("--------LISTA DE TOKENS-------")
-    while True:
-        token = lexer.token()
-        if not token:
-            break
-        print(token)
-    print("------------------------------")

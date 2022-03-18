@@ -1,16 +1,5 @@
-from ast import parse
-from cgi import print_arguments
-from lib2to3.pgen2.token import NUMBER
-
-from matplotlib.pyplot import get
 
 from symbolTable import SymbolTable
-import ply.yacc as yacc
-import os
-import codecs
-import re
-from lexer import tokens
-from sys import stdin
 
 
 class VarAccessNode:
@@ -138,7 +127,7 @@ def p_params_string(p):
     # string_sin_comillas = string_con_comillas.split('"')[1]
     p[0] = string_con_comillas
 
-# Negacion
+# Funciones booleanas
 
 
 def p_boolean_neg(p):
