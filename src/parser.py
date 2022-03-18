@@ -81,21 +81,29 @@ def p_line_boolean_to_false(p):
     p[0] = p[1]
 
 
-def p_line_print(p):
-    "line : print"
-    p[0] = p[1]
+# VAR-DECL
+
+def p_var_decl(p):
+    """var_decl : SET var_assigment_list SEMICOLON"""
 
 
-def p_print_params(p):
-    "print : PRINT LPAREN params RPAREN SEMICOLON"
-    p[0] = p[3]
+# VAR-ASSIGMENT-LIST
+def p_var_assigment(p):
+    """var_assigment_list : VAR ASSIGN expression """
+    var_name = p[1]
+    value = p[3]
+    add_var(var_name, value)
 
 
-def p_print_param(p):
-    "print : PRINT LPAREN param RPAREN SEMICOLON"
-    p[0] = p[3]
+def p_var_assigment_list(p):
+    """var_assigment_list : var_assigment_list SEMICOLON VAR ASSIGN expression """
+    print("multiple")
+    var_name = p[2]
+    value = p[4]
+    add_var(var_name, value)
 
 
+# Parametros
 def p_params(p):
     "params : param"
     p[0] = p[1]
@@ -123,30 +131,9 @@ def p_params_string(p):
     # string_sin_comillas = string_con_comillas.split('"')[1]
     p[0] = string_con_comillas
 
-
-# VAR-DECL
-
-def p_var_decl(p):
-    """var_decl : SET var_assigment_list SEMICOLON"""
-
-
-# VAR-ASSIGMENT-LIST
-def p_var_assigment(p):
-    """var_assigment_list : VAR ASSIGN expression """
-    var_name = p[1]
-    value = p[3]
-    add_var(var_name, value)
-
-
-def p_var_assigment_list(p):
-    """var_assigment_list : var_assigment_list SEMICOLON VAR ASSIGN expression """
-    print("multiple")
-    var_name = p[2]
-    value = p[4]
-    add_var(var_name, value)
-
-
 # Negacion
+
+
 def p_boolean_neg(p):
     'boolean_neg : SET VAR NEG SEMICOLON'
     valor_original = symbol_table.get(p[2])
@@ -166,7 +153,7 @@ def p_boolean_to_false(p):
     'boolean_false : SET VAR FALSE SEMICOLON'
     symbol_table.cambiar_valor(p[2], 0)
 
-    # EXPR
+# EXPR
 
 
 def p_expression_arith(p):
@@ -194,7 +181,13 @@ def p_expression_for(p):
     p[0] = p[1]
 
 
+def p_expression_print(p):
+    "expression : print"
+    p[0] = p[1]
+
 # IF-expression
+
+
 def p_if(p):
     "if-expression : IF condition LBRACE expression RBRACE"
     condicion = p[2]
@@ -230,7 +223,13 @@ def p_for(p):
         add_var(variable_name, 0)
 
 
+def p_print(p):
+    "print : PRINT LPAREN params RPAREN SEMICOLON"
+    p[0] = p[3]
+
 # condition
+
+
 def p_cond_arith(p):
     '''condition : arith-expression EQUALS arith-expression
                 | arith-expression DIFFERENT arith-expression
