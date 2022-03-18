@@ -71,6 +71,7 @@ def p_line(p):
         | statements"""
     p[0] = p[1]
 
+
 def p_statements(p):
     """statements : statement
                     | statement statement"""
@@ -83,6 +84,7 @@ def p_statement(p):
                 | en_caso"""
     p[0] = p[1]
 
+
 def p_line_boolean_to_true(p):
     "line : boolean_true"
     p[0] = p[1]
@@ -94,16 +96,21 @@ def p_line_boolean_to_false(p):
 
 # VAR-DECL
 
+
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
+    print(p[4])
     p[0] = p[4]
+
 
 def p_var_decls(p):
     """var_decls : var_decl SET VAR ASSIGN expression SEMICOLON
                 | var_decl"""
-    p[0] = (p[1],p[5])
+    p[0] = (p[1], p[5])
 
 # Parametros
+
+
 def p_params(p):
     "params : param"
     p[0] = p[1]
@@ -203,6 +210,8 @@ def p_if_else(p):
 """
 FOR
 """
+
+
 def p_for(p):
     "for_loop : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
     variable_name = p[2]
@@ -215,19 +224,30 @@ def p_for(p):
 def p_print(p):
     "print : PRINT LPAREN params RPAREN SEMICOLON"
     p[0] = p[3]
-    
-#en_caso
+
+# en_caso
+
+
 def p_en_caso_0(p):
     "en_caso : ENCASO switch_list_0 SINO LBRACE expression RBRACE FINENCASO SEMICOLON"
+
+
 def p_swich_0(p):
     "switch_list_0 : CUANDO condition ENTONS LBRACE expression RBRACE"
+
+
 def p_swich_0_list(p):
     "switch_list_0 : switch_list_0 CUANDO condition ENTONS LBRACE expression RBRACE"
 
+
 def p_en_caso_1(p):
     "en_caso : ENCASO expression switch_list_1 SINO LBRACE expression RBRACE FINENCASO SEMICOLON"
+
+
 def p_switch_1(p):
     "switch_list_1 : CUANDO semi_condition ENTONS LBRACE expression RBRACE"
+
+
 def p_swich_1_list(p):
     "switch_list_1 : switch_list_1 CUANDO semi_condition ENTONS LBRACE expression RBRACE"
 
@@ -256,7 +276,9 @@ def p_cond_negative(p):
     "condition : NEGATIVE condition"
     p[0] = not p[2]
 
-#semi_condition
+# semi_condition
+
+
 def p_semi_condition(p):
     """semi_condition : EQUALS arith-expression
                 | DIFFERENT arith-expression
@@ -265,9 +287,7 @@ def p_semi_condition(p):
                 | LESSTHANE arith-expression
                 | MORETHANE arith-expression"""
     print("semi_condition")
-    p[0] = (p[1],p[2])
-
-
+    p[0] = (p[1], p[2])
 
 
 # arith-expr
