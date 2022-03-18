@@ -1,5 +1,5 @@
 
-from symbolTable import SymbolTable
+from symbolTable import symbol_table
 
 
 class VarAccessNode:
@@ -12,8 +12,6 @@ class VarAssignNode:
         self.var_name_tok = var_name_tok
         self.value_node = value_node
 
-
-symbol_table = SymbolTable()
 
 precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
     ('right', 'ASSIGN'),
@@ -29,6 +27,7 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 # ROOT
 def p_program(p):
     "program : block"
+    print(symbol_table.symbols)
     p[0] = p[1]
 
 
@@ -56,14 +55,13 @@ def p_main(p):
 # var_decls
 def p_line(p):
     """line : expression
-        | boolean_neg
         | statements"""
     p[0] = p[1]
 
 
 def p_statements(p):
     """statements : statement
-                    | statement statement"""
+                | statement statement"""
 
 
 def p_statement(p):
@@ -74,28 +72,22 @@ def p_statement(p):
     p[0] = p[1]
 
 
-def p_line_boolean_to_true(p):
-    "line : boolean_true"
-    p[0] = p[1]
-
-
-def p_line_boolean_to_false(p):
-    "line : boolean_false"
-    p[0] = p[1]
-
 # VAR-DECL
 
 
-def p_var_decl(p):
-    """var_decl : SET VAR ASSIGN expression SEMICOLON"""
-    print(p[4])
-    p[0] = p[4]
-
-
 def p_var_decls(p):
-    """var_decls : var_decl SET VAR ASSIGN expression SEMICOLON
-                | var_decl"""
-    p[0] = (p[1], p[5])
+    """var_decls : var_decl"""
+
+
+def p_var_decl(p):
+    """var_decl : var_decls SET VAR ASSIGN expression SEMICOLON"""
+    symbol_table.set(p[3], p[5])
+
+
+def p_var_decl_expression(p):
+    """var_decl : SET VAR ASSIGN expression SEMICOLON"""
+    symbol_table.set(p[2], p[4])
+
 
 # Parametros
 
@@ -105,7 +97,7 @@ def p_params(p):
     p[0] = p[1]
 
 
-def p_params_list(p):
+def p_param(p):
     "param : params ASSIGN param"
     p[0] = str(p[1]) + ' ' + str(p[3])
 
@@ -132,22 +124,22 @@ def p_params_string(p):
 
 def p_boolean_neg(p):
     'boolean_neg : SET VAR NEG SEMICOLON'
-    valor_original = symbol_table.get(p[2])
+    # valor_original = symbol_table.get(p[2])
 
-    if valor_original == 1:
-        symbol_table.cambiar_valor(p[2], 0)
-    else:
-        symbol_table.cambiar_valor(p[2], 1)
+    # if valor_original == 'True':
+    #     symbol_table.cambiar_valor(p[2], 'False')
+    # else:
+    #     symbol_table.cambiar_valor(p[2], 'True')
 
 
 def p_boolean_to_true(p):
     'boolean_true : SET VAR TRUE SEMICOLON'
-    symbol_table.cambiar_valor(p[2], 1)
+    # symbol_table.cambiar_valor(p[2], 'True')
 
 
 def p_boolean_to_false(p):
     'boolean_false : SET VAR FALSE SEMICOLON'
-    symbol_table.cambiar_valor(p[2], 0)
+    # symbol_table.cambiar_valor(p[2], 'False')
 
 # EXPR
 
@@ -282,43 +274,43 @@ def p_semi_condition(p):
 # arith-expr
 def p_arith_plus(p):
     'arith-expression : arith-expression PLUS term'
-    p[0] = p[1] + p[3]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_arith_minus(p):
     'arith-expression : arith-expression MINUS term'
-    p[0] = p[1] - p[3]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_arith_term(p):
     'arith-expression : term'
-    p[0] = p[1]
+    p[0] = str(p[1])
 
 
 # TERM
 def p_term_times(p):
     'term : term TIMES factor'
-    p[0] = p[1] * p[3]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_term_exponente(p):
     'term : term POWER factor'
-    p[0] = p[1] ** p[3]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_term_div(p):
     'term : term DIVIDE factor'
-    p[0] = p[1] / p[3]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_term_mod(p):
     'term : term MODULE factor'
-    p[0] = p[1] % p[3]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_term_wholediv(p):
     'term : term WHOLEDIVIDE factor'
-    p[0] = p[1] // p[3]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_term_factor(p):
@@ -341,7 +333,7 @@ def p_factor_var(p):
 
 def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
-    p[0] = p[2]
+    p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
 def p_error(p):
@@ -357,12 +349,3 @@ def p_error(p):
 def p_empty(p):
     'empty :'
     pass
-
-
-"""
-Agrega una variable a la tabla de valores
-"""
-
-
-def add_var(var_name, value):
-    symbol_table.set(var_name, value)

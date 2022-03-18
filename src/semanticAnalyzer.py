@@ -1,7 +1,7 @@
 import ply.yacc as yacc
 
 from lexer import *
-from symbolTable import SymbolTable
+from symbolTable import symbol_table
 
 
 class VarAccessNode:
@@ -14,8 +14,6 @@ class VarAssignNode:
         self.var_name_tok = var_name_tok
         self.value_node = value_node
 
-
-symbol_table = SymbolTable()
 
 precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
     ('right', 'ASSIGN'),
@@ -33,9 +31,146 @@ def run_semantic_analysis(codigo):
     parser.parse(codigo)
 
 
-def p_progam(p):
+def is_number(variable):
+    return (isinstance(variable, int) or isinstance(variable, float))
+
+
+def is_boolean(variable):
+    return (variable == 'True' or variable == 'False')
+
+
+def validate_number_operation(simbolo1, simbolo2):
+    if(is_boolean(simbolo1) or is_boolean(simbolo2)):
+        raise Exception("No se pueden operar valores booleanos")
+
+    try:
+        eval(simbolo1)
+        eval(simbolo2)
+    except:
+        raise Exception("Solamente se puede operar con numeros")
+
+
+def p_progam_empty(p):
     "program : empty"
-    print('ola')
+
+
+def p_progam_var_decls(p):
+    "program : var_decls"
+
+
+# Declaraciones
+def p_var_decls(p):
+    """var_decls : var_decl"""
+    p[0] = p[1]
+
+
+def p_var_decl(p):
+    """var_decl : var_decls SET VAR ASSIGN expression SEMICOLON"""
+    p[0] = p[5]
+
+
+def p_var_decl_expression(p):
+    """var_decl : SET VAR ASSIGN expression SEMICOLON"""
+    p[0] = p[4]
+
+# Expresiones
+
+
+def p_expression_arith(p):
+    'expression : arith-expression'
+    p[0] = p[1]
+
+
+def p_expression_boolean(p):
+    'expression : BOOL'
+    p[0] = p[1]
+
+# Aritmeticas
+
+
+def p_arith_plus(p):
+    'arith-expression : arith-expression PLUS term'
+    simbolo1 = str(p[1])
+    simbolo2 = str(p[3])
+    validate_number_operation(simbolo1, simbolo2)
+    p[0] = eval(simbolo1) + eval(simbolo2)
+
+
+def p_arith_minus(p):
+    'arith-expression : arith-expression MINUS term'
+    simbolo1 = str(p[1])
+    simbolo2 = str(p[3])
+    validate_number_operation(simbolo1, simbolo2)
+    p[0] = eval(simbolo1) - eval(simbolo2)
+
+
+def p_arith_term(p):
+    'arith-expression : term'
+    p[0] = p[1]
+
+
+# TERM
+def p_term_times(p):
+    'term : term TIMES factor'
+    simbolo1 = str(p[1])
+    simbolo2 = str(p[3])
+    validate_number_operation(simbolo1, simbolo2)
+    p[0] = eval(simbolo1) * eval(simbolo2)
+
+
+def p_term_exponente(p):
+    'term : term POWER factor'
+    simbolo1 = str(p[1])
+    simbolo2 = str(p[3])
+    validate_number_operation(simbolo1, simbolo2)
+    p[0] = eval(simbolo1) ** eval(simbolo2)
+
+
+def p_term_div(p):
+    'term : term DIVIDE factor'
+    simbolo1 = str(p[1])
+    simbolo2 = str(p[3])
+    validate_number_operation(simbolo1, simbolo2)
+    p[0] = eval(simbolo1) / eval(simbolo2)
+
+
+def p_term_mod(p):
+    'term : term MODULE factor'
+    simbolo1 = str(p[1])
+    simbolo2 = str(p[3])
+    validate_number_operation(simbolo1, simbolo2)
+    p[0] = eval(simbolo1) % eval(simbolo2)
+
+
+def p_term_wholediv(p):
+    'term : term WHOLEDIVIDE factor'
+    simbolo1 = str(p[1])
+    simbolo2 = str(p[3])
+    validate_number_operation(simbolo1, simbolo2)
+    p[0] = eval(simbolo1) // eval(simbolo2)
+
+
+def p_term_factor(p):
+    'term : factor'
+    p[0] = p[1]
+
+# FACTOR
+
+
+def p_factor_num(p):
+    'factor : NUMBER'
+    p[0] = p[1]
+
+
+def p_factor_var(p):
+    "factor : VAR"
+    value = symbol_table.get(p[1])
+    p[0] = value
+
+
+def p_factor_expr(p):
+    'factor : LPAREN expression RPAREN'
+    p[0] = p[2]
 
 
 def p_empty(p):

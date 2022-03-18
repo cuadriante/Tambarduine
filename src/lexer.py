@@ -134,7 +134,7 @@ def t_NUMBER(t):
 
 def t_BOOL(t):
     r'((t|T)rue)|((f|F)alse)'
-    t.value = 1 if (t.value == 'true' or t.value == 'True') else 0
+    t.value = 'True' if (t.value == 'true' or t.value == 'True') else 'False'
     return t
 
 

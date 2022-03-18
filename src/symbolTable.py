@@ -25,3 +25,7 @@ class SymbolTable:
 
     def cambiar_valor(self, name, new_value):
         self.symbols[name] = new_value
+
+
+# La tabla de simbolos es la misma para el parser y el semantico
+symbol_table = SymbolTable()

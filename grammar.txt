@@ -15,6 +15,10 @@ line                : expr
 
 boolean_neg         : SET VAR NEG SEMICOLON
 
+boolean_to_true     : SET VAR TRUE SEMICOLON
+
+boolean_to_false    : SET VAR FALSE SEMICOLON
+
 expr                : 
                     | arith-expr
                     | BOOL
@@ -75,7 +79,7 @@ arith-expr          : arith-expression (PLUS|MINUS) term
 term                : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
                     | factor
 
-factor              :NUMBER
+factor              : NUMBER
                     | VAR
                     | LPAREN factor RPAREN
 

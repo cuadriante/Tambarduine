@@ -33,16 +33,18 @@ def analizarCodigo(nombre_archivo):
     arr = fp.read()
     fp.close()
 
-    # # LEXER - LEXICAL ANALYSIS
-    # lexer.input(arr)
+    # LEXER - LEXICAL ANALYSIS
+    lexer.input(arr)
     # print_lexer()
 
-    # # PARSER - SYNTACTIC ANALYSIS
-    # parser.parse(arr)
+    # PARSER - SYNTACTIC ANALYSIS
+    # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
+    parser.parse(arr)
 
     # SEMANTIC ANALYSIS
     run_semantic_analysis(arr)
 
 
 # analizarCodigo('prueba_if_else.tam')
-analizarCodigo('prueba_semantic.tam')
+# analizarCodigo('prueba_declaraciones.tam')
+analizarCodigo('prueba_semantico.tam')

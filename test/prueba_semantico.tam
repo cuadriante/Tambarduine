@@ -1,0 +1,8 @@
+SET @boolean, true;
+
+SET @var1, 123; SET @var2, 10//5;
+SET @var3, 9;
+
+SET @var4, (14 % @var2) ** 3;
+
+SET @operacion, ((@var1 + @var3 - @var4) * @var4 + @boolean) / 4;
