@@ -5,4 +5,4 @@ SET @var3, 9;
 
 SET @var4, (14 % @var2) ** 3;
 
-SET @operacion, ((@var1 + @var3 - @var4) * @var4 + @boolean) / 4;
+SET @operacion, ((@var1 + @var3 - @var4) * @var4 + 56) / 4;

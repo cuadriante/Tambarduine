@@ -1,8 +1,8 @@
-SET @boolean, true;
+Principal(){
+    SET @var2, 10//5;
+    SET @var3, 9;
+    SET @var1, 123;
+    SET @var4, 8;
+    SET @var5, 3+1;
+};
 
-SET @var1, 123; SET @var2, 10//5;
-SET @var3, 9;
-
-SET @var4, (14 % @var3) ** 3;
-
-SET @operacion, ((@var1 + @var2 - @var4) * @var4 + @var3) / 4;

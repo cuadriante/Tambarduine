@@ -1,0 +1,7 @@
+print("hola");
+Abanico("hola");
+Vertical("hola");
+Percutor("hola");
+Golpe("hola");
+Vibrato("hola");
+Metronomo("hola");

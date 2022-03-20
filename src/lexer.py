@@ -1,3 +1,5 @@
+import ply.lex as lex
+
 # List of token names.   This is always required
 tokens = (
     'IN',
@@ -27,7 +29,6 @@ tokens = (
     'RBRACE',
     'ASSIGN',
     'COMMENT',
-    'RESERVED',
     'VAR',
     'SEMICOLON',
     'CCODE',
@@ -38,17 +39,16 @@ tokens = (
 )
 
 reserved = {
-    "principal": "PRINCIPAL",
-    "set": "SET",
-    "abanico": "ABANICO",
-    "vertical": "VERTICAL",
-    "percutor": "PERCUTOR",
-    "golpe": "GOLPE",
-    "vibrato": "VIBRATO",
-    "metronomo": "METRONOMO",
+    "Principal": "PRINCIPAL",
+    "SET": "SET",
+    "Abanico": "ABANICO",
+    "Vertical": "VERTICAL",
+    "Percutor": "PERCUTOR",
+    "Golpe": "GOLPE",
+    "Vibrato": "VIBRATO",
+    "Metronomo": "METRONOMO",
     "if": "IF",
     "else": "ELSE",
-    "while": "WHILE",
     "for": "FOR",
     "to": "TO",
     "step": "STEP",
@@ -57,8 +57,8 @@ reserved = {
     "cuando": "CUANDO",
     "sino": "SINO",
     "finencaso": "FINENCASO",
-    "exec": "EXEC",
-    "def": "DEF",
+    "Exec": "EXEC",
+    "Def": "DEF",
     "print": "PRINT"
 }
 
@@ -157,7 +157,7 @@ def t_VAR(t):
 def t_ID(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
 
-    if t.value.lower() in reserved:
+    if t.value in reserved:
         t.value = t.value.upper()
         t.type = t.value
         return t
@@ -200,39 +200,4 @@ def t_ID(t):
 #         return t
 
 
-"""
-def find_doc(direc):
-    global files
-    docs = []
-    doc_number = ''
-    result = False
-    cont = 1
-
-    for base, dirs, files in os.walk(direc):
-        docs.append(files)
-
-    for file in files:
-        print(str(cont) + ". " + file)
-        cont = cont + 1
-
-    while not result:
-        doc_number = input('\nChoose which file to execute: ')  # Choose which file to execute
-        for file in files:
-            if file == files[int(doc_number) - 1]:
-                result = True
-                break
-
-        print("Executing \"%s\" \n" % files[int(doc_number) - 1])
-
-
-    return files[int(doc_number) - 1]
-
-
-directory = "./test/"
-document = find_doc(directory)
-test = directory + document
-fp = codecs.open(test, 'r', None, 'strict', - 1)
-# fp = codecs.open(test, "r", "utf-8")
-arr = fp.read()
-fp.close()
-"""
+lexer = lex.lex()

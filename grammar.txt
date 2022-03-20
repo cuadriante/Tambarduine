@@ -2,13 +2,12 @@ program             : block
 
 block               : main
 
-main                : line
+main                : PRINCIPAL LPAREN RPAREN LBRACE line RBRACE SEMICOLON
 
 line                : expr
                     | boolean_neg
                     | boolean_to_true
                     | boolean_to_false
-                    | print
                     | statements
 
 
@@ -26,21 +25,18 @@ expr                :
 
 
 statements          : statement
-                    | statement statement
+                    | statements statement
 
 statement           : if_statement
                     | for_loop
                     | en_caso
                     | var_decls 
+                    | callable_function
 
-
-
-
-var_decls           : var_decl SET VAR ASSIGN expr SEMICOLON
+var_decls           : var_decls var_decl
                     | var_decl
 
 var_decl            : SET VAR ASSIGN expr SEMICOLON
-
 
 
 if_statement        : IF condition LBRACE expression RBRACE
@@ -70,9 +66,6 @@ condition           : arith-expression semi_condition
 semi_condition      : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
 
 
-
-
-
 arith-expr          : arith-expression (PLUS|MINUS) term
                     | term
 
@@ -83,11 +76,25 @@ factor              : NUMBER
                     | VAR
                     | LPAREN factor RPAREN
 
-print               : PRINT LPAREN params RPAREN SEMICOLON
-
 params              : param
-                    | params ASSIGN param
+                    | params param
 
 param               : NUMBER
                     | VAR
                     | STRING
+
+callable_function   : abanico
+                    | vertical
+                    | percutor
+                    | golpe
+                    | vibrato
+                    | metronomo
+                    | print                   
+
+abanico             : ABANICO LPAREN params RPAREN SEMICOLON
+vertical            : VERTICAL LPAREN params RPAREN SEMICOLON
+percutor            : PERCUTOR LPAREN params RPAREN SEMICOLON
+golpe               : GOLPE LPAREN params RPAREN SEMICOLON
+vibrato             : VIBRATO LPAREN params RPAREN SEMICOLON
+metronomo           : METRONOMO LPAREN params RPAREN SEMICOLON
+print               : PRINT LPAREN params RPAREN SEMICOLON

@@ -4,28 +4,6 @@ from lexer import *
 from symbolTable import symbol_table
 
 
-class VarAccessNode:
-    def __init__(self, var_name_tok):
-        self.var_name_tok = var_name_tok
-
-
-class VarAssignNode:
-    def __init__(self, var_name_tok, value_node):
-        self.var_name_tok = var_name_tok
-        self.value_node = value_node
-
-
-precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
-    ('right', 'ASSIGN'),
-    ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
-    ("left", "NEGATIVE"),
-    ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE', 'WHOLEDIVIDE', 'MODULE'),
-    ('left', 'POWER'),
-    ('left', 'TRUE', 'FALSE'),
-)
-
-
 def run_semantic_analysis(codigo):
     parser = yacc.yacc()
     parser.parse(codigo)

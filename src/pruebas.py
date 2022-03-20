@@ -1,12 +1,11 @@
-import ply.lex as lex
-import ply.yacc as yacc
+
 import codecs
 
 from parser import *
 from lexer import *
 from semanticAnalyzer import run_semantic_analysis
 
-lexer = lex.lex()
+
 parser = yacc.yacc()
 
 
@@ -35,16 +34,16 @@ def analizarCodigo(nombre_archivo):
 
     # LEXER - LEXICAL ANALYSIS
     lexer.input(arr)
-    # print_lexer()
+    print_lexer()
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
     parser.parse(arr)
 
     # SEMANTIC ANALYSIS
-    run_semantic_analysis(arr)
+    # run_semantic_analysis(arr)
 
 
 # analizarCodigo('prueba_if_else.tam')
-# analizarCodigo('prueba_declaraciones.tam')
-analizarCodigo('prueba_semantico.tam')
+analizarCodigo('prueba_declaraciones.tam')
+# analizarCodigo('prueba_semantico.tam')

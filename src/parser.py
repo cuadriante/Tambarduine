@@ -1,4 +1,5 @@
-
+import ply.yacc as yacc
+from lexer import tokens
 from symbolTable import symbol_table
 
 
@@ -45,14 +46,13 @@ def p_block_main(p):
 
 
 # MAIN
-
 def p_main(p):
-    "main : line"
-    p[0] = p[1]
-
+    "main : PRINCIPAL LPAREN RPAREN LBRACE line RBRACE SEMICOLON"
+    print("main")
+    p[0] = p[5]
 
 # line
-# var_decls
+
 def p_line(p):
     """line : expression
         | statements"""
@@ -61,63 +61,38 @@ def p_line(p):
 
 def p_statements(p):
     """statements : statement
-                | statement statement"""
+                | statements statement"""
 
 
 def p_statement(p):
     """statement : var_decls
                 | if_statement
                 | for_loop
-                | en_caso"""
+                | en_caso
+                | callable_function"""
     p[0] = p[1]
 
 
 # VAR-DECL
 
 
-def p_var_decls(p):
-    """var_decls : var_decl"""
-
-
 def p_var_decl(p):
-    """var_decl : var_decls SET VAR ASSIGN expression SEMICOLON"""
-    symbol_table.set(p[3], p[5])
-
-
-def p_var_decl_expression(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
     symbol_table.set(p[2], p[4])
+    print("Variable")
+
+def p_var_decls(p):
+    """var_decls : var_decls var_decl"""
+    print("Variables")       
+
+def p_var_trans(p):
+    """var_decls : var_decl"""
+    print("varToVars")
+    p[0] =  p[1]
 
 
 # Parametros
 
-
-def p_params(p):
-    "params : param"
-    p[0] = p[1]
-
-
-def p_param(p):
-    "param : params ASSIGN param"
-    p[0] = str(p[1]) + ' ' + str(p[3])
-
-
-def p_param_num(p):
-    "param : NUMBER"
-    p[0] = p[1]
-
-
-def p_params_var(p):
-    "param : VAR"
-    value = symbol_table.get(p[1])
-    p[0] = value
-
-
-def p_params_string(p):
-    "param : STRING"
-    string_con_comillas = p[1]
-    # string_sin_comillas = string_con_comillas.split('"')[1]
-    p[0] = string_con_comillas
 
 # Funciones booleanas
 
@@ -158,11 +133,6 @@ def p_expression_comp(p):
     'expression : condition'
     p[0] = p[1]
 
-
-def p_expression_print(p):
-    "expression : print"
-    p[0] = p[1]
-
 # IF
 
 
@@ -199,12 +169,9 @@ def p_for(p):
     if symbol_table.get(variable_name):
         pass
     else:
-        add_var(variable_name, 0)
+        symbol_table.set(variable_name, 0)
 
 
-def p_print(p):
-    "print : PRINT LPAREN params RPAREN SEMICOLON"
-    p[0] = p[3]
 
 # en_caso
 
@@ -336,16 +303,80 @@ def p_factor_expr(p):
     p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
-def p_error(p):
 
+
+
+def p_empty(p):
+    'empty :'
+    pass
+
+def p_callable_function(p):
+    """callable_function : abanico
+                        | vertical
+                        | percutor
+                        | golpe
+                        | vibrato
+                        | metronomo
+                        | print   """
+    print("función llamable")
+
+
+
+#FUNCIONES 
+def p_abanico(p):
+    "abanico : ABANICO LPAREN params RPAREN SEMICOLON"
+    print(p[1])
+def p_vertical(p):
+    "vertical : VERTICAL LPAREN params RPAREN SEMICOLON"
+    print(p[1])
+def p_percutor(p):
+    "percutor : PERCUTOR LPAREN params RPAREN SEMICOLON"
+    print(p[1])
+def p_golpe(p):
+    "golpe : GOLPE LPAREN params RPAREN SEMICOLON"
+    print(p[1])
+def p_vibrato(p):
+    "vibrato : VIBRATO LPAREN params RPAREN SEMICOLON"
+    print(p[1])
+def p_metronomo(p):
+    "metronomo : METRONOMO LPAREN params RPAREN SEMICOLON"
+    print(p[1])
+def p_print(p):
+    "print : PRINT LPAREN params RPAREN SEMICOLON"
+    p[0] = p[3]
+
+
+
+
+def p_params(p):
+    """params : params ASSIGN param"""
+    p[0] = str(p[1]) + ' ' + str(p[3])
+
+def p_params_param(p):
+    "params : param"
+    p[0] = p[1]
+
+def p_param_num(p):
+    "param : NUMBER"
+    p[0] = p[1]
+
+
+def p_params_var(p):
+    "param : VAR"
+    value = symbol_table.get(p[1])
+    p[0] = value
+
+
+def p_params_string(p):
+    "param : STRING"
+    string_con_comillas = p[1]
+    # string_sin_comillas = string_con_comillas.split('"')[1]
+    p[0] = string_con_comillas
+
+def p_error(p):
     if p == None:
         token = "end of file"
     else:
         token = f"{p.type}({p.value}) on line {p.lineno}"
 
     print(f"Syntax error: Unexpected {token}")
-
-
-def p_empty(p):
-    'empty :'
-    pass
