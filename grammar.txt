@@ -38,14 +38,14 @@ if_statement        : IF condition LBRACE statements RBRACE
 for_loop            : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE      
 
 
-en_caso             : ENCASO switch_list_0 SINO LBRACE expression RBRACE FINENCASO SEMICOLON
+en_caso             : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
                     | ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
                 
-switch_list_0       : CUANDO VAR condition expression ENTONS LBRACE statements RBRACE
-                    | switch_list_0 CUANDO VAR condition expression ENTONS LBRACE statements RBRACE
+switch_list_0       : CUANDO condition ENTONS LBRACE statements RBRACE
+                    | switch_list_0 CUANDO condition ENTONS LBRACE statements RBRACE
 
-switch_list_1       : CUANDO condition expression ENTONS LBRACE statements RBRACE
-                    | switch_list_1 CUANDO condition expression ENTONS LBRACE statements RBRACE
+switch_list_1       : CUANDO semi_condition ENTONS LBRACE statements RBRACE
+                    | switch_list_1 CUANDO semi_condition ENTONS LBRACE statements RBRACE
 
 condition           : arith-expression semi_condition
 
