@@ -3,6 +3,8 @@ program                 : block
 block                   : main
                         | function
 
+function_call           : EXEC VAR LPAREN params RPAREN SEMICOLON
+
 function_decls          : function_decl
                         | function_decls function_decl"
 
@@ -34,6 +36,7 @@ statement               : if_statement
                         | var_decls
                         | callable_function
                         | bool_statement
+                        | function_call
 
 var_decls               : var_decls var_decl
                         | var_decl

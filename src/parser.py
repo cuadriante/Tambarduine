@@ -45,36 +45,43 @@ def p_block(p):
 # funciones
 
 
-def p_functions(p):
+def p_function_decls(p):
     "function_decls : function_decl"
     p[0] = p[1]
 
 
-def p_functions_function(p):
+def p_function_decls_function_decl(p):
     "function_decls : function_decls function_decl"
     p[0] = p[1]
 
 
-def p_functions_empty(p):
+def p_functions_decl_empty(p):
     "function_decls : empty"
     p[0] = p[1]
 
 
-def p_function(p):
+def p_function_decl(p):
     "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON"
     params = p[4].split(',')
     function_table.add(p[2], params)
     p[0] = str(p[4])
 
 
-def p_function_params_var(p):
+def p_function_decl_params_var(p):
     "function_decl_params : VAR"
     p[0] = p[1]
 
 
-def p_function_params(p):
+def p_function_decl_params(p):
     "function_decl_params : function_decl_params ASSIGN VAR"
     p[0] = str(p[1]) + ', ' + str(p[3])
+
+
+def p_function_call(p):
+    "function_call : EXEC VAR LPAREN params RPAREN SEMICOLON"
+    p[0] = str(p[2]) + ',' + str(p[4])
+    params = p[4].split(',')
+    function_table.call(p[2], params)
 
 # MAIN) +
 
@@ -102,7 +109,8 @@ def p_statement(p):
                 | en_caso
                 | var_decls
                 | callable_function
-                | bool_statement"""
+                | bool_statement
+                | function_call"""
     print("statement")
     p[0] = p[1]
 
@@ -381,7 +389,7 @@ def p_print(p):
 
 def p_params(p):
     """params : params ASSIGN param"""
-    p[0] = str(p[1]) + ' ' + str(p[3])
+    p[0] = str(p[1]) + ',' + str(p[3])
 
 
 def p_params_param(p):
