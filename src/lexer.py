@@ -149,7 +149,7 @@ def t_COMMENT(t):
 
 
 def t_VAR(t):
-    r'@[a-zA-Z_0-9?][a-zA-Z_0-9?][a-zA-Z_0-9?][a-zA-Z_0-9?]*'
+    r'@[a-zA-Z_0-9?]{3,10}'
     t.type = reserved.get(t.value, 'VAR')  # Check for reserved words
     return t
 
@@ -164,40 +164,6 @@ def t_ID(t):
     else:
         print("Illegal character '%s'" % t.value)
         t.lexer.skip(1)
-
-
-'''def t_FUNCTION(t):
-    r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*()'
-    var = t.type == reserved.get(t.value, 'FUNCTION')  # Check for reserved words
-    return t
-'''
-
-
-# # Match the first {. Enter ccode state.
-# def t_ccode(t):
-#     r'\{'
-#     t.lexer.code_start = t.lexer.lexpos  # Record the starting position
-#     t.lexer.level = 1  # Initial brace level
-#     t.lexer.begin('ccode')  # Enter 'ccode' state
-
-
-# # Rules for the ccode state
-# def t_ccode_lbrace(t):
-#     r'\{'
-#     t.lexer.level += 1
-
-
-# def t_ccode_rbrace(t):
-#     r'\};'
-#     t.lexer.level -= 1
-
-#     # If closing brace, return the code fragment
-#     if t.lexer.level == 0:
-#         t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
-#         t.type = "CCODE"
-#         t.lexer.lineno += t.value.count('\n')
-#         t.lexer.begin('INITIAL')
-#         return t
 
 
 lexer = lex.lex()
