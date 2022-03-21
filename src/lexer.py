@@ -51,7 +51,7 @@ reserved = {
     "else": "ELSE",
     "for": "FOR",
     "to": "TO",
-    "step": "STEP",
+    "Step": "STEP",
     "encaso": "ENCASO",
     "entons": "ENTONS",
     "cuando": "CUANDO",

@@ -1,26 +1,35 @@
 Principal(){
     if 1 < 7 {
-        1 
+        SET @var3, 9;
     } 
     else 
     {
-        0
+        SET @var3, 9;
     }
 
     if 1 < 7 
     {
-        1 
+        SET @var3, 9;
     } 
     else 
     {
-        0
+        SET @var3, 9;
+    }
+
+    if 1 < 7 
+    {
+        SET @var3, 9;
+    } 
+    else 
+    {
+        SET @var3, 9;
     }
     if 1 < 7 
     {
-        1 
+        SET @var3, 9;
     } 
     else 
     {
-        0
+        SET @var3, 9;
     }
 };

@@ -15,6 +15,7 @@ class VarAssignNode:
 
 
 precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
+    
     ('right', 'ASSIGN'),
     ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
     ("left", "NEGATIVE"),
@@ -47,17 +48,11 @@ def p_block_main(p):
 
 # MAIN
 def p_main(p):
-    "main : PRINCIPAL LPAREN RPAREN LBRACE line RBRACE SEMICOLON"
+    "main : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON"
     print("main")
     p[0] = p[5]
 
-# line
-
-def p_line(p):
-    """line : expression
-        | statements"""
-    p[0] = p[1]
-
+#statements
 
 def p_statements(p):
     """statements : statement
@@ -65,17 +60,22 @@ def p_statements(p):
 
 
 def p_statement(p):
-    """statement : var_decls
+    """statement : for_loop
                 | if_statement
-                | for_loop
                 | en_caso
-                | callable_function"""
+                | var_decls
+                | callable_function
+                | bool_statement"""
+    print("statement")
     p[0] = p[1]
 
+# #MINI_STATEMENTS
+# def p_mini_statements(p):
+#     """mini_statements : var_decls
+#                     | callable_function
+#                     | bool_statement"""
 
 # VAR-DECL
-
-
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
     symbol_table.set(p[2], p[4])
@@ -91,11 +91,11 @@ def p_var_trans(p):
     p[0] =  p[1]
 
 
-# Parametros
-
-
 # Funciones booleanas
-
+def p_bool_statements(p):
+    """bool_statement : boolean_neg
+                    | boolean_true
+                    | boolean_false"""
 
 def p_boolean_neg(p):
     'boolean_neg : SET VAR NEG SEMICOLON'
@@ -129,15 +129,9 @@ def p_expression_boolean(p):
     p[0] = p[1]
 
 
-def p_expression_comp(p):
-    'expression : condition'
-    p[0] = p[1]
-
 # IF
-
-
 def p_if(p):
-    "if_statement : IF condition LBRACE expression RBRACE"
+    "if_statement : IF condition LBRACE statements RBRACE"
     print("if")
     condicion = p[2]
     if(condicion == True):
@@ -149,7 +143,7 @@ def p_if(p):
 
 
 def p_if_else(p):
-    "if_statement : IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE"
+    "if_statement : IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
     print("elseif")
     condicion = p[2]
     if(condicion == True):
@@ -161,43 +155,35 @@ def p_if_else(p):
 """
 FOR
 """
-
-
 def p_for(p):
-    "for_loop : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE"
-    variable_name = p[2]
-    if symbol_table.get(variable_name):
-        pass
-    else:
-        symbol_table.set(variable_name, 0)
+    "for_loop : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE"
+    print("for_loop")
 
 
 
 # en_caso
-
-
 def p_en_caso_0(p):
-    "en_caso : ENCASO switch_list_0 SINO LBRACE expression RBRACE FINENCASO SEMICOLON"
+    "en_caso : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
 
 
 def p_swich_0(p):
-    "switch_list_0 : CUANDO condition ENTONS LBRACE expression RBRACE"
+    "switch_list_0 : CUANDO condition ENTONS LBRACE statements RBRACE"
 
 
 def p_swich_0_list(p):
-    "switch_list_0 : switch_list_0 CUANDO condition ENTONS LBRACE expression RBRACE"
+    "switch_list_0 : switch_list_0 CUANDO condition ENTONS LBRACE statements RBRACE"
 
 
 def p_en_caso_1(p):
-    "en_caso : ENCASO expression switch_list_1 SINO LBRACE expression RBRACE FINENCASO SEMICOLON"
+    "en_caso : ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
 
 
 def p_switch_1(p):
-    "switch_list_1 : CUANDO semi_condition ENTONS LBRACE expression RBRACE"
+    "switch_list_1 : CUANDO semi_condition ENTONS LBRACE statements RBRACE"
 
 
 def p_swich_1_list(p):
-    "switch_list_1 : switch_list_1 CUANDO semi_condition ENTONS LBRACE expression RBRACE"
+    "switch_list_1 : switch_list_1 CUANDO semi_condition ENTONS LBRACE statements RBRACE"
 
 
 # condition
@@ -219,21 +205,14 @@ def p_cond_arith(p):
     elif p[2][0] == ">=":
         p[0] = p[1] >= p[2][1]
 
-
-def p_cond_negative(p):
-    "condition : NEGATIVE condition"
-    p[0] = not p[2]
-
 # semi_condition
-
-
 def p_semi_condition(p):
-    """semi_condition : EQUALS arith-expression
-                | DIFFERENT arith-expression
-                | LESSTHAN arith-expression
-                | MORETHAN arith-expression
-                | LESSTHANE arith-expression
-                | MORETHANE arith-expression"""
+    """semi_condition : EQUALS expression
+                | DIFFERENT expression
+                | LESSTHAN expression
+                | MORETHAN expression
+                | LESSTHANE expression
+                | MORETHANE expression"""
     print("semi_condition")
     p[0] = (p[1], p[2])
 
@@ -357,14 +336,8 @@ def p_params_param(p):
     p[0] = p[1]
 
 def p_param_num(p):
-    "param : NUMBER"
+    "param : expression"
     p[0] = p[1]
-
-
-def p_params_var(p):
-    "param : VAR"
-    value = symbol_table.get(p[1])
-    p[0] = value
 
 
 def p_params_string(p):

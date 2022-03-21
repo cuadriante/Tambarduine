@@ -4,24 +4,15 @@ block               : main
 
 main                : PRINCIPAL LPAREN RPAREN LBRACE line RBRACE SEMICOLON
 
-line                : expr
-                    | boolean_neg
-                    | boolean_to_true
-                    | boolean_to_false
-                    | statements
-
-
+bool_statement      : boolean_neg
+                    | boolean_true
+                    | boolean_false
 
 boolean_neg         : SET VAR NEG SEMICOLON
 
-boolean_to_true     : SET VAR TRUE SEMICOLON
+boolean_true        : SET VAR TRUE SEMICOLON
 
-boolean_to_false    : SET VAR FALSE SEMICOLON
-
-expr                : 
-                    | arith-expr
-                    | BOOL
-                    | condition
+boolean_false        : SET VAR FALSE SEMICOLON
 
 
 statements          : statement
@@ -32,39 +23,36 @@ statement           : if_statement
                     | en_caso
                     | var_decls 
                     | callable_function
+                    | bool_statement
 
 var_decls           : var_decls var_decl
                     | var_decl
 
-var_decl            : SET VAR ASSIGN expr SEMICOLON
+var_decl            : SET VAR ASSIGN expression SEMICOLON
 
 
-if_statement        : IF condition LBRACE expression RBRACE
-                    | IF condition LBRACE expression RBRACE ELSE LBRACE expression RBRACE
+if_statement        : IF condition LBRACE statements RBRACE
+                    | IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE
 
 
-
-for_loop            : FOR VAR TO factor STEP NUMBER LBRACE expression RBRACE      
-
+for_loop            : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE      
 
 
 en_caso             : ENCASO switch_list_0 SINO LBRACE expression RBRACE FINENCASO SEMICOLON
-                    | ENCASO expression switch_list_1 SINO LBRACE expression RBRACE FINENCASO SEMICOLON
+                    | ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
                 
-switch_list_0       : CUANDO VAR condition expression ENTONS LBRACE expression RBRACE
-                    | switch_list_0 CUANDO VAR condition expression ENTONS LBRACE expression RBRACE
+switch_list_0       : CUANDO VAR condition expression ENTONS LBRACE statements RBRACE
+                    | switch_list_0 CUANDO VAR condition expression ENTONS LBRACE statements RBRACE
 
-switch_list_1       : CUANDO condition expression ENTONS LBRACE expression RBRACE
-                    | switch_list_1 CUANDO condition expression ENTONS LBRACE expression RBRACE
-
-
-
+switch_list_1       : CUANDO condition expression ENTONS LBRACE statements RBRACE
+                    | switch_list_1 CUANDO condition expression ENTONS LBRACE statements RBRACE
 
 condition           : arith-expression semi_condition
-                    | NEGATIVE condition
 
-semi_condition      : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) arith-expression
+semi_condition      : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) expression
 
+expression          : arith-expr
+                    | BOOL
 
 arith-expr          : arith-expression (PLUS|MINUS) term
                     | term
@@ -79,8 +67,7 @@ factor              : NUMBER
 params              : param
                     | params param
 
-param               : NUMBER
-                    | VAR
+param               : expression
                     | STRING
 
 callable_function   : abanico
