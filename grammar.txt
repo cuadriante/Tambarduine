@@ -1,87 +1,97 @@
-program             : block
+program                 : block
 
-block               : main
+block                   : main
+                        | function
 
-main                : PRINCIPAL LPAREN RPAREN LBRACE line RBRACE SEMICOLON
+function_decls          : function_decl
+                        | function_decls function_decl"
 
-bool_statement      : boolean_neg
-                    | boolean_true
-                    | boolean_false
+function_decl           : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON
 
-boolean_neg         : SET VAR NEG SEMICOLON
-
-boolean_true        : SET VAR TRUE SEMICOLON
-
-boolean_false        : SET VAR FALSE SEMICOLON
+function_decl_params    : VAR
+                        | function_params ASSIGN VAR
 
 
-statements          : statement
-                    | statements statement
+main                    : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON
 
-statement           : if_statement
-                    | for_loop
-                    | en_caso
-                    | var_decls 
-                    | callable_function
-                    | bool_statement
+bool_statement          : boolean_neg
+                        | boolean_true
+                        | boolean_false
 
-var_decls           : var_decls var_decl
-                    | var_decl
+boolean_neg             : SET VAR NEG SEMICOLON
 
-var_decl            : SET VAR ASSIGN expression SEMICOLON
+boolean_true            : SET VAR TRUE SEMICOLON
+
+boolean_false           : SET VAR FALSE SEMICOLON
 
 
-if_statement        : IF condition LBRACE statements RBRACE
-                    | IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+statements              : statement
+                        | statements statement
+
+statement               : if_statement
+                        | for_loop
+                        | en_caso
+                        | var_decls
+                        | callable_function
+                        | bool_statement
+
+var_decls               : var_decls var_decl
+                        | var_decl
+
+var_decl                : SET VAR ASSIGN expression SEMICOLON
 
 
-for_loop            : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE      
+if_statement            : IF condition LBRACE statements RBRACE
+                        | IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE
 
 
-en_caso             : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
-                    | ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
+for_loop                : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE
+
+
+en_caso                 : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
+                        | ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
                 
-switch_list_0       : CUANDO condition ENTONS LBRACE statements RBRACE
-                    | switch_list_0 CUANDO condition ENTONS LBRACE statements RBRACE
+switch_list_0           : CUANDO condition ENTONS LBRACE statements RBRACE
+                        | switch_list_0 CUANDO condition ENTONS LBRACE statements RBRACE
 
-switch_list_1       : CUANDO semi_condition ENTONS LBRACE statements RBRACE
-                    | switch_list_1 CUANDO semi_condition ENTONS LBRACE statements RBRACE
+switch_list_1           : CUANDO semi_condition ENTONS LBRACE statements RBRACE
+                        | switch_list_1 CUANDO semi_condition ENTONS LBRACE statements RBRACE
 
-condition           : arith-expression semi_condition
+condition               : arith-expression semi_condition
 
-semi_condition      : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) expression
+semi_condition          : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHANE) expression
 
-expression          : arith-expr
-                    | BOOL
+expression              : arith-expr
+                        | BOOL
 
-arith-expr          : arith-expression (PLUS|MINUS) term
-                    | term
+arith-expr              : arith-expression (PLUS|MINUS) term
+                        | term
 
-term                : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
-                    | factor
+term                    : term (TIMES|DIVIDE|WHOLEDIVIDE|MODULE|POWER) factor
+                        | factor
 
-factor              : NUMBER
-                    | VAR
-                    | LPAREN factor RPAREN
+factor                  : NUMBER
+                        | VAR
+                        | LPAREN factor RPAREN
 
-params              : param
-                    | params param
+params                  : param
+                        | params param
 
-param               : expression
-                    | STRING
+param                   : expression
+                        | STRING
 
-callable_function   : abanico
-                    | vertical
-                    | percutor
-                    | golpe
-                    | vibrato
-                    | metronomo
-                    | print                   
+callable_function       : abanico
+                        | vertical
+                        | percutor
+                        | golpe
+                        | vibrato
+                        | metronomo
+                        | print
 
-abanico             : ABANICO LPAREN params RPAREN SEMICOLON
-vertical            : VERTICAL LPAREN params RPAREN SEMICOLON
-percutor            : PERCUTOR LPAREN params RPAREN SEMICOLON
-golpe               : GOLPE LPAREN params RPAREN SEMICOLON
-vibrato             : VIBRATO LPAREN params RPAREN SEMICOLON
-metronomo           : METRONOMO LPAREN params RPAREN SEMICOLON
-print               : PRINT LPAREN params RPAREN SEMICOLON
+abanico                 : ABANICO LPAREN params RPAREN SEMICOLON
+vertical                : VERTICAL LPAREN params RPAREN SEMICOLON
+percutor                : PERCUTOR LPAREN params RPAREN SEMICOLON
+golpe                   : GOLPE LPAREN params RPAREN SEMICOLON
+vibrato                 : VIBRATO LPAREN params RPAREN SEMICOLON
+metronomo               : METRONOMO LPAREN params RPAREN SEMICOLON
+print                   : PRINT LPAREN params RPAREN SEMICOLON

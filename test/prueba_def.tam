@@ -1,0 +1,11 @@
+Def @rutina (@parametro1, @parametro2){
+
+};
+
+Def @rutinota (@parametro2, @parametro3){
+
+};
+
+Principal(){
+
+};

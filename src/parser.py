@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from lexer import tokens
 from symbolTable import symbol_table
+from functionTable import function_table
 
 
 class VarAccessNode:
@@ -15,7 +16,7 @@ class VarAssignNode:
 
 
 precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
-    
+
     ('right', 'ASSIGN'),
     ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
     ("left", "NEGATIVE"),
@@ -37,22 +38,58 @@ def p_program(p):
 # bloack : functions main
 
 
-def p_block_main(p):
-    "block : main"
+def p_block(p):
+    "block : function_decls main"
     p[0] = p[1]
 
-# def p_block_functions(p):
-#     "block : function"
-#     p[0] = p[1]
+# funciones
 
 
-# MAIN
+def p_functions(p):
+    "function_decls : function_decl"
+    p[0] = p[1]
+
+
+def p_functions_function(p):
+    "function_decls : function_decls function_decl"
+    p[0] = p[1]
+
+
+def p_functions_empty(p):
+    "function_decls : empty"
+    p[0] = p[1]
+
+
+def p_function(p):
+    "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON"
+    params = p[4].split(',')
+    function_table.add(p[2], params)
+    p[0] = str(p[4])
+
+
+def p_function_params_var(p):
+    "function_decl_params : VAR"
+    p[0] = p[1]
+
+
+def p_function_params(p):
+    "function_decl_params : function_decl_params ASSIGN VAR"
+    p[0] = str(p[1]) + ', ' + str(p[3])
+
+# MAIN) +
+
+
 def p_main(p):
     "main : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON"
     print("main")
     p[0] = p[5]
 
-#statements
+# statements
+
+
+def p_statements_empty(p):
+    """statements : empty"""
+
 
 def p_statements(p):
     """statements : statement
@@ -76,19 +113,23 @@ def p_statement(p):
 #                     | bool_statement"""
 
 # VAR-DECL
+
+
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
     symbol_table.set(p[2], p[4])
     print("Variable")
 
+
 def p_var_decls(p):
     """var_decls : var_decls var_decl"""
-    print("Variables")       
+    print("Variables")
+
 
 def p_var_trans(p):
     """var_decls : var_decl"""
     print("varToVars")
-    p[0] =  p[1]
+    p[0] = p[1]
 
 
 # Funciones booleanas
@@ -96,6 +137,7 @@ def p_bool_statements(p):
     """bool_statement : boolean_neg
                     | boolean_true
                     | boolean_false"""
+
 
 def p_boolean_neg(p):
     'boolean_neg : SET VAR NEG SEMICOLON'
@@ -155,10 +197,11 @@ def p_if_else(p):
 """
 FOR
 """
+
+
 def p_for(p):
     "for_loop : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE"
     print("for_loop")
-
 
 
 # en_caso
@@ -182,7 +225,7 @@ def p_switch_1(p):
     "switch_list_1 : CUANDO semi_condition ENTONS LBRACE statements RBRACE"
 
 
-def p_swich_1_list(p):
+def p_switch_1_list(p):
     "switch_list_1 : switch_list_1 CUANDO semi_condition ENTONS LBRACE statements RBRACE"
 
 
@@ -206,6 +249,8 @@ def p_cond_arith(p):
         p[0] = p[1] >= p[2][1]
 
 # semi_condition
+
+
 def p_semi_condition(p):
     """semi_condition : EQUALS expression
                 | DIFFERENT expression
@@ -282,12 +327,10 @@ def p_factor_expr(p):
     p[0] = str(p[1]) + str(p[2]) + str(p[3])
 
 
-
-
-
 def p_empty(p):
     'empty :'
     pass
+
 
 def p_callable_function(p):
     """callable_function : abanico
@@ -300,40 +343,51 @@ def p_callable_function(p):
     print("función llamable")
 
 
-
-#FUNCIONES 
+# FUNCIONES
 def p_abanico(p):
     "abanico : ABANICO LPAREN params RPAREN SEMICOLON"
     print(p[1])
+
+
 def p_vertical(p):
     "vertical : VERTICAL LPAREN params RPAREN SEMICOLON"
     print(p[1])
+
+
 def p_percutor(p):
     "percutor : PERCUTOR LPAREN params RPAREN SEMICOLON"
     print(p[1])
+
+
 def p_golpe(p):
     "golpe : GOLPE LPAREN params RPAREN SEMICOLON"
     print(p[1])
+
+
 def p_vibrato(p):
     "vibrato : VIBRATO LPAREN params RPAREN SEMICOLON"
     print(p[1])
+
+
 def p_metronomo(p):
     "metronomo : METRONOMO LPAREN params RPAREN SEMICOLON"
     print(p[1])
+
+
 def p_print(p):
     "print : PRINT LPAREN params RPAREN SEMICOLON"
     p[0] = p[3]
-
-
 
 
 def p_params(p):
     """params : params ASSIGN param"""
     p[0] = str(p[1]) + ' ' + str(p[3])
 
+
 def p_params_param(p):
     "params : param"
     p[0] = p[1]
+
 
 def p_param_num(p):
     "param : expression"
@@ -345,6 +399,11 @@ def p_params_string(p):
     string_con_comillas = p[1]
     # string_sin_comillas = string_con_comillas.split('"')[1]
     p[0] = string_con_comillas
+
+
+def p_params_empty(p):
+    "param : empty"
+    p[0] = p[1]
 
 
 def p_error(p):
