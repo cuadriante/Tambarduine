@@ -66,6 +66,10 @@ class ExceptionGenerator(Exception):
                 msg = "UNEXPECTED"
                 if exc_spec == "dt":
                     msg = msg + "DATATYPE."
+                if exc_spec == "m_prin":
+                    msg = msg + ": MISSING PRINCIPAL."
+                if exc_spec == "2_prin":
+                    msg = msg + ": MORE THAN ONE PRINCIPAL DECLARED."
             case _:
                 return 0  # 0 is the default case if x is not found
         raise Exception(msg)

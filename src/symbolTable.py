@@ -12,8 +12,9 @@ class SymbolTable:
         if value == None and self.parent:
             return self.parent(name)
         elif value == None and self.parent == None:
-            raise Exception(
-                "No existe una variable con el identificador " + name)
+            # raise Exception(
+            #    "No existe una variable con el identificador " + name)
+            return False
         else:
             return value
 
@@ -23,7 +24,7 @@ class SymbolTable:
     def remove(self, name):
         del symbols[name]
 
-    def cambiar_valor(self, name, new_value):
+    def change_value(self, name, new_value):
         self.symbols[name] = new_value
 
 

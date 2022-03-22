@@ -142,6 +142,7 @@ def p_function_call(p):
 
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
+    symbol_table.change_value(p[2], p[4])
     var_decl = var_decl(p[2], p[4])
     p[0] = var_decl
 

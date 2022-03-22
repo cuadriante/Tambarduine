@@ -1,5 +1,5 @@
 import ply.lex as lex
-#from symbolTable import symbol_table
+from symbolTable import symbol_table
 
 # List of token names.   This is always required
 tokens = (
@@ -37,6 +37,7 @@ tokens = (
     'TRUE',
     'FALSE',
     'STRING',
+    'PARAM',
 )
 
 reserved = {
@@ -99,7 +100,7 @@ t_STRING = r'".*"'
 
 # Declare the state
 states = (
-    ('ccode', 'exclusive'),
+    ('ccode', 'inclusive'),
 )
 
 
@@ -152,7 +153,8 @@ def t_COMMENT(t):
 def t_VAR(t):
     r'@[a-zA-Z_0-9?]{3,10}'
     t.type = reserved.get(t.value, 'VAR')  # Check for reserved words
-   # symbol_table.set(t.value, -1)
+    if not symbol_table.get(t.value):
+        symbol_table.set(t.value, -1)
     return t
 
 
@@ -167,7 +169,7 @@ def t_ID(t):
         print("Illegal character '%s'" % t.value)
         t.lexer.skip(1)
 
-
+'''
 # Match the first {. Enter ccode state.
 def t_ccode(t):
     r'\('
@@ -194,6 +196,5 @@ def t_ccode_rbrace(t):
         t.lexer.begin('INITIAL')
         return t
 
-
-
+'''
 lexer = lex.lex()

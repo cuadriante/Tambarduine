@@ -26,7 +26,7 @@ def print_lexer():
 
 def analizarCodigo(nombre_archivo):
     # READ FILE
-    document_to_compile = "test/" + nombre_archivo
+    document_to_compile = nombre_archivo
     test = document_to_compile
     fp = codecs.open(test, 'r', None, 'strict', - 1)
     arr = fp.read()
@@ -48,4 +48,5 @@ def analizarCodigo(nombre_archivo):
 # analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
-analizarCodigo("prueba_def.tam")
+analizarCodigo("hola.tam")
+print(symbol_table.symbols)
