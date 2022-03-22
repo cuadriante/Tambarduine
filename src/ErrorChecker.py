@@ -75,6 +75,8 @@ class ExceptionGenerator(Exception):
 # 1: invalid data type
 # 2: invalid data type during arithmetic procedure
 # 3: invalid comparison due to mismatched data types
+# que no haya principal
+# que el principal este dos veces
 
 eg = ExceptionGenerator()
 

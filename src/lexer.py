@@ -1,4 +1,5 @@
 import ply.lex as lex
+#from symbolTable import symbol_table
 
 # List of token names.   This is always required
 tokens = (
@@ -98,7 +99,7 @@ t_STRING = r'".*"'
 
 # Declare the state
 states = (
-    ('ccode', 'inclusive'),
+    ('ccode', 'exclusive'),
 )
 
 
@@ -151,6 +152,7 @@ def t_COMMENT(t):
 def t_VAR(t):
     r'@[a-zA-Z_0-9?]{3,10}'
     t.type = reserved.get(t.value, 'VAR')  # Check for reserved words
+   # symbol_table.set(t.value, -1)
     return t
 
 
@@ -164,6 +166,34 @@ def t_ID(t):
     else:
         print("Illegal character '%s'" % t.value)
         t.lexer.skip(1)
+
+
+# Match the first {. Enter ccode state.
+def t_ccode(t):
+    r'\('
+    t.lexer.code_start = t.lexer.lexpos  # Record the starting position
+    t.lexer.level = 1  # Initial brace level
+    t.lexer.begin('ccode')  # Enter 'ccode' state
+
+
+# Rules for the ccode state
+def t_ccode_lbrace(t):
+    r'\('
+    t.lexer.level += 1
+
+
+def t_ccode_rbrace(t):
+    r'\)'
+    t.lexer.level -= 1
+
+    # If closing brace, return the code fragment
+    if t.lexer.level == 0:
+        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
+        t.type = "PARAM"
+        t.lexer.lineno += t.value.count('\n')
+        t.lexer.begin('INITIAL')
+        return t
+
 
 
 lexer = lex.lex()
