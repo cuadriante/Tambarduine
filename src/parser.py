@@ -1,21 +1,8 @@
-from numpy import _2Tuple
 import ply.yacc as yacc
 from lexer import tokens
 from parsingStructure import *
 from symbolTable import symbol_table
 from functionTable import function_table
-
-
-class VarAccessNode:
-    def __init__(self, var_name_tok):
-        self.var_name_tok = var_name_tok
-
-
-class VarAssignNode:
-    def __init__(self, var_name_tok, value_node):
-        self.var_name_tok = var_name_tok
-        self.value_node = value_node
-
 
 precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
 
@@ -78,7 +65,7 @@ def p_function_decl_param_var(p):
     function_decls_param = function_decls_param(p[1])
     p[0] = function_decls_param
 
-def p_function_decl_params(p):
+def p_function_decl_param_to_params(p):
     "function_decl_params : function_decl_param"
     p[0] = p[1]
 def p_function_decl_params(p):
@@ -102,11 +89,7 @@ def p_main(p):
 # statements
 
 
-def p_statements_empty(p):
-    """statements : empty"""
-
-
-def p_statements(p):
+def p_statement_statements(p):
     """statements : statement"""
     p[0] = p[1]
 
@@ -115,13 +98,12 @@ def p_statements(p):
     p[1].set_next(p[2])
     p[0] = p[1]
 
-
 def p_statement(p):
     """statement : for_loop
                 | if_statement
                 | en_caso
-                | var_decls
-                | callable_functions
+                | var_decl
+                | callable_function
                 | bool_statement
                 | function_call"""
     print("statement")
@@ -137,26 +119,14 @@ def p_function_call(p):
     function_table.call(p[2], params)
     function_call = function_call(p[2], p[4])
     p[0] = function_call
-# VAR-DECL
 
+# VAR-DECL
 
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
     symbol_table.change_value(p[2], p[4])
     var_decl = var_decl(p[2], p[4])
     p[0] = var_decl
-
-
-def p_var_decls(p):
-    """var_decls : var_decls var_decl"""
-    p[1].set_next(p[2])
-    p[0] = p[1]
-    print("Variables")
-
-def p_var_trans(p):
-    """var_decls : var_decl"""
-    print("varToVars")
-    p[0] = p[1]
 
 
 # Funciones booleanas
@@ -241,7 +211,9 @@ def p_swich_0(p):
     switch_list0 = switch_list0(p[2], p[5])
     p[0] = switch_list0
     print("switch_list0")
-
+def p_switch0_to_list(p):
+    "switch_list_0 : switch0"
+    p[0] = p[1]
 
 def p_swich_0_list(p):
     "switch_list_0 : switch_list_0 switch0"
@@ -260,6 +232,10 @@ def p_switch_1(p):
     switch_list1 = switch_list1(p[2], p[5])
     p[0] = switch_list1
     print("switch_list1")
+
+def p_switch1_to_list(p):
+    "switch_list_1 : switch1"
+    p[0] = p[1]
 
 def p_swich_1_list(p):
     "switch_list_1 : switch_list_1 switch1"
@@ -357,7 +333,7 @@ def p_factor_expr(p):
 
 
 def p_empty(p):
-    'empty :'
+    'empty : '
     pass
 
 

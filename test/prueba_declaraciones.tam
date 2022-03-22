@@ -1,8 +1,4 @@
 Principal(){
-    SET @var2, 10//5;
-    SET @var3, 9;
-    SET @var1, 123;
-    SET @var4, 8;
-    SET @var5, 3+1;
+    SET @var1, 5;
 };
 

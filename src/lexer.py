@@ -25,7 +25,6 @@ tokens = (
     'MORETHANE',
     'LPAREN',
     'RPAREN',
-    "EXPONENTE",
     'LBRACE',
     'RBRACE',
     'ASSIGN',
@@ -178,23 +177,23 @@ def t_ccode(t):
     t.lexer.begin('ccode')  # Enter 'ccode' state
 
 
-# Rules for the ccode state
-def t_ccode_lbrace(t):
-    r'\('
-    t.lexer.level += 1
+# # Rules for the ccode state
+# def t_ccode_lbrace(t):
+#     r'\('
+#     t.lexer.level += 1
 
 
-def t_ccode_rbrace(t):
-    r'\)'
-    t.lexer.level -= 1
+# def t_ccode_rbrace(t):
+#     r'\)'
+#     t.lexer.level -= 1
 
-    # If closing brace, return the code fragment
-    if t.lexer.level == 0:
-        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
-        t.type = "PARAM"
-        t.lexer.lineno += t.value.count('\n')
-        t.lexer.begin('INITIAL')
-        return t
+#     # If closing brace, return the code fragment
+#     if t.lexer.level == 0:
+#         t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
+#         t.type = "PARAM"
+#         t.lexer.lineno += t.value.count('\n')
+#         t.lexer.begin('INITIAL')
+#         return t
 
 '''
 lexer = lex.lex()
