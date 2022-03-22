@@ -1,17 +1,18 @@
 program                 : block
 
-block                   : main
-                        | function
+block                   : function_decls main
 
-function_call           : EXEC VAR LPAREN params RPAREN SEMICOLON
+main                    : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON
 
 function_decls          : function_decl
                         | function_decls function_decl"
 
 function_decl           : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON
 
-function_decl_params    : VAR
-                        | function_params ASSIGN VAR
+function_decl_params    : function_decl_param
+                        | function_decl_params function_decl_param
+
+function_decl_param     : VAR
 
 
 main                    : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON
@@ -38,6 +39,8 @@ statement               : if_statement
                         | bool_statement
                         | function_call
 
+function_call           : EXEC VAR LPAREN params RPAREN SEMICOLON
+
 var_decls               : var_decls var_decl
                         | var_decl
 
@@ -53,12 +56,16 @@ for_loop                : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE
 
 en_caso                 : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
                         | ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON
-                
-switch_list_0           : CUANDO condition ENTONS LBRACE statements RBRACE
-                        | switch_list_0 CUANDO condition ENTONS LBRACE statements RBRACE
 
-switch_list_1           : CUANDO semi_condition ENTONS LBRACE statements RBRACE
-                        | switch_list_1 CUANDO semi_condition ENTONS LBRACE statements RBRACE
+switch0                 : CUANDO condition ENTONS LBRACE statements RBRACE
+
+switch_list_0           : switch0
+                        | switch_list_0 switch0
+
+switch1                 : CUANDO semi_condition ENTONS LBRACE statements RBRACE
+
+switch_list_1           : switch0
+                        | switch_list_1 switch1
 
 condition               : arith-expression semi_condition
 

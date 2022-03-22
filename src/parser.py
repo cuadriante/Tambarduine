@@ -1,5 +1,7 @@
+from numpy import _2Tuple
 import ply.yacc as yacc
 from lexer import tokens
+from parsingStructure import *
 from symbolTable import symbol_table
 from functionTable import function_table
 
@@ -31,15 +33,17 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 def p_program(p):
     "program : block"
     print(symbol_table.symbols)
-    p[0] = p[1]
+    program = program(p[1])
+    p[0] = program
 
 
 # BLOCK
 # bloack : functions main
 
-
 def p_block(p):
     "block : function_decls main"
+    block = block(p[1], p[2])
+    p[0] = block
     p[0] = p[1]
 
 # funciones
@@ -52,6 +56,7 @@ def p_function_decls(p):
 
 def p_function_decls_function_decl(p):
     "function_decls : function_decls function_decl"
+    p[1].next(p[2])
     p[0] = p[1]
 
 
@@ -64,32 +69,35 @@ def p_function_decl(p):
     "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON"
     params = p[4].split(',')
     function_table.add(p[2], params)
-    p[0] = str(p[4])
+    function_decl = function_decl(p[2], p[4], p[7])
+    p[0] = function_decl
 
 
-def p_function_decl_params_var(p):
-    "function_decl_params : VAR"
+def p_function_decl_param_var(p):
+    "function_decl_param : VAR"
+    function_decls_param = function_decls_param(p[1])
+    p[0] = function_decls_param
+
+def p_function_decl_params(p):
+    "function_decl_params : function_decl_param"
+    p[0] = p[1]
+def p_function_decl_params(p):
+    "function_decl_params : function_decl_params function_decl_param"
+    p[1].next(p[1])
     p[0] = p[1]
 
 
-def p_function_decl_params(p):
-    "function_decl_params : function_decl_params ASSIGN VAR"
-    p[0] = str(p[1]) + ', ' + str(p[3])
 
-
-def p_function_call(p):
-    "function_call : EXEC VAR LPAREN params RPAREN SEMICOLON"
-    p[0] = str(p[2]) + ',' + str(p[4])
-    params = p[4].split(',')
-    function_table.call(p[2], params)
 
 # MAIN) +
+
 
 
 def p_main(p):
     "main : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON"
     print("main")
-    p[0] = p[5]
+    main = main(p[5])
+    p[0] = main
 
 # statements
 
@@ -99,8 +107,13 @@ def p_statements_empty(p):
 
 
 def p_statements(p):
-    """statements : statement
-                | statements statement"""
+    """statements : statement"""
+    p[0] = p[1]
+
+def p_statements(p):
+    """statements : statements statement"""
+    p[1].set_next(p[2])
+    p[0] = p[1]
 
 
 def p_statement(p):
@@ -108,31 +121,36 @@ def p_statement(p):
                 | if_statement
                 | en_caso
                 | var_decls
-                | callable_function
+                | callable_functions
                 | bool_statement
                 | function_call"""
     print("statement")
-    p[0] = p[1]
+    statement = statement(p[1])
+    p[0] = statement
 
-# #MINI_STATEMENTS
-# def p_mini_statements(p):
-#     """mini_statements : var_decls
-#                     | callable_function
-#                     | bool_statement"""
+#FUNCTION_CALL
 
+def p_function_call(p):
+    "function_call : EXEC VAR LPAREN params RPAREN SEMICOLON"
+    p[0] = str(p[2]) + ',' + str(p[4])
+    params = p[4].split(',')
+    function_table.call(p[2], params)
+    function_call = function_call(p[2], p[4])
+    p[0] = function_call
 # VAR-DECL
 
 
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
-    symbol_table.set(p[2], p[4])
-    print("Variable")
+    var_decl = var_decl(p[2], p[4])
+    p[0] = var_decl
 
 
 def p_var_decls(p):
     """var_decls : var_decls var_decl"""
+    p[1].set_next(p[2])
+    p[0] = p[1]
     print("Variables")
-
 
 def p_var_trans(p):
     """var_decls : var_decl"""
@@ -145,96 +163,108 @@ def p_bool_statements(p):
     """bool_statement : boolean_neg
                     | boolean_true
                     | boolean_false"""
+    p[0] = p[1]
 
 
 def p_boolean_neg(p):
     'boolean_neg : SET VAR NEG SEMICOLON'
-    # valor_original = symbol_table.get(p[2])
-
-    # if valor_original == 'True':
-    #     symbol_table.cambiar_valor(p[2], 'False')
-    # else:
-    #     symbol_table.cambiar_valor(p[2], 'True')
-
+    bool_statement = bool_statement(p[2], p[3])
+    p[0] = bool_statement
 
 def p_boolean_to_true(p):
     'boolean_true : SET VAR TRUE SEMICOLON'
-    # symbol_table.cambiar_valor(p[2], 'True')
+    bool_statement = bool_statement(p[2], p[3])
+    p[0] = bool_statement
 
 
 def p_boolean_to_false(p):
     'boolean_false : SET VAR FALSE SEMICOLON'
-    # symbol_table.cambiar_valor(p[2], 'False')
+    bool_statement = bool_statement(p[2], p[3])
+    p[0] = bool_statement
 
 # EXPR
 
 
 def p_expression_arith(p):
     'expression : arith-expression'
-    p[0] = p[1]
+    expression = expression(p[1])
+    p[0] = expression
 
 
 def p_expression_boolean(p):
     'expression : BOOL'
-    p[0] = p[1]
+    expression = expression(p[1])
+    p[0] = expression
 
 
 # IF
 def p_if(p):
     "if_statement : IF condition LBRACE statements RBRACE"
     print("if")
-    condicion = p[2]
-    if(condicion == True):
+    if_statement = if_statement(p[2], p[4])
+    p[0] = if_statement
 
-        valor = p[4]
-        p[0] = valor
-    else:
-        pass
 
 
 def p_if_else(p):
     "if_statement : IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
     print("elseif")
-    condicion = p[2]
-    if(condicion == True):
-        p[0] = p[4]
-    else:
-        p[0] = p[8]
+    if_statement = if_statement(p[2], p[4], p[8])
+    p[0] = if_statement
 
 
 """
 FOR
 """
-
+def p_for_step(p):
+    "for_loop : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE"
+    print("for_loop_step")
+    for_loop = for_loop(p[2], p[4], p[8], p[6])
+    p[0] = for_loop
 
 def p_for(p):
-    "for_loop : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE"
+    "for_loop : FOR VAR TO factor LBRACE statements RBRACE"
     print("for_loop")
-
+    for_loop = for_loop(p[2], p[4], p[8])
+    p[0] = for_loop
 
 # en_caso
 def p_en_caso_0(p):
     "en_caso : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
-
+    en_caso = en_caso(p[2], p[5])
+    p[0] = en_caso
+    print("en_caso0")
 
 def p_swich_0(p):
-    "switch_list_0 : CUANDO condition ENTONS LBRACE statements RBRACE"
+    "switch0 : CUANDO condition ENTONS LBRACE statements RBRACE"
+    switch_list0 = switch_list0(p[2], p[5])
+    p[0] = switch_list0
+    print("switch_list0")
 
 
 def p_swich_0_list(p):
-    "switch_list_0 : switch_list_0 CUANDO condition ENTONS LBRACE statements RBRACE"
-
+    "switch_list_0 : switch_list_0 switch0"
+    p[1].next(p[2])
+    p[0] = p[1]
+    print("switch_list0")    
 
 def p_en_caso_1(p):
     "en_caso : ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
-
+    en_caso = en_caso(p[3], p[6], p[2])
+    p[0] = en_caso
+    print("en_caso1")
 
 def p_switch_1(p):
-    "switch_list_1 : CUANDO semi_condition ENTONS LBRACE statements RBRACE"
+    "switch1 : CUANDO semi_condition ENTONS LBRACE statements RBRACE"
+    switch_list1 = switch_list1(p[2], p[5])
+    p[0] = switch_list1
+    print("switch_list1")
 
-
-def p_switch_1_list(p):
-    "switch_list_1 : switch_list_1 CUANDO semi_condition ENTONS LBRACE statements RBRACE"
+def p_swich_1_list(p):
+    "switch_list_1 : switch_list_1 switch1"
+    p[1].next(p[2])
+    p[0] = p[1]
+    print("switch_list1")   
 
 
 # condition
@@ -242,7 +272,6 @@ def p_switch_1_list(p):
 
 def p_cond_arith(p):
     "condition : arith-expression semi_condition"
-    print("condition")
     if p[2][0] == "==":
         p[0] = p[1] == p[2][1]
     elif p[2][0] == "<>":
@@ -255,6 +284,9 @@ def p_cond_arith(p):
         p[0] = p[1] <= p[2][1]
     elif p[2][0] == ">=":
         p[0] = p[1] >= p[2][1]
+    print("condition")
+    condition = condition(p[1], p[2])
+    p[0] = condition
 
 # semi_condition
 
@@ -267,72 +299,60 @@ def p_semi_condition(p):
                 | LESSTHANE expression
                 | MORETHANE expression"""
     print("semi_condition")
-    p[0] = (p[1], p[2])
+    semi_condition = semi_condition(p[1], p[2])
+    p[0] = semi_condition
 
 
 # arith-expr
 def p_arith_plus(p):
-    'arith-expression : arith-expression PLUS term'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
-
-
-def p_arith_minus(p):
-    'arith-expression : arith-expression MINUS term'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
-
+    """arith-expression : arith-expression PLUS term
+                        | arith-expression MINUS term"""
+    arith_expr = arith_expr(p[1], p[2], p[3])
+    p[0] = arith_expr
 
 def p_arith_term(p):
     'arith-expression : term'
-    p[0] = str(p[1])
+    arith_expr = arith_expr(p[1])
+    p[0] = arith_expr
 
 
 # TERM
-def p_term_times(p):
-    'term : term TIMES factor'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
-
-
-def p_term_exponente(p):
-    'term : term POWER factor'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
-
-
-def p_term_div(p):
-    'term : term DIVIDE factor'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
-
-
-def p_term_mod(p):
-    'term : term MODULE factor'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
-
-
-def p_term_wholediv(p):
-    'term : term WHOLEDIVIDE factor'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
+def p_term(p):
+    """term : term TIMES factor
+            | term DIVIDE factor
+            | term MODULE factor
+            | term WHOLEDIVIDE factor
+            | term POWER factor"""
+    term = term(p[1], p[2], p[3])
+    p[0] = term
 
 
 def p_term_factor(p):
     'term : factor'
-    p[0] = p[1]
+    term = term(p[1])
+    p[0] = term
 
 # FACTOR
 
 
 def p_factor_num(p):
     'factor : NUMBER'
-    p[0] = p[1]
+    factor = factor(p[1])
+    p[0] = factor
 
 
 def p_factor_var(p):
     "factor : VAR"
-    value = symbol_table.get(p[1])
-    p[0] = value
+    factor = factor(p[1])
+    p[0] = factor
+
 
 
 def p_factor_expr(p):
-    'factor : LPAREN expression RPAREN'
-    p[0] = str(p[1]) + str(p[2]) + str(p[3])
+    'factor : LPAREN arith-expression RPAREN'
+    factor = factor(p[2])
+    p[0] = factor
+
 
 
 def p_empty(p):
@@ -348,65 +368,73 @@ def p_callable_function(p):
                         | vibrato
                         | metronomo
                         | print   """
+    callable_function = callable_function(p[1])
+    p[0] = callable_function
     print("función llamable")
 
 
 # FUNCIONES
 def p_abanico(p):
     "abanico : ABANICO LPAREN params RPAREN SEMICOLON"
+    abanico = abanico(p[3])
+    p[0] = abanico
     print(p[1])
 
 
 def p_vertical(p):
     "vertical : VERTICAL LPAREN params RPAREN SEMICOLON"
+    vertical = vertical(p[3])
+    p[0] = vertical
     print(p[1])
 
 
 def p_percutor(p):
     "percutor : PERCUTOR LPAREN params RPAREN SEMICOLON"
+    percutor = percutor(p[3])
+    p[0] = percutor
     print(p[1])
 
 
 def p_golpe(p):
     "golpe : GOLPE LPAREN params RPAREN SEMICOLON"
+    golpe = golpe(p[3])
+    p[0] = golpe
     print(p[1])
 
 
 def p_vibrato(p):
     "vibrato : VIBRATO LPAREN params RPAREN SEMICOLON"
+    vibrato = vibrato(p[3])
+    p[0] = vibrato
     print(p[1])
 
 
 def p_metronomo(p):
     "metronomo : METRONOMO LPAREN params RPAREN SEMICOLON"
+    metronomo = metronomo(p[3])
+    p[0] = metronomo
     print(p[1])
 
 
 def p_print(p):
     "print : PRINT LPAREN params RPAREN SEMICOLON"
-    p[0] = p[3]
-
+    printer = printer(p[3])
+    p[0] = printer
 
 def p_params(p):
     """params : params ASSIGN param"""
-    p[0] = str(p[1]) + ',' + str(p[3])
-
+    p[1].next(p[3])
+    p[0] = p[1]
 
 def p_params_param(p):
     "params : param"
     p[0] = p[1]
 
-
-def p_param_num(p):
-    "param : expression"
-    p[0] = p[1]
-
-
 def p_params_string(p):
-    "param : STRING"
-    string_con_comillas = p[1]
-    # string_sin_comillas = string_con_comillas.split('"')[1]
-    p[0] = string_con_comillas
+    """param : STRING
+            | expression"""
+    param = param(p[1])
+    p[0] = param
 
 
 def p_params_empty(p):
