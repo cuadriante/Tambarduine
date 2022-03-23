@@ -1,5 +1,5 @@
 Principal(){
-    SET @var1, 5*5;
-    SET @var2, 6+5*1;
+    SET @var1, 7*7;
+
 };
 
