@@ -35,12 +35,12 @@ def p_block(p):
 
 def p_function_decls(p):
     "function_decls : function_decl"
-    p[0] = p[1]
+    p[0] = function_decls(p[1])
 
 
 def p_function_decls_function_decl(p):
     "function_decls : function_decls function_decl"
-    p[1].next(p[2])
+    p[1].add(p[2])
     p[0] = p[1]
 
 
@@ -65,7 +65,7 @@ def p_function_decl_param_to_params(p):
     p[0] = p[1]
 def p_function_decl_params(p):
     "function_decl_params : function_decl_params function_decl_param"
-    p[1].next(p[1])
+    p[1].add(p[1])
     p[0] = p[1]
 
 
@@ -199,7 +199,7 @@ def p_switch0_to_list(p):
 def p_swich_0_list(p):
     "switch_list_0 : switch_list_0 switch0"
     print("switch_list0")   
-    p[1].next(p[2])
+    p[1].add(p[2])
     p[0] = p[1]
 
 def p_en_caso_1(p):
@@ -220,7 +220,7 @@ def p_switch1_to_list(p):
 def p_swich_1_list(p):
     "switch_list_1 : switch_list_1 switch1"
     print("switch_list1")   
-    p[1].next(p[2])
+    p[1].add(p[2])
     p[0] = p[1]
 
 
@@ -364,7 +364,7 @@ def p_print(p):
 
 def p_params(p):
     """params : params ASSIGN param"""
-    p[1].next(p[3])
+    p[1].add(p[3])
     p[0] = p[1]
 
 def p_params_param(p):

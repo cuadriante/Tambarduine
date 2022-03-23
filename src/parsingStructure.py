@@ -1,5 +1,6 @@
 
 from ast import operator
+from unittest import result
 from matplotlib.pyplot import step, text
 
 identation = "   "
@@ -14,10 +15,18 @@ class factor():
         self.factor = factor
 
     def printear(self, level):
-            valor = str(self.factor)
-            print(identation*level + "Factor:")
-            level += 1
-            print(identation*level + valor)
+        valor = str(self.factor)
+        print(identation*level + "Factor:")
+        level += 1
+        print(identation*level + valor)
+    
+    def exec(self):
+        factor = self.factor
+        if isinstance(factor, int):
+            return self.factor
+        else:
+            pass
+            #Buscar en la tabla de symbolos
 
 class term(Structure):
     def __init__(self, factor, term=None, operator=None):
@@ -33,6 +42,27 @@ class term(Structure):
             self.term.printear(level)
             print(identation*level + self.operator)
         self.factor.printear(level)
+    
+    def exec(self):
+        factor = self.factor.exec()
+        result = 0
+        if hasattr(self, "term") and hasattr(self, "operator"):
+            term = self.term.exec()
+            operator = self.operator
+            if operator == "*":
+                result = term * factor
+            elif operator == "/":
+                result = term / factor
+            elif operator == "//":
+                result = term // factor
+            elif operator == "%":
+                result = term % factor
+            elif operator == "**":
+                result = term ** factor
+        else:
+            result = factor
+        return result
+            #Buscar en la tabla de symbolos
 
 class arith_expr(Structure):
     def __init__(self, term, arith_expr=None, operator=None):
@@ -61,7 +91,7 @@ class param():
     def __init__(self, expr_or_string):
         self.param_list = [expr_or_string]
     
-    def set_next(self, next_param):
+    def add(self, next_param):
         self.param_list.append(next_param)
     
 
@@ -89,6 +119,7 @@ class var_decl():
         level += 1
         print(identation*level + self.var_name)
         self.expression.printear(level)
+    
 
 
 class function_call():
@@ -137,7 +168,7 @@ class switch_list0():
         self.switch_list = [switch0]
 
 
-    def set_next(self, next_switch):
+    def add(self, next_switch):
         self.switch_list.append(next_switch)
     
 
@@ -150,7 +181,7 @@ class switch_list1():
     def __init__(self, switch1):
         self.switch_list = [switch1]
 
-    def set_next(self, next_switch):
+    def add(self, next_switch):
         self.switch_list.append(next_switch)
 
 
@@ -158,7 +189,7 @@ class statement():
     def __init__(self, statement):
         self.statement_list = [statement]
     
-    def set_next(self, next_statement):
+    def add(self, next_statement):
         self.statement_list.append(next_statement)
     
     def printear(self, level):
@@ -171,8 +202,8 @@ class callable_function(Structure):
     def __init__(self, function):
         self.function = function
 
-    def set_next(self, next_function):
-        super().set_next(next_function)
+    def add(self, next_function):
+        super().add(next_function)
 
     def get_next(self):
         return super().get_next()
@@ -236,23 +267,27 @@ class function_decl(Structure):
         self.function_decl_params = function_decl_params
         self.statements = statements
 
-    def set_next(self, next_function_decls):
-        super().set_next(next_function_decls)
+    def add(self, next_function_decls):
+        super().add(next_function_decls)
 
     def get_next(self):
         return super().get_next()
         
+class function_decls():
+    def __init__(self, function_decl):
+        self.function_decl_list = [function_decl]
 
+    def add(self, function_decl):
+        self.function_decl_list.append(function_decl)
+        
 
-class function_decls_param(Structure):
+class function_decls_param():
     def __init__(self, var_name):
-        self.var_name = var_name
+        self.param_list = [var_name]
+        
+    def add(self, next_param):
+        self.param_list.append(next_param)
 
-    def set_next(self, next_function_params):
-        super().set_next(next_function_params)
-
-    def get_next(self):
-        return super().get_next()
 
 
 class program(Structure):
