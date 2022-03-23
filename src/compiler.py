@@ -4,7 +4,7 @@ from parser import *
 from lexer import *
 from semanticAnalyzer import run_semantic_analysis
 
-from hardwareCommunication import *
+# from hardwareCommunication import *
 
 parser = yacc.yacc()
 
@@ -18,6 +18,9 @@ def print_lexer():
         print(token)
     print("------------------------------")
 
+def print_arbol(program):
+    print("-----------Arbol------------")
+    program.printear()
 
 """-----> Los archivos de prueba se ponen en la carpeta test y se llama a la funcion con el nombre del archivo <-----"""
 
@@ -38,14 +41,16 @@ def analizarCodigo(nombre_archivo):
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
-    # parser.parse(arr)
+    program = parser.parse(arr)
+    print_arbol(program)
+    
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
 
 
 # analizarCodigo('prueba_if_else.tam')
-# analizarCodigo('prueba_declaraciones.tam')
+analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
 # analizarCodigo("hola.tam")
@@ -53,6 +58,6 @@ def analizarCodigo(nombre_archivo):
 # analizarCodigo("prueba_def.tam")
 
 # Hardware
-alternar_direccion_servo()
-time.sleep(3)
-detener_servo()
+# alternar_direccion_servo()
+# time.sleep(3)
+# detener_servo()

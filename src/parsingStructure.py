@@ -1,28 +1,23 @@
-# from msilib.schema import Class
-from struct import Struct
 
-from matplotlib.pyplot import step
+from ast import operator
+from matplotlib.pyplot import step, text
+
+identation = "   "
 
 
 class Structure:
     pass
-    # def print(self, params):
-    #     for i in params:
-    #         params.print()
-
-
-class Many:
-    def set_next(self, next):
-        self.next = next
-
-    def get_many(self):
-        return self.next
 
 
 class factor():
     def __init__(self, factor):
         self.factor = factor
 
+    def printear(self, level):
+            valor = str(self.factor)
+            print(identation*level + "Factor:")
+            level += 1
+            print(identation*level + valor)
 
 class term(Structure):
     def __init__(self, factor, term=None, operator=None):
@@ -31,6 +26,13 @@ class term(Structure):
             self.operator = operator
         self.factor = factor
 
+    def printear(self, level):
+        print(identation*level + "Term:")
+        level +=1
+        if hasattr(self, "term") and hasattr(self, "operator"):
+            self.term.printear(level)
+            print(identation*level + self.operator)
+        self.factor.printear(level)
 
 class arith_expr(Structure):
     def __init__(self, term, arith_expr=None, operator=None):
@@ -39,21 +41,30 @@ class arith_expr(Structure):
             self.operator = operator
         self.term = term
 
+    def printear(self, level):
+        print(identation*level + "Arith_expr:")
+        level +=1
+        if hasattr(self, "arith_expr") and hasattr(self, "operator"):
+            self.arith_expr.printear(level)
+            print(identation*level + self.operator)
+        self.term.printear(level)
 
 class expression(Structure):
     def __init__(self, arith_expr_or_bool):
         self.arith_expr_or_bool = arith_expr_or_bool
+    
+    def printear(self, level):
+        print(identation*level + "Expression:" )
+        self.arith_expr_or_bool.printear(level + 1)
 
-
-class param(Many):
+class param():
     def __init__(self, expr_or_string):
-        self.expr_or_string = expr_or_string
-
+        self.param_list = [expr_or_string]
+    
     def set_next(self, next_param):
-        super().set_next(next_param)
+        self.param_list.append(next_param)
+    
 
-    def get_next(self):
-        return super().get_next()
 
 
 class semi_condition(Structure):
@@ -67,29 +78,23 @@ class condition(Structure):
         self.arith_expr = arith_expr
         self.semi_condition = semi_condition
 
-
-class var_decl(Many):
+class var_decl():
     def __init__(self, var_name, expression):
         self.var_name = var_name
         self.expression = expression
 
-    def set_next(self, next_var_decl):
-        super().set_next(next_var_decl)
+    def printear(self, level):
+        level += 1
+        print(identation*level + "Var_decl:")
+        level += 1
+        print(identation*level + self.var_name)
+        self.expression.printear(level)
 
-    def get_next(self):
-        return super().get_next()
 
-
-class function_call(Many):
+class function_call():
     def __init__(self, function_name, params):
         self.function_name = function_name
         self.params = params
-
-    def set_next(self, next_var_decl):
-        super().set_next(next_var_decl)
-
-    def get_next(self):
-        return super().get_next()
 
 
 class bool_statement(Structure):
@@ -122,40 +127,44 @@ class en_caso(Structure):
         if expression:
             self.expression = expression
 
-
-class switch_list0(Many):
-    def __init__(self, condition, statements):
+class switch0():
+    def __init__(self, condition , statements):
         self.condition = condition
         self.statements = statements
 
+class switch_list0():
+    def __init__(self, switch0):
+        self.switch_list = [switch0]
+
+
     def set_next(self, next_switch):
-        super().set_next(next_switch)
+        self.switch_list.append(next_switch)
+    
 
-    def get_next(self):
-        return super().get_next()
-
-
-class switch_list1(Many):
-    def __init__(self, semi_condition, statements):
-        self.semi_condition = semi_condition
+class switch1():
+    def __init__(self, semi_condition , statements):
+        self.semi_condition = condition
         self.statements = statements
 
+class switch_list1():
+    def __init__(self, switch1):
+        self.switch_list = [switch1]
+
     def set_next(self, next_switch):
-        super().set_next(next_switch)
-
-    def get_next(self):
-        return super().get_next()
+        self.switch_list.append(next_switch)
 
 
-class statement(Many):
+class statement():
     def __init__(self, statement):
-        self.statement = statement
-
+        self.statement_list = [statement]
+    
     def set_next(self, next_statement):
-        super().set_next(next_statement)
-
-    def get_next(self):
-        return super().get_next()
+        self.statement_list.append(next_statement)
+    
+    def printear(self, level):
+        print(identation*level + "Statements:")
+        for statement in self.statement_list:
+            statement.printear(level)
 
 
 class callable_function(Structure):
@@ -208,12 +217,18 @@ class main(Structure):
     def __init__(self, statements):
         self.statemnts = statements
 
+    def printear(self, level):
+        print(identation*level + "Main:")
+        self.statemnts.printear(level+1)
 
 class block(Structure):
     def __init__(self, function_decls, main):
         self.function_decls = function_decls
         self.main = main
 
+    def printear(self, level):
+        print(identation*level + "Block:")
+        self.main.printear(level + 1)
 
 class function_decl(Structure):
     def __init__(self, function_name, function_decl_params, statements):
@@ -226,6 +241,7 @@ class function_decl(Structure):
 
     def get_next(self):
         return super().get_next()
+        
 
 
 class function_decls_param(Structure):
@@ -242,3 +258,10 @@ class function_decls_param(Structure):
 class program(Structure):
     def __init__(self, block):
         self.block = block
+    
+    def printear(self):
+        print("Program:")
+        self.block.printear(2)
+
+
+
