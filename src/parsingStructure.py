@@ -19,14 +19,18 @@ class factor():
         print(identation*level + "Factor:")
         level += 1
         print(identation*level + valor)
-    
+
     def exec(self):
         factor = self.factor
         if isinstance(factor, int):
             return self.factor
         else:
             pass
-            #Buscar en la tabla de symbolos
+            # Buscar en la tabla de symbolos
+
+    def get_child(self):
+        return self.factor
+
 
 class term(Structure):
     def __init__(self, factor, term=None, operator=None):
@@ -37,12 +41,12 @@ class term(Structure):
 
     def printear(self, level):
         print(identation*level + "Term:")
-        level +=1
+        level += 1
         if hasattr(self, "term") and hasattr(self, "operator"):
             self.term.printear(level)
             print(identation*level + self.operator)
         self.factor.printear(level)
-    
+
     def exec(self):
         factor = self.factor.exec()
         result = 0
@@ -62,7 +66,11 @@ class term(Structure):
         else:
             result = factor
         return result
-            #Buscar en la tabla de symbolos
+        # Buscar en la tabla de symbolos
+
+    def get_child(self):
+        return self.factor.get_child()
+
 
 class arith_expr(Structure):
     def __init__(self, term, arith_expr=None, operator=None):
@@ -73,28 +81,51 @@ class arith_expr(Structure):
 
     def printear(self, level):
         print(identation*level + "Arith_expr:")
-        level +=1
+        level += 1
         if hasattr(self, "arith_expr") and hasattr(self, "operator"):
             self.arith_expr.printear(level)
             print(identation*level + self.operator)
         self.term.printear(level)
 
+    def get_child(self):
+        return self.term.get_child()
+
+
 class expression(Structure):
     def __init__(self, arith_expr_or_bool):
         self.arith_expr_or_bool = arith_expr_or_bool
-    
+
     def printear(self, level):
-        print(identation*level + "Expression:" )
+        print(identation*level + "Expression:")
         self.arith_expr_or_bool.printear(level + 1)
+
+    def get_child(self):
+        return self.arith_expr_or_bool.get_child()
+
 
 class param():
     def __init__(self, expr_or_string):
         self.param_list = [expr_or_string]
-    
+
     def add(self, next_param):
         self.param_list.append(next_param)
-    
 
+    def get_params(self):
+        result_params = []
+        for param in self.param_list:
+            if isinstance(param, str):
+                result_params.append(param)
+            else:
+                result_params.append(param.get_child())
+
+        return result_params
+
+    def get_child(self):
+        param = self.param_list[0]
+        if isinstance(param, str):
+            return param
+        else:
+            return param.get_child()
 
 
 class semi_condition(Structure):
@@ -108,6 +139,7 @@ class condition(Structure):
         self.arith_expr = arith_expr
         self.semi_condition = semi_condition
 
+
 class var_decl():
     def __init__(self, var_name, expression):
         self.var_name = var_name
@@ -119,7 +151,6 @@ class var_decl():
         level += 1
         print(identation*level + self.var_name)
         self.expression.printear(level)
-    
 
 
 class function_call():
@@ -158,24 +189,26 @@ class en_caso(Structure):
         if expression:
             self.expression = expression
 
+
 class switch0():
-    def __init__(self, condition , statements):
+    def __init__(self, condition, statements):
         self.condition = condition
         self.statements = statements
+
 
 class switch_list0():
     def __init__(self, switch0):
         self.switch_list = [switch0]
 
-
     def add(self, next_switch):
         self.switch_list.append(next_switch)
-    
+
 
 class switch1():
-    def __init__(self, semi_condition , statements):
+    def __init__(self, semi_condition, statements):
         self.semi_condition = condition
         self.statements = statements
+
 
 class switch_list1():
     def __init__(self, switch1):
@@ -188,10 +221,10 @@ class switch_list1():
 class statement():
     def __init__(self, statement):
         self.statement_list = [statement]
-    
+
     def add(self, next_statement):
         self.statement_list.append(next_statement)
-    
+
     def printear(self, level):
         print(identation*level + "Statements:")
         for statement in self.statement_list:
@@ -252,6 +285,7 @@ class main(Structure):
         print(identation*level + "Main:")
         self.statemnts.printear(level+1)
 
+
 class block(Structure):
     def __init__(self, function_decls, main):
         self.function_decls = function_decls
@@ -260,6 +294,7 @@ class block(Structure):
     def printear(self, level):
         print(identation*level + "Block:")
         self.main.printear(level + 1)
+
 
 class function_decl(Structure):
     def __init__(self, function_name, function_decl_params, statements):
@@ -272,31 +307,31 @@ class function_decl(Structure):
 
     def get_next(self):
         return super().get_next()
-        
+
+
 class function_decls():
     def __init__(self, function_decl):
         self.function_decl_list = [function_decl]
 
     def add(self, function_decl):
         self.function_decl_list.append(function_decl)
-        
+
 
 class function_decls_param():
     def __init__(self, var_name):
         self.param_list = [var_name]
-        
-    def add(self, next_param):
-        self.param_list.append(next_param)
 
+    def add(self, next_param):
+        self.param_list.append(next_param.param_list[0])
+
+    def get_param_ids(self):
+        return self.param_list
 
 
 class program(Structure):
     def __init__(self, block):
         self.block = block
-    
+
     def printear(self):
         print("Program:")
         self.block.printear(2)
-
-
-

@@ -20,6 +20,8 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 def p_program(p):
     "program : block"
     print(symbol_table.symbols)
+    function_table.print_declared_functions()
+    function_table.print_called_functions()
     p[0] = program(p[1])
 
 
@@ -51,8 +53,7 @@ def p_functions_decl_empty(p):
 
 def p_function_decl(p):
     "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON"
-    params = p[4].split(',')
-    function_table.add(p[2], params)
+    function_table.add(p[2], p[4])
     p[0] = function_decl(p[2], p[4], p[7])
 
 
@@ -60,19 +61,24 @@ def p_function_decl_param_var(p):
     "function_decl_param : VAR"
     p[0] = function_decls_param(p[1])
 
+
+def p_function_decl_param_empty(p):
+    "function_decl_param : empty"
+    p[0] = function_decls_param(p[1])
+
+
 def p_function_decl_param_to_params(p):
     "function_decl_params : function_decl_param"
     p[0] = p[1]
+
+
 def p_function_decl_params(p):
-    "function_decl_params : function_decl_params function_decl_param"
-    p[1].add(p[1])
+    "function_decl_params : function_decl_params ASSIGN function_decl_param"
+    p[1].add(p[3])
     p[0] = p[1]
 
 
-
-
 # MAIN) +
-
 
 
 def p_main(p):
@@ -87,10 +93,12 @@ def p_statement_statements(p):
     """statements : statement"""
     p[0] = p[1]
 
+
 def p_statements(p):
     """statements : statements statement"""
-    p[1].set_next(p[2])
+    p[1].add(p[2])
     p[0] = p[1]
+
 
 def p_statement(p):
     """statement : for_loop
@@ -99,20 +107,21 @@ def p_statement(p):
                 | var_decl
                 | callable_function
                 | bool_statement
-                | function_call"""
+                | function_call
+                | empty"""
     print("statement")
     p[0] = statement(p[1])
 
-#FUNCTION_CALL
+# FUNCTION_CALL
+
 
 def p_function_call(p):
     "function_call : EXEC VAR LPAREN params RPAREN SEMICOLON"
-    p[0] = str(p[2]) + ',' + str(p[4])
-    params = p[4].split(',')
-    function_table.call(p[2], params)
+    function_table.call(p[2], p[4])
     p[0] = function_call(p[2], p[4])
 
 # VAR-DECL
+
 
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
@@ -132,6 +141,7 @@ def p_bool_statements(p):
 def p_boolean_neg(p):
     'boolean_neg : SET VAR NEG SEMICOLON'
     p[0] = bool_statement(p[2], p[3])
+
 
 def p_boolean_to_true(p):
     'boolean_true : SET VAR TRUE SEMICOLON'
@@ -162,7 +172,6 @@ def p_if(p):
     p[0] = if_statement(p[2], p[4])
 
 
-
 def p_if_else(p):
     "if_statement : IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
     print("elseif")
@@ -172,10 +181,13 @@ def p_if_else(p):
 """
 FOR
 """
+
+
 def p_for_step(p):
     "for_loop : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE"
     print("for_loop_step")
     p[0] = for_loop(p[2], p[4], p[8], p[6])
+
 
 def p_for(p):
     "for_loop : FOR VAR TO factor LBRACE statements RBRACE"
@@ -183,29 +195,37 @@ def p_for(p):
     print("for_loop")
 
 # en_caso
+
+
 def p_en_caso_0(p):
     "en_caso : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
     p[0] = en_caso(p[2], p[5])
     print("en_caso0")
 
+
 def p_swich_0(p):
     "switch0 : CUANDO condition ENTONS LBRACE statements RBRACE"
     p[0] = switch0(p[2], p[5])
     print("switch0")
+
+
 def p_switch0_to_list(p):
     "switch_list_0 : switch0"
     p[0] = switch_list0(p[1])
 
+
 def p_swich_0_list(p):
     "switch_list_0 : switch_list_0 switch0"
-    print("switch_list0")   
+    print("switch_list0")
     p[1].add(p[2])
     p[0] = p[1]
+
 
 def p_en_caso_1(p):
     "en_caso : ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
     p[0] = en_caso(p[3], p[6], p[2])
     print("en_caso1")
+
 
 def p_switch_1(p):
     "switch1 : CUANDO semi_condition ENTONS LBRACE statements RBRACE"
@@ -217,12 +237,12 @@ def p_switch1_to_list(p):
     "switch_list_1 : switch1"
     p[0] = switch_list1(p[1])
 
+
 def p_swich_1_list(p):
     "switch_list_1 : switch_list_1 switch1"
-    print("switch_list1")   
+    print("switch_list1")
     p[1].add(p[2])
     p[0] = p[1]
-
 
 
 # condition
@@ -259,10 +279,13 @@ def p_semi_condition(p):
     p[0] = semi_condition(p[1], p[2])
 
 # arith-expr
+
+
 def p_arith_plus(p):
     """arith-expression : arith-expression PLUS term
                         | arith-expression MINUS term"""
     p[0] = arith_expr(p[3], p[1], p[2])
+
 
 def p_arith_term(p):
     'arith-expression : term'
@@ -296,11 +319,9 @@ def p_factor_var(p):
     p[0] = factor(p[1])
 
 
-
 def p_factor_expr(p):
     'factor : LPAREN arith-expression RPAREN'
     p[0] = factor(p[2])
-
 
 
 def p_empty(p):
@@ -362,20 +383,22 @@ def p_print(p):
     printer = printer(p[3])
     p[0] = printer
 
+
 def p_params(p):
     """params : params ASSIGN param"""
     p[1].add(p[3])
     p[0] = p[1]
 
+
 def p_params_param(p):
     "params : param"
     p[0] = p[1]
+
 
 def p_params_string(p):
     """param : STRING
             | expression"""
     p[0] = param(p[1])
-
 
 
 def p_params_empty(p):

@@ -18,11 +18,14 @@ class SymbolTable:
         else:
             return value
 
+    def get_all(self):
+        return self.symbols.values()
+
     def set(self, name, value):
         self.symbols[name] = value
 
     def remove(self, name):
-        del symbols[name]
+        del self.symbols[name]
 
     def change_value(self, name, new_value):
         self.symbols[name] = new_value
