@@ -2,6 +2,7 @@
 from ast import operator
 from unittest import result
 from matplotlib.pyplot import step, text
+from symbolTable import symbol_table
 
 identation = "   "
 
@@ -51,6 +52,7 @@ class term(Structure):
             operator = self.operator
             if operator == "*":
                 result = term * factor
+                print(term, factor, result)
             elif operator == "/":
                 result = term / factor
             elif operator == "//":
@@ -78,6 +80,22 @@ class arith_expr(Structure):
             self.arith_expr.printear(level)
             print(identation*level + self.operator)
         self.term.printear(level)
+    
+    
+    def exec(self):
+        term = self.term.exec()
+        result = 0
+        if hasattr(self, "arith_expr") and hasattr(self, "operator"):
+            arith_expr = self.arith_expr.exec()
+            operator = self.operator
+
+            if operator == "+":
+                result = arith_expr + term
+            elif operator == "-":
+                result = arith_expr - term
+        else:
+            result = term
+        return result
 
 class expression(Structure):
     def __init__(self, arith_expr_or_bool):
@@ -86,6 +104,10 @@ class expression(Structure):
     def printear(self, level):
         print(identation*level + "Expression:" )
         self.arith_expr_or_bool.printear(level + 1)
+    
+    def exec(self):
+        expression = self.arith_expr_or_bool.exec()
+        return expression
 
 class param():
     def __init__(self, expr_or_string):
@@ -119,6 +141,10 @@ class var_decl():
         level += 1
         print(identation*level + self.var_name)
         self.expression.printear(level)
+    
+    def exec(self):
+        valor = self.expression.exec()
+        symbol_table.set(self.var_name, valor)
     
 
 
@@ -196,6 +222,10 @@ class statement():
         print(identation*level + "Statements:")
         for statement in self.statement_list:
             statement.printear(level)
+    
+    def exec(self):
+        for statement in self.statement_list:
+            statement.exec()
 
 
 class callable_function(Structure):
@@ -246,11 +276,14 @@ class metronomo(Structure):
 
 class main(Structure):
     def __init__(self, statements):
-        self.statemnts = statements
+        self.statements = statements
 
     def printear(self, level):
         print(identation*level + "Main:")
-        self.statemnts.printear(level+1)
+        self.statements.printear(level+1)
+    
+    def exec(self):
+        self.statements.exec()
 
 class block(Structure):
     def __init__(self, function_decls, main):
@@ -260,6 +293,10 @@ class block(Structure):
     def printear(self, level):
         print(identation*level + "Block:")
         self.main.printear(level + 1)
+
+    def exec(self):
+        # self.function_decls.exec()
+        self.main.exec()        
 
 class function_decl(Structure):
     def __init__(self, function_name, function_decl_params, statements):
@@ -297,6 +334,10 @@ class program(Structure):
     def printear(self):
         print("Program:")
         self.block.printear(2)
+
+    def exec(self):
+        self.block.exec()
+        print(symbol_table.symbols)
 
 
 

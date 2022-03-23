@@ -43,6 +43,7 @@ def analizarCodigo(nombre_archivo):
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
     program = parser.parse(arr)
     print_arbol(program)
+    program.exec()
     
 
     # SEMANTIC ANALYSIS

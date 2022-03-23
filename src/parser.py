@@ -19,7 +19,6 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 # ROOT
 def p_program(p):
     "program : block"
-    print(symbol_table.symbols)
     p[0] = program(p[1])
 
 
@@ -89,7 +88,7 @@ def p_statement_statements(p):
 
 def p_statements(p):
     """statements : statements statement"""
-    p[1].set_next(p[2])
+    p[1].add(p[2])
     p[0] = p[1]
 
 def p_statement(p):
@@ -116,7 +115,6 @@ def p_function_call(p):
 
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
-    symbol_table.change_value(p[2], p[4])
     print("var_decl")
     p[0] = var_decl(p[2], p[4])
 
