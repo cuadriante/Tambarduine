@@ -1,10 +1,10 @@
-
 import codecs
 
 from parser import *
 from lexer import *
 from semanticAnalyzer import run_semantic_analysis
 
+from hardwareCommunication import *
 
 parser = yacc.yacc()
 
@@ -26,28 +26,33 @@ def print_lexer():
 
 def analizarCodigo(nombre_archivo):
     # READ FILE
-    document_to_compile =  "test/" + nombre_archivo
+    document_to_compile = "test/" + nombre_archivo
     test = document_to_compile
     fp = codecs.open(test, 'r', None, 'strict', - 1)
     arr = fp.read()
     fp.close()
 
     # LEXER - LEXICAL ANALYSIS
-    lexer.input(arr)
-    print_lexer()
+    # lexer.input(arr)
+    # print_lexer()
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
-    parser.parse(arr)
+    # parser.parse(arr)
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
 
 
 # analizarCodigo('prueba_if_else.tam')
-analizarCodigo('prueba_declaraciones.tam')
+# analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
 # analizarCodigo("hola.tam")
 # print(symbol_table.symbols)
 # analizarCodigo("prueba_def.tam")
+
+# Hardware
+alternar_direccion_servo()
+time.sleep(3)
+detener_servo()

@@ -4,31 +4,36 @@
 
 #include <Servo.h>
 
-int input_value;
+int input_value = 10;
 
 Servo servoHorizontal;
 
 void setup() {
   servoHorizontal.attach(9);
 
-
-  
-  pinMode(8,  OUTPUT);
-  digitalWrite(8, LOW);
-  
   Serial.begin(9600);
   Serial.setTimeout(1);
 }
 
 void loop() {
-  //alternarDireccion(servoHorizontal, 750);
+  if (Serial.available()) {
+    input_value = Serial.readString().toInt();
+  }
+  else{
+    if (input_value == 1) {
+      servoHorizontal.write(0);
+    }
+    else if (input_value == 2){
+      alternarDireccion(servoHorizontal, 500);
+    }
+  }
 }
 
-void alternarDireccion(Servo servo, int tiempoDeGiro){
+void alternarDireccion(Servo servo, int velocidadGiro) {
   servo.write(0);
-  delay(tiempoDeGiro);
+  delay(velocidadGiro);
   servo.write(180);
-  delay(tiempoDeGiro);
+  delay(velocidadGiro);
 }
 
 
@@ -41,20 +46,20 @@ void alternarDireccion(Servo servo, int tiempoDeGiro){
 
 
 
-void led_on(){
+void led_on() {
   digitalWrite(8, HIGH);
 }
 
-void led_off(){
+void led_off() {
   digitalWrite(8, LOW);
 }
 
-void controlarLed(){
+void controlarLed() {
   while (!Serial.available()); // No hace nada hasta que no se abra el puerto serial
   input_value = Serial.readString().toInt(); // Lee el valor recibido y lo convierte a int
-  if(input_value == 1){
+  if (input_value == 1) {
     led_on();
-  }else{
+  } else {
     led_off();
   }
 }
