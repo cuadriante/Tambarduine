@@ -4,19 +4,31 @@
 
 #include <Servo.h>
 
-int input_value = 10;
+int input_value = 99;
+float metronomo = 500;
 
-Servo servoHorizontal;
+Servo servoVertical;
+Servo servoAbanico;
 
 void setup() {
-  servoHorizontal.attach(9);
+  servoVertical.attach(9);
+  servoAbanico.attach(10);
+  setMetronomo(0.75);
 
   Serial.begin(9600);
   Serial.setTimeout(1);
 }
 
 void loop() {
-  if (Serial.available()) {
+  verticalD();
+  delay(1000);
+  abanicoA();
+  delay(1000);
+  verticalI();
+  delay(1000);
+  abanicoB();
+  delay(1000);
+/*  if (Serial.available()) {
     input_value = Serial.readString().toInt();
   }
   else{
@@ -26,40 +38,45 @@ void loop() {
     else if (input_value == 2){
       alternarDireccion(servoHorizontal, 500);
     }
-  }
+  }*/
 }
 
-void alternarDireccion(Servo servo, int velocidadGiro) {
-  servo.write(0);
-  delay(velocidadGiro);
-  servo.write(180);
-  delay(velocidadGiro);
+void abanicoA(){
+  servoAbanico.write(0);
+  delay(metronomo);
+  servoAbanico.write(90);
+  servoAbanico.write(180);
+  delay(metronomo);
+  servoAbanico.write(90);
 }
 
-
-
-
-
-
-
-
-
-
-
-void led_on() {
-  digitalWrite(8, HIGH);
+void abanicoB(){
+  servoAbanico.write(180);
+  delay(metronomo);
+  servoAbanico.write(90);
+  servoAbanico.write(0);
+  delay(metronomo);
+  servoAbanico.write(90);
 }
 
-void led_off() {
-  digitalWrite(8, LOW);
+void verticalD(){
+  servoVertical.write(0);
+  delay(metronomo);
+  servoVertical.write(90);
+  servoVertical.write(180);
+  delay(metronomo);
+  servoVertical.write(90);
 }
 
-void controlarLed() {
-  while (!Serial.available()); // No hace nada hasta que no se abra el puerto serial
-  input_value = Serial.readString().toInt(); // Lee el valor recibido y lo convierte a int
-  if (input_value == 1) {
-    led_on();
-  } else {
-    led_off();
-  }
+void verticalI(){
+  servoVertical.write(180);
+  delay(metronomo);
+  servoVertical.write(90);
+  servoVertical.write(0);
+  delay(metronomo);
+  servoVertical.write(90);
+}
+
+void setMetronomo(float tiempoEntreGolpes){
+  metronomo = tiempoEntreGolpes/2 * 1000;
 }
