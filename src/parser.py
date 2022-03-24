@@ -96,7 +96,7 @@ def p_statement_statements(p):
 
 def p_statements(p):
     """statements : statements statement"""
-    p[1].add(p[2])
+    p[1].add(p[2].statement_list[0])
     p[0] = p[1]
 
 

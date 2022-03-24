@@ -1,7 +1,4 @@
 
-from sre_compile import isstring
-import string
-from matplotlib.pyplot import step, text
 from symbolTable import symbol_table
 
 identation = "   "
@@ -322,12 +319,29 @@ class en_caso():
         self.sino = sino_statements
         if expression:
             self.expression = expression
+    
+    def printear(self, level):
+        print(identation*level + "En_caso:")
+        level += 1
+        self.switch_list.printer(level)
+        self.sino.printear(level)
+        if self.hasExpression():
+            self.expression.printear(level)
+    
+    def hasExpression(self):
+        return hasattr("expression")
 
 
 class switch0():
     def __init__(self, condition, statements):
         self.condition = condition
         self.statements = statements
+    
+    def printear(self):
+        print(identation*level + "Switch0:")
+        level += 1
+        self.condition.printer(level)
+        self.statements.printear(level)
 
 
 class switch_list0():
@@ -337,12 +351,23 @@ class switch_list0():
     def add(self, next_switch):
         self.switch_list.append(next_switch)
 
+    def printear(self):
+        print(identation*level + "Switch_list0:")
+        level += 1
+        for switch in self.switch_list:
+            switch.printear(level)        
+
 
 class switch1():
     def __init__(self, semi_condition, statements):
-        self.semi_condition = condition
+        self.semi_condition = semi_condition
         self.statements = statements
 
+    def printear(self):
+        print(identation*level + "Switch1:")
+        level += 1
+        self.semi_condition.printer(level)
+        self.statements.printear(level)
 
 class switch_list1():
     def __init__(self, switch1):
@@ -350,6 +375,12 @@ class switch_list1():
 
     def add(self, next_switch):
         self.switch_list.append(next_switch)
+    
+    def printear(self):
+        print(identation*level + "Switch_list0:")
+        level += 1
+        for switch in self.switch_list:
+            switch.printear(level)   
 
 
 class statement():
