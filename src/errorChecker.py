@@ -1,24 +1,45 @@
 from symbolTable import *
 
 
+indentation = "     "
+
+
 def run_error_checker(program):
     if program.block.main:
         print("valid main found.")
         if program.block.main.statements:
-            print("valid statement(s) found.")
+            print(indentation + "valid statement(s) found.")
             for s in program.block.main.statements.statement_list:
-                print("statement found.")
+                print(2*indentation + "statement found.")
                 if s.expression:
-                    print("expression found.")
+                    print(3*indentation + "expression found.")
                     if s.expression.arith_expr_or_bool:
-                        print("arithmetic or boolean expression found.")
+                        check_arith_expr(s)
                 else:
-                    print("no expression found.")
+                    print(4*indentation + "no expression found.")
                     # hacer algo
-            eg.raise_exception("miss", "stat")
+            # eg.raise_exception("miss", "stat")
     else:
         eg.raise_exception("miss", "prin")
 
+
+def check_arith_expr(s):
+    print(3 * indentation + "arithmetic or boolean expression found.")
+    term_next = True
+    s_term = s.expression.arith_expr_or_bool.term
+    prev_s_term = s_term
+    print(4 * indentation + "term found.")
+    while term_next:
+        if s_term.term:
+            print(4 * indentation + "term found.")
+            prev_s_term = s_term
+            s_term = s_term.term
+            operation = True
+            pass
+        else:
+            term_next = False
+    if operation:
+        s_term
 
 def is_number(variable):
     return isinstance(variable, int) or isinstance(variable, float)
@@ -60,7 +81,9 @@ def check_if_validity(comparison):  # que comparison sea una lista
             eg.raise_exception("inv_comp", "dt")
     return True
 
+
 class ExceptionGenerator(Exception):
+
     def raise_exception(self, exc_num, exc_spec):
         match exc_num:
             case "inv_dt":
@@ -92,13 +115,13 @@ class ExceptionGenerator(Exception):
                 msg = "MISSING"
                 if exc_spec == "prin":
                     msg = msg + ": PRINCIPAL."
-                if exc_spec == "stat:":
+                if exc_spec == "stat":
                     msg = msg + ": STATEMENT(S)."
                 if exc_spec == "expr":
                     msg = msg + ": EXPRESSION"
             case _:
                 return 0  # 0 is the default case if x is not found
-        raise Exception(msg)
+        raise Exception("ERROR:" + msg)
 
 
 # error types:
