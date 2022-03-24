@@ -1,7 +1,8 @@
 import codecs
 
-from parser import *
 from lexer import *
+from parser import *
+from errorChecker import *
 from semanticAnalyzer import run_semantic_analysis
 
 # from hardwareCommunication import *
@@ -29,9 +30,9 @@ def print_arbol(program):
 """-----> Correr el programa desde la raiz del proyecto <-----"""
 
 
-def analizarCodigo(nombre_archivo):
+def analizeCode(nombre_archivo):
     # READ FILE
-    document_to_compile = "test/" + nombre_archivo
+    document_to_compile = 'test/' + nombre_archivo
     test = document_to_compile
     fp = codecs.open(test, 'r', None, 'strict', - 1)
     arr = fp.read()
@@ -47,17 +48,19 @@ def analizarCodigo(nombre_archivo):
     # print_arbol(program)
     # program.exec()
 
+    # run_error_checker(program)
+
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
 
 
 # analizarCodigo('prueba_if_else.tam')
-# analizarCodigo('prueba_declaraciones.tam')
+analizeCode('prueba_def.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
 # analizarCodigo("hola.tam")
 # print(symbol_table.symbols)
-analizarCodigo("prueba_def.tam")
+# analizarCodigo("prueba_def.tam")
 
 # Hardware
 # alternar_direccion_servo()

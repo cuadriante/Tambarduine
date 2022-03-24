@@ -13,7 +13,7 @@ Def @rutinita (){
 };
 
 Principal(){
-    SET @var1, True;
+    SET @var1, false;
     Exec @rutinota("adios", @var1,2131);
     Exec @rutina(123, "ola");
 };

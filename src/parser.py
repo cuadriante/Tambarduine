@@ -28,7 +28,6 @@ def p_program(p):
 
 
 # BLOCK
-# bloack : functions main
 
 def p_block(p):
     "block : function_decls main"
@@ -100,12 +99,13 @@ def p_main(p):
 
 def p_statement_statements(p):
     """statements : statement"""
+    print("statements")
     p[0] = p[1]
 
 
 def p_statements(p):
     """statements : statements statement"""
-    p[1].add(p[2])
+    p[1].add(p[2].statement_list[0])
     p[0] = p[1]
 
 
@@ -203,7 +203,7 @@ def p_for_step(p):
 
 def p_for(p):
     "for_loop : FOR VAR TO factor LBRACE statements RBRACE"
-    p[0] = for_loop(p[2], p[4], p[8])
+    p[0] = for_loop(p[2], p[4], p[6])
     print("for_loop")
 
 # en_caso
@@ -262,18 +262,6 @@ def p_swich_1_list(p):
 
 def p_cond_arith(p):
     "condition : arith-expression semi_condition"
-    if p[2][0] == "==":
-        p[0] = p[1] == p[2][1]
-    elif p[2][0] == "<>":
-        p[0] = p[1] != p[2][1]
-    elif p[2][0] == "<":
-        p[0] = p[1] < p[2][1]
-    elif p[2][0] == ">":
-        p[0] = p[1] > p[2][1]
-    elif p[2][0] == "<=":
-        p[0] = p[1] <= p[2][1]
-    elif p[2][0] == ">=":
-        p[0] = p[1] >= p[2][1]
     print("condition")
     p[0] = condition(p[1], p[2])
 
@@ -392,8 +380,7 @@ def p_metronomo(p):
 
 def p_print(p):
     "print : PRINT LPAREN params RPAREN SEMICOLON"
-    printer = printer(p[3])
-    p[0] = printer
+    p[0] = printer(p[3])
 
 
 def p_params(p):

@@ -1,6 +1,25 @@
 from symbolTable import *
 
 
+def run_error_checker(program):
+    if program.block.main:
+        print("valid main found.")
+        if program.block.main.statements:
+            print("valid statement(s) found.")
+            for s in program.block.main.statements.statement_list:
+                print("statement found.")
+                if s.expression:
+                    print("expression found.")
+                    if s.expression.arith_expr_or_bool:
+                        print("arithmetic or boolean expression found.")
+                else:
+                    print("no expression found.")
+                    # hacer algo
+            eg.raise_exception("miss", "stat")
+    else:
+        eg.raise_exception("miss", "prin")
+
+
 def is_number(variable):
     return isinstance(variable, int) or isinstance(variable, float)
 
@@ -66,10 +85,17 @@ class ExceptionGenerator(Exception):
                 msg = "UNEXPECTED"
                 if exc_spec == "dt":
                     msg = msg + "DATATYPE."
-                if exc_spec == "m_prin":
-                    msg = msg + ": MISSING PRINCIPAL."
                 if exc_spec == "2_prin":
                     msg = msg + ": MORE THAN ONE PRINCIPAL DECLARED."
+
+            case "miss":
+                msg = "MISSING"
+                if exc_spec == "prin":
+                    msg = msg + ": PRINCIPAL."
+                if exc_spec == "stat:":
+                    msg = msg + ": STATEMENT(S)."
+                if exc_spec == "expr":
+                    msg = msg + ": EXPRESSION"
             case _:
                 return 0  # 0 is the default case if x is not found
         raise Exception(msg)
