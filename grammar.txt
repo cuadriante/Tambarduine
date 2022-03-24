@@ -7,13 +7,14 @@ main                    : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMIC
 function_decls          : function_decl
                         | function_decls ASSIGN function_decl"
 
-function_decl           : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON
+function_decl           : DEF VAR LPAREN function_decl_params RPAREN LBRACE function_body RBRACE SEMICOLON
 
 function_decl_params    : function_decl_param
                         | function_decl_params function_decl_param
 
 function_decl_param     : VAR
 
+function_body           : statements
 
 main                    : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON
 

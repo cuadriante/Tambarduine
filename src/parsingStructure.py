@@ -88,8 +88,7 @@ class arith_expr(Structure):
             self.arith_expr.printear(level)
             print(identation*level + self.operator)
         self.term.printear(level)
-    
-    
+
     def exec(self):
         term = self.term.exec()
         result = 0
@@ -116,13 +115,16 @@ class expression(Structure):
     def printear(self, level):
         print(identation*level + "Expression:")
         self.arith_expr_or_bool.printear(level + 1)
-    
+
     def exec(self):
         expression = self.arith_expr_or_bool.exec()
         return expression
 
     def get_child(self):
-        return self.arith_expr_or_bool.get_child()
+        if isinstance(self.arith_expr_or_bool, str):
+            return self.arith_expr_or_bool
+        else:
+            return self.arith_expr_or_bool.get_child()
 
 
 class param():
@@ -139,7 +141,6 @@ class param():
                 result_params.append(param)
             else:
                 result_params.append(param.get_child())
-
         return result_params
 
     def get_child(self):
@@ -173,11 +174,10 @@ class var_decl():
         level += 1
         print(identation*level + self.var_name)
         self.expression.printear(level)
-    
+
     def exec(self):
         valor = self.expression.exec()
         symbol_table.set(self.var_name, valor)
-    
 
 
 class function_call():
@@ -256,7 +256,7 @@ class statement():
         print(identation*level + "Statements:")
         for statement in self.statement_list:
             statement.printear(level)
-    
+
     def exec(self):
         for statement in self.statement_list:
             statement.exec()
@@ -315,7 +315,7 @@ class main(Structure):
     def printear(self, level):
         print(identation*level + "Main:")
         self.statements.printear(level+1)
-    
+
     def exec(self):
         self.statements.exec()
 
@@ -331,13 +331,14 @@ class block(Structure):
 
     def exec(self):
         # self.function_decls.exec()
-        self.main.exec()        
+        self.main.exec()
+
 
 class function_decl(Structure):
-    def __init__(self, function_name, function_decl_params, statements):
+    def __init__(self, function_name, function_decl_params, function_body):
         self.function_name = function_name
         self.function_decl_params = function_decl_params
-        self.statements = statements
+        self.function_body = function_body
 
     def add(self, next_function_decls):
         super().add(next_function_decls)
@@ -365,6 +366,27 @@ class function_decls_param():
         return self.param_list
 
 
+class function_body():
+    def __init__(self, statements):
+        self.statements = statements
+
+    def get_var_decls(self):
+        result = []
+        first_statement = self.statements.statement_list[0]
+
+        if isinstance(first_statement, var_decl):
+            result.append(first_statement)
+
+        for i in range(1, len(self.statements.statement_list)):
+            statement = self.statements.statement_list[i]
+            statement_child = statement.statement_list[0]
+
+            if isinstance(statement_child, var_decl):
+                result.append(statement_child)
+
+        return result
+
+
 class program(Structure):
     def __init__(self, block):
         self.block = block
@@ -376,6 +398,3 @@ class program(Structure):
     def exec(self):
         self.block.exec()
         print(symbol_table.symbols)
-
-
-

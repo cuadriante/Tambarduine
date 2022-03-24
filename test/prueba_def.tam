@@ -1,8 +1,14 @@
 Def @rutina (@parametro1, @parametro2){
-
+    SET @varRutina, 431; SET @varRutina3, 590;
+    SET @varRutina2, 131;
+    SET @varRutina4, false;
 };
 
 Def @rutinota (@parametro2, @parametro3, @parametro4){
+    SET @varRutina5, true;
+};
+
+Def @rutinita (){
 
 };
 
