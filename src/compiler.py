@@ -58,7 +58,7 @@ def analizeCode(nombre_archivo):
 analizeCode('prueba_def.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
-# analizarCodigo("hola.tam")
+# analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizarCodigo("prueba_def.tam")
 

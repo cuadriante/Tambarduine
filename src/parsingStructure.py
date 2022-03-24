@@ -65,7 +65,10 @@ class term():
         # Buscar en la tabla de symbolos
 
     def get_child(self):
-        return self.factor.get_child()
+        if isinstance(self.factor, str) or isinstance(self.factor, bool):
+            return self.factor
+        else:
+            return self.factor.get_child()
 
 
 class arith_expr():
@@ -99,7 +102,10 @@ class arith_expr():
         return result
 
     def get_child(self):
-        return self.term.get_child()
+        if isinstance(self.term, str) or isinstance(self.term, bool):
+            return self.term
+        else:
+            return self.term.get_child()
 
 
 class expression():
@@ -156,7 +162,7 @@ class param():
         # print(self.param_list)
         for param in self.param_list:
             if self.isString(param):
-                print(identation*level + param)
+                print(indentation*level + param)
             else:
                 param.printear(level)
 
@@ -184,7 +190,7 @@ class param():
 
     def get_child(self):
         param = self.param_list[0]
-        if isinstance(param, str):
+        if isinstance(param, str) or isinstance(param, bool):
             return param
         else:
             return param.get_child()
@@ -196,9 +202,9 @@ class semi_condition():
         self.expression = expression
 
     def printear(self, level):
-        print(identation*level + "Semi_condition:")
+        print(indentation*level + "Semi_condition:")
         level += 1
-        print(identation*level + self.comparator)
+        print(indentation*level + self.comparator)
         self.expression.printear(level)
 
     def exec(self):
@@ -214,7 +220,7 @@ class condition():
         self.semi_condition = semi_condition
 
     def printear(self, level):
-        print(identation*level + "Condition:")
+        print(indentation*level + "Condition:")
         level += 1
         self.arith_expr.printear(level)
         self.semi_condition.printear(level)
@@ -280,7 +286,7 @@ class if_statement():
 
     def printear(self, level):
         level += 1
-        print(identation*level + "If_statement:")
+        print(indentation*level + "If_statement:")
         level += 1
         self.condition.printear(level)
         self.statements1.printear(level)
@@ -309,12 +315,12 @@ class for_loop():
 
     def printear(self, level):
         level += 1
-        print(identation*level + "For_loop:")
+        print(indentation*level + "For_loop:")
         level += 1
-        print(identation*level + self.var_name)
+        print(indentation*level + self.var_name)
         self.to.printear(level)
         if self.hasStep():
-            print(identation*level + "Step " + str(self.step))
+            print(indentation*level + "Step " + str(self.step))
         self.statements.printear(level)
 
     def hasStep(self):
@@ -341,7 +347,7 @@ class en_caso():
             self.expression = expression
 
     def printear(self, level):
-        print(identation*level + "En_caso:")
+        print(indentation*level + "En_caso:")
         level += 1
         self.switch_list.printer(level)
         self.sino.printear(level)
@@ -358,7 +364,7 @@ class switch0():
         self.statements = statements
 
     def printear(self):
-        print(identation*level + "Switch0:")
+        print(indentation*level + "Switch0:")
         level += 1
         self.condition.printer(level)
         self.statements.printear(level)
@@ -372,7 +378,7 @@ class switch_list0():
         self.switch_list.append(next_switch)
 
     def printear(self):
-        print(identation*level + "Switch_list0:")
+        print(indentation*level + "Switch_list0:")
         level += 1
         for switch in self.switch_list:
             switch.printear(level)
@@ -384,7 +390,7 @@ class switch1():
         self.statements = statements
 
     def printear(self):
-        print(identation*level + "Switch1:")
+        print(indentation*level + "Switch1:")
         level += 1
         self.semi_condition.printer(level)
         self.statements.printear(level)
@@ -398,7 +404,7 @@ class switch_list1():
         self.switch_list.append(next_switch)
 
     def printear(self):
-        print(identation*level + "Switch_list0:")
+        print(indentation*level + "Switch_list0:")
         level += 1
         for switch in self.switch_list:
             switch.printear(level)

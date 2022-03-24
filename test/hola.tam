@@ -1,0 +1,6 @@
+Principal(){
+    SET @var1, 7*7;
+    SET @var2, 7+7;
+    SET @var3, 67;
+};
+

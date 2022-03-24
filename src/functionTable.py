@@ -28,6 +28,7 @@ class FunctionTable:
 
         params = params.get_params()
         function_decl_params = self.declared_functions.get(id)[0]
+        function_decl_variables = self.declared_functions.get(id)[1]
 
         function_decl_param_ids = function_decl_params.get_param_ids()
         function_symbol_table = SymbolTable()
@@ -35,6 +36,9 @@ class FunctionTable:
         for i in range(len(function_decl_param_ids)):
             param_id = function_decl_param_ids[i]
             function_symbol_table.set(param_id, params[i])
+
+        for var_decl in function_decl_variables:
+            function_symbol_table.set(var_decl.var_name, var_decl.expression)
 
         self.called_functions.append({id: function_symbol_table})
 
@@ -73,7 +77,12 @@ class FunctionTable:
                 symbol_keys = function_symbols[0]
                 symbol_values = function_symbols[1]
                 for i in range(len(symbol_keys)):
-                    print(str(symbol_keys[i]) + ": " + str(symbol_values[i]))
+                    if isinstance(symbol_values[i], str) or isinstance(symbol_values[i], int) or isinstance(symbol_values[i], bool):
+                        print(str(symbol_keys[i]) + ": " +
+                              str(symbol_values[i]))
+                    else:
+                        print(str(symbol_keys[i]) + ": " +
+                              str(symbol_values[i].get_child()))
             print('--------------------------------------------------')
 
 

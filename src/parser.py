@@ -20,8 +20,8 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 def p_program(p):
     "program : block"
     print(symbol_table.symbols)
-    function_table.print_declared_functions()
-    function_table.print_called_functions()
+    # function_table.print_declared_functions()
+    # function_table.print_called_functions()
     # print(function_table.declared_functions)
     # print(function_table.called_functions)
     p[0] = program(p[1])
