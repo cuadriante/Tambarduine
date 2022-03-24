@@ -1,7 +1,7 @@
 
 from symbolTable import symbol_table
 
-identation = "   "
+indentation = "   "
 
 
 class factor():
@@ -10,9 +10,11 @@ class factor():
 
     def printear(self, level):
         valor = str(self.factor)
-        print(identation*level + "Factor:")
+        print(indentation * level + "Factor:")
         level += 1
-        print(identation*level + valor)
+        print(indentation*level + valor)
+
+        print(indentation * level + valor)
 
     def exec(self):
         factor = self.factor
@@ -34,11 +36,11 @@ class term():
         self.factor = factor
 
     def printear(self, level):
-        print(identation*level + "Term:")
+        print(indentation * level + "Term:")
         level += 1
         if hasattr(self, "term") and hasattr(self, "operator"):
             self.term.printear(level)
-            print(identation*level + self.operator)
+            print(indentation * level + self.operator)
         self.factor.printear(level)
 
     def exec(self):
@@ -74,14 +76,13 @@ class arith_expr():
         self.term = term
 
     def printear(self, level):
-        print(identation*level + "Arith_expr:")
+        print(indentation * level + "Arith_expr:")
         level += 1
         if hasattr(self, "arith_expr") and hasattr(self, "operator"):
             self.arith_expr.printear(level)
-            print(identation*level + self.operator)
+            print(indentation * level + self.operator)
         self.term.printear(level)
-    
-    
+
     def exec(self):
         term = self.term.exec()
         result = 0
@@ -105,20 +106,20 @@ class expression():
                 self.arith_expr_or_bool = True
             elif (arith_expr_or_bool == "false" or "False"):
                 self.arith_expr_or_bool = False
-            else: 
+            else:
                 pass
                 # ERROR, NO DEBE LLEGAR UN STRING QUE NO SEA TRUE OR FALSE
         else:
             self.arith_expr_or_bool = arith_expr_or_bool
         # print("Then", self.arith_expr_or_bool)
-        
 
-    
+
+
     def printear(self, level):
-        print(identation*level + "Expression:" )
+        print(indentation*level + "Expression:" )
         level += 1
         if self.isBool():
-            print(identation*level + str(self.arith_expr_or_bool) )
+            print(indentation*level + str(self.arith_expr_or_bool) )
         else:
             self.arith_expr_or_bool.printear(level)
     
@@ -129,7 +130,7 @@ class expression():
             expression = self.arith_expr_or_bool.exec()
         print(expression)
         return expression
-    
+
     def isBool(self):
         return isinstance(self.arith_expr_or_bool, bool)
 
@@ -142,18 +143,18 @@ class param():
         # print(expr_or_string)
         self.param_list = [expr_or_string]
         # print(self.param_list)
-    
+
     def add(self, next_param):
         self.param_list.append(next_param)
     
     def printear(self, level):
         # print(self.param_list)
-        for param in self.param_list: 
+        for param in self.param_list:
             if self.isString(param):
                 print(identation*level + param)
             else:
                 param.printear(level)
-    
+
     def isString(self, param):
         return isinstance(param, str)
 
@@ -171,7 +172,7 @@ class semi_condition():
     def __init__(self, comparator, expression):
         self.comparator = comparator
         self.expression = expression
-    
+
     def printear(self, level):
         print(identation*level + "Semi_condition:")
         level += 1
@@ -189,13 +190,13 @@ class condition():
     def __init__(self, arith_expr, semi_condition):
         self.arith_expr = arith_expr
         self.semi_condition = semi_condition
-    
+
     def printear(self, level):
         print(identation*level + "Condition:")
         level += 1
         self.arith_expr.printear(level)
         self.semi_condition.printear(level)
-    
+
     def exec(self):
         result = None
         elemento0 = self.arith_expr.exec()
@@ -215,7 +216,7 @@ class condition():
             result = elemento0 >= elemento1
         elif comparator == "<>":
             result = elemento0 != elemento1
-        
+
         return result
 
 
@@ -226,11 +227,11 @@ class var_decl():
 
     def printear(self, level):
         level += 1
-        print(identation*level + "Var_decl:")
+        print(indentation * level + "Var_decl:")
         level += 1
-        print(identation*level + self.var_name)
+        print(indentation * level + self.var_name)
         self.expression.printear(level)
-    
+
     def exec(self):
         valor = self.expression.exec()
         symbol_table.set(self.var_name, valor)
@@ -255,7 +256,7 @@ class if_statement():
         self.statements1 = statements1
         if statements2:
             self.statements2 = statements2
-    
+
     def printear(self, level):
         level+=1
         print(identation*level + "If_statement:")
@@ -268,7 +269,7 @@ class if_statement():
 
     def hasElse(self):
         return hasattr(self, "statements2")
-    
+
     def exec(self):
         condition = self.condition.exec()
         if condition:
@@ -284,7 +285,7 @@ class for_loop():
         self.statements = statements
         if step_number:
             self.step = step_number
-        
+
     def printear(self, level):
         level += 1
         print(identation*level + "For_loop:")
@@ -294,10 +295,10 @@ class for_loop():
         if self.hasStep():
             print(identation*level + "Step " + str(self.step))
         self.statements.printear(level)
-    
+
     def hasStep(self):
         return hasattr(self, "step")
-    
+
     def exec(self):
         if not symbol_table.get(self.var_name):
             symbol_table.add(self.var_name, 1)
@@ -319,7 +320,7 @@ class en_caso():
         self.sino = sino_statements
         if expression:
             self.expression = expression
-    
+
     def printear(self, level):
         print(identation*level + "En_caso:")
         level += 1
@@ -327,7 +328,7 @@ class en_caso():
         self.sino.printear(level)
         if self.hasExpression():
             self.expression.printear(level)
-    
+
     def hasExpression(self):
         return hasattr("expression")
 
@@ -336,7 +337,7 @@ class switch0():
     def __init__(self, condition, statements):
         self.condition = condition
         self.statements = statements
-    
+
     def printear(self):
         print(identation*level + "Switch0:")
         level += 1
@@ -355,7 +356,7 @@ class switch_list0():
         print(identation*level + "Switch_list0:")
         level += 1
         for switch in self.switch_list:
-            switch.printear(level)        
+            switch.printear(level)
 
 
 class switch1():
@@ -375,15 +376,17 @@ class switch_list1():
 
     def add(self, next_switch):
         self.switch_list.append(next_switch)
-    
+
     def printear(self):
         print(identation*level + "Switch_list0:")
         level += 1
         for switch in self.switch_list:
-            switch.printear(level)   
+            switch.printear(level)
 
 
 class statement():
+    expression = None
+
     def __init__(self, statement):
         self.statement_list = [statement]
 
@@ -391,10 +394,10 @@ class statement():
         self.statement_list.append(next_statement)
 
     def printear(self, level):
-        print(identation*level + "Statements:")
+        print(indentation * level + "Statements:")
         for statement in self.statement_list:
             statement.printear(level)
-    
+
     def exec(self):
         for statement in self.statement_list:
             statement.exec()
@@ -403,11 +406,11 @@ class statement():
 class callable_function():
     def __init__(self, function):
         self.function = function
-    
+
     def printear(self, level):
         level += 1
         self.function.printear(level)
-        
+
     def exec(self):
         self.function.exec()
 
@@ -417,10 +420,10 @@ class printer():
         self.params = params
 
     def printear(self, level):
-        print(identation*level + "Printer:")
+        print(indentation*level + "Printer:")
         level += 1
         self.params.printear(level)
-    
+
     #DEBE DE GUARDAR EL PRINT Y EJECUTARSE JUNTO CON LAS FUNCIONES BUILD-IN
     def exec(self):
         param_list = self.params.exec()
@@ -463,9 +466,9 @@ class main():
         self.statements = statements
 
     def printear(self, level):
-        print(identation*level + "Main:")
-        self.statements.printear(level+1)
-    
+        print(indentation * level + "Main:")
+        self.statements.printear(level + 1)
+
     def exec(self):
         self.statements.exec()
 
@@ -475,12 +478,12 @@ class block():
         self.main = main
 
     def printear(self, level):
-        print(identation*level + "Block:")
+        print(indentation * level + "Block:")
         self.main.printear(level + 1)
 
     def exec(self):
         # self.function_decls.exec()
-        self.main.exec()        
+        self.main.exec()
 
 class function_decl():
     def __init__(self, function_name, function_decl_params, statements):
@@ -526,5 +529,5 @@ class program():
         self.block.exec()
         print(symbol_table.symbols)
 
-
-
+    def get_block(self):
+        return self.block
