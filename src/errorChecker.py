@@ -37,6 +37,9 @@ def check_arith_expr(s_term):
         if s_term.operator == "//" or s_term.operator == "/":
             if s_term.factor.factor == 0:
                 eg.raise_exception("inv_arith", "div")
+    elif s_term.term.operator:
+        valid = check_arith_expr(s_term.term)
+
     if not valid:
         eg.raise_exception("inv_param", "")
     return True

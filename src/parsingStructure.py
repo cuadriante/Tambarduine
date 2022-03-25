@@ -81,12 +81,15 @@ class arith_expr():
         self.term = term
 
     def printear(self, level):
-        print(indentation * level + "Arith_expr:")
-        level += 1
-        if hasattr(self, "arith_expr") and hasattr(self, "operator"):
-            self.arith_expr.printear(level)
-            print(indentation * level + self.operator)
-        self.term.printear(level)
+        if arith_expr == None:
+            print("xd")
+        else:
+            print(indentation * level + "Arith_expr:")
+            level += 1
+            if hasattr(self, "arith_expr") and hasattr(self, "operator"):
+                self.arith_expr.printear(level)
+                print(indentation * level + self.operator)
+            self.term.printear(level)
 
     def exec(self):
         term = self.term.exec()
