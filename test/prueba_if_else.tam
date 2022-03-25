@@ -1,7 +1,10 @@
 Principal(){
     if 10 < 7 {
         SET @var3, 1;
-    } 
+    }
+    if 8 > 2 {
+        SET @var1, 7+2;
+    }
     else 
     {
         SET @var2, 0;

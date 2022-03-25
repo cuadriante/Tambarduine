@@ -264,6 +264,9 @@ class if_statement():
     expression = None
     var_decl = None
     var_name = None
+    statements1 = None
+    statements2 = None
+
     def __init__(self, condition, statements1, statements2=None):
         self.condition = condition
         self.statements1 = statements1
@@ -277,7 +280,7 @@ class if_statement():
         self.condition.printear(level)
         self.statements1.printear(level)
 
-        if self.hasElse():
+        if self.statements2 and self.hasElse():
             self.statements2.printear(level)
 
     def hasElse(self):

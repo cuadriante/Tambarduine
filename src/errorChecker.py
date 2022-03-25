@@ -11,24 +11,28 @@ def run_error_checker(program):
         print("valid main found.")
         if program.block.main.statements:
             print(indentation + "valid statement(s) found.")
-            for s in program.block.main.statements.statement_list:
-                print(2 * indentation + "statement found.")
-                if s.condition:
-                    print(3 * indentation + "condition found.")
-                    check_condition(s)
-                if s.var_name:
-                    print(3 * indentation + s.var_name + " found in symbol table.")
-                    check_var(s)
-                if s.expression:
-                    print(3 * indentation + "expression found.")
-                    if s.expression.arith_expr_or_bool:
-                        check_arith_expr(s.expression.arith_expr_or_bool)
-                else:
-                    print(4 * indentation + "no expression found.")
-                    # hacer algo
+            check_statement_list(program.block.main.statements.statement_list)
             # eg.raise_exception("miss", "stat")
     else:
         eg.raise_exception("miss", "prin")
+
+
+def check_statement_list(statement_list):
+    for s in statement_list:
+        print(2 * indentation + "statement found.")
+        if s.condition:
+            print(3 * indentation + "if condition found.")
+            check_if(s)
+        if s.var_name:
+            print(3 * indentation + s.var_name + " found in symbol table.")
+            check_var(s)
+        if s.expression:
+            print(3 * indentation + "expression found.")
+            if s.expression.arith_expr_or_bool:
+                check_arith_expr(s.expression.arith_expr_or_bool)
+        else:
+            print(4 * indentation + "no expression found.")
+            # hacer algo
 
 
 def check_var(s):
@@ -39,13 +43,16 @@ def check_var(s):
                 check_arith_expr(s.expression.arith_expr_or_bool)
 
 
-def check_condition(s):
-    if s.condition.arith_expr:
-        check_arith_expr(s.condition.arith_expr)
-    if s.condition.semi_condition.comparator:
-        if s.condition.semi_condition.expression.arith_expr_or_bool:
-            check_arith_expr(s.condition.semi_condition.expression.arith_expr_or_bool)
-
+def check_if(if_st):
+    if if_st.condition.arith_expr:
+        check_arith_expr(if_st.condition.arith_expr)
+    if if_st.condition.semi_condition.comparator:
+        if if_st.condition.semi_condition.expression.arith_expr_or_bool:
+            check_arith_expr(if_st.condition.semi_condition.expression.arith_expr_or_bool)
+    if if_st.statements1:
+        check_statement_list(if_st.statements1.statement_list)
+    if if_st.statements2:
+        check_statement_list(if_st.statements2.statement_list)
 
 def check_arith_expr(s_term):
     print(4 * indentation + "arithmetic or boolean expression found.")
