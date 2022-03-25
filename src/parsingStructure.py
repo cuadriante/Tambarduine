@@ -2,7 +2,7 @@
 from symbolTable import symbol_table
 
 indentation = "   "
-
+directives = []
 
 class factor():
     def __init__(self, factor):
@@ -14,15 +14,12 @@ class factor():
         level += 1
         print(indentation*level + valor)
 
-        print(indentation * level + valor)
-
     def exec(self):
         factor = self.factor
         if isinstance(factor, int):
             return self.factor
         else:
-            pass
-            # Buscar en la tabla de symbolos
+            return symbol_table.get(self.factor)
 
     def get_child(self):
         return self.factor
@@ -136,7 +133,6 @@ class expression():
             return self.arith_expr_or_bool
         else:
             expression = self.arith_expr_or_bool.exec()
-        print(expression)
         return expression
 
     def isBool(self):
@@ -349,25 +345,50 @@ class en_caso():
     def printear(self, level):
         print(indentation*level + "En_caso:")
         level += 1
-        self.switch_list.printer(level)
-        self.sino.printear(level)
         if self.hasExpression():
             self.expression.printear(level)
+        self.switch_list.printear(level)
+        print(indentation*level + "Si_no:")
+        level += 1
+        self.sino.printear(level)
 
     def hasExpression(self):
-        return hasattr("expression")
+        return hasattr(self, "expression")
+    
+
+    def exec(self):
+        useSino = None
+        if self.hasExpression():
+            useSiNo = self.switch_list.exec(self.expression)
+        else:
+            useSiNo = self.switch_list.exec()
+        if useSiNo:
+            self.sino.exec()
+
+
 
 
 class switch0():
     def __init__(self, condition, statements):
         self.condition = condition
         self.statements = statements
-
-    def printear(self):
+    
+    def printear(self, level):
         print(indentation*level + "Switch0:")
         level += 1
-        self.condition.printer(level)
+        self.condition.printear(level)
         self.statements.printear(level)
+    
+    def exec(self):
+        condition = self.condition.exec()
+        useSiNo = None
+        if condition:
+            self.statements.exec()
+            useSiNo = False
+        else: 
+            useSiNo = True
+        print(useSiNo)
+        return useSiNo
 
 
 class switch_list0():
@@ -377,11 +398,19 @@ class switch_list0():
     def add(self, next_switch):
         self.switch_list.append(next_switch)
 
-    def printear(self):
+    def printear(self, level):
         print(indentation*level + "Switch_list0:")
         level += 1
         for switch in self.switch_list:
-            switch.printear(level)
+            switch.printear(level)        
+    
+    def exec(self):
+        useSiNo = True
+        for switch in self.switch_list:
+            bool_value = switch.exec()
+            if not bool_value:
+                useSiNo = False
+        return useSiNo
 
 
 class switch1():
@@ -389,12 +418,40 @@ class switch1():
         self.semi_condition = semi_condition
         self.statements = statements
 
-    def printear(self):
+    def printear(self, level):
         print(indentation*level + "Switch1:")
         level += 1
-        self.semi_condition.printer(level)
+        self.semi_condition.printear(level)
         self.statements.printear(level)
 
+    def exec(self, expression):
+        """LAS CONDITION NO RECIBEN BOOLS COMO PRIMER ELEMENTO"""
+        com_and_elem = self.semi_condition.exec()
+        comparator = com_and_elem[0]
+        elemento1 = com_and_elem[1]
+        print(expression)
+        elemento0 = expression.exec()
+        print(elemento0, comparator, elemento1)
+        if comparator == "==":
+            result = elemento0 == elemento1
+        elif comparator == "<":
+            result = elemento0 < elemento1
+        elif comparator == ">":
+            result = elemento0 > elemento1
+        elif comparator == "<=":
+            result = elemento0 <= elemento1
+        elif comparator == ">=":
+            result = elemento0 >= elemento1
+        elif comparator == "<>":
+            result = elemento0 != elemento1
+
+        useSiNo = None
+        if result:
+            self.statements.exec()
+            useSiNo = False
+        else: 
+            useSiNo = True
+        return useSiNo
 
 class switch_list1():
     def __init__(self, switch1):
@@ -402,12 +459,21 @@ class switch_list1():
 
     def add(self, next_switch):
         self.switch_list.append(next_switch)
-
-    def printear(self):
-        print(indentation*level + "Switch_list0:")
+    
+    def printear(self, level):
+        print(indentation*level + "Switch_list1:")
         level += 1
         for switch in self.switch_list:
             switch.printear(level)
+
+
+    def exec(self, expression):
+        useSiNo = True
+        for switch in self.switch_list:
+            bool_value = switch.exec(expression)
+            if not bool_value:
+                useSiNo = False
+        return useSiNo  
 
 
 class statement():
@@ -454,36 +520,111 @@ class printer():
     def exec(self):
         param_list = self.params.exec()
         print(param_list)
+        directives.append(("print", param_list))
 
 
 class abanico():
     def __init__(self, param):
         self.param = param
+    
+    def printear(self, level):
+        print(indentation*level + "Abanico:")
+        level += 1
+        self.param.printear(level)
+    
+    def exec(self):
+        params = self.param.exec()
+        function = "abanico"
+        direction = params[0]
+        directives.append((function, direction))
+
+
+
 
 
 class vertical():
     def __init__(self, param):
         self.param = param
+    
+    def printear(self, level):
+        print(indentation*level + "Vertical:")
+        level += 1
+        self.param.printear(level)
+    
+    def exec(self):
+        params = self.param.exec()
+        function = "vertical"
+        direction = params[0]
+        directives.append((function, direction))
+
 
 
 class percutor():
     def __init__(self, param):
         self.param = param
+    
+    def printear(self, level):
+        print(indentation*level + "Percutor:")
+        level += 1
+        self.param.printear(level)
+    
+    def exec(self):
+        params = self.param.exec()
+        function = "percutor"
+        direction = params[0]
+        directives.append((function, direction))
+
 
 
 class golpe():
     def __init__(self, param):
         self.param = param
+    
+    def printear(self, level):
+        print(indentation*level + "Golpe:")
+
+    
+    def exec(self):
+        function = "golpe"
+        directives.append((function))
+
 
 
 class vibrato():
     def __init__(self, param):
         self.param = param
+    
+    def printear(self, level):
+        print(indentation*level + "Vibrato:")
+        level += 1
+        self.param.printear(level)
+    
+    def exec(self):
+        params = self.param.exec()
+        function = "vibrato"
+        cantidad = params[0]
+        directives.append((function, cantidad))
 
 
 class metronomo():
     def __init__(self, param):
         self.param = param
+    
+    def printear(self, level):
+        print(indentation*level + "Metronomo:")
+        level += 1
+        self.param.printear(level)
+    
+    def exec(self):
+        parametros = self.param.exec()
+
+    def exec(self):
+        params = self.param.exec()
+        function = "metronomo"
+        on_off = params[0]
+        time_range = params[1]
+        directives.append((function, on_off, time_range))
+
 
 
 class main():
@@ -570,6 +711,7 @@ class program():
     def exec(self):
         self.block.exec()
         print(symbol_table.symbols)
+        return directives
 
     def get_block(self):
         return self.block

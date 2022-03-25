@@ -53,11 +53,11 @@ reserved = {
     "for": "FOR",
     "to": "TO",
     "Step": "STEP",
-    "encaso": "ENCASO",
-    "entons": "ENTONS",
-    "cuando": "CUANDO",
-    "sino": "SINO",
-    "finencaso": "FINENCASO",
+    "EnCaso": "ENCASO",
+    "EnTons": "ENTONS",
+    "Cuando": "CUANDO",
+    "SiNo": "SINO",
+    "FinEnCaso": "FINENCASO",
     "Exec": "EXEC",
     "Def": "DEF",
     "print": "PRINT"
@@ -96,6 +96,7 @@ t_TRUE = r'.T'
 t_FALSE = r'.F'
 t_PRINT = r'print'
 t_STRING = r'".*"'
+# t_STRING = r'[a-zA-Z?][a-zA-Z?]*'
 
 # Declare the state
 states = (

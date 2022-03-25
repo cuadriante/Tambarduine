@@ -235,8 +235,9 @@ def p_swich_0_list(p):
 
 def p_en_caso_1(p):
     "en_caso : ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
-    p[0] = en_caso(p[3], p[6], p[2])
     print("en_caso1")
+    p[0] = en_caso(p[3], p[6], p[2])
+
 
 
 def p_switch_1(p):

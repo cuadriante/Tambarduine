@@ -1,6 +1,11 @@
 Principal(){
-    SET @var1, 7*7;
-    SET @var2, 7+7;
-    SET @var3, 67;
+    SET @var1, 7*7+5;
+    Abanico("A");
+    Vertical("D");
+    Percutor("D");
+    Golpe();
+    Vibrato(10);
+    Metronomo("A",1);
+    print("hola");
 };
 
