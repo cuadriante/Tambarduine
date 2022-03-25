@@ -29,7 +29,8 @@ class factor():
 
 
 class term():
-    term = None
+    operator = None
+    arith_expr = None
 
     def __init__(self, factor, term=None, operator=None):
         if term and operator:
@@ -71,6 +72,8 @@ class term():
 
 
 class arith_expr():
+    factor = None
+    operator = None
     def __init__(self, term, arith_expr=None, operator=None):
         if arith_expr and operator:
             self.arith_expr = arith_expr

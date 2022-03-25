@@ -1,6 +1,5 @@
 from symbolTable import *
 
-
 indentation = "     "
 
 
@@ -10,36 +9,38 @@ def run_error_checker(program):
         if program.block.main.statements:
             print(indentation + "valid statement(s) found.")
             for s in program.block.main.statements.statement_list:
-                print(2*indentation + "statement found.")
+                print(2 * indentation + "statement found.")
                 if s.expression:
-                    print(3*indentation + "expression found.")
+                    print(3 * indentation + "expression found.")
                     if s.expression.arith_expr_or_bool:
-                        check_arith_expr(s)
+                        check_arith_expr(s.expression.arith_expr_or_bool)
                 else:
-                    print(4*indentation + "no expression found.")
+                    print(4 * indentation + "no expression found.")
                     # hacer algo
             # eg.raise_exception("miss", "stat")
     else:
         eg.raise_exception("miss", "prin")
 
 
-def check_arith_expr(s):
+def check_arith_expr(s_term):
     print(3 * indentation + "arithmetic or boolean expression found.")
-    term_next = True
-    s_term = s.expression.arith_expr_or_bool.term
-    prev_s_term = s_term
-    print(4 * indentation + "term found.")
-    while term_next:
-        if s_term.term:
-            print(4 * indentation + "term found.")
-            prev_s_term = s_term
-            s_term = s_term.term
-            operation = True
-            pass
-        else:
-            term_next = False
-    if operation:
-        s_term
+    valid = True
+    if s_term.operator:
+        if s_term.arith_expr:
+            print("bajando arith " + str(s_term.factor))
+            valid = check_arith_expr(s_term.arith_expr)
+            print("subiendo arith " + str(s_term.factor))
+        if s_term.term.operator:
+            print("bajando term " + str(s_term.factor))
+            valid = check_arith_expr(s_term.term)
+            print("subiendo term " + str(s_term.factor))
+        if s_term.operator == "//" or s_term.operator == "/":
+            if s_term.factor.factor == 0:
+                eg.raise_exception("inv_arith", "div")
+    if not valid:
+        eg.raise_exception("inv_param", "")
+    return True
+
 
 def is_number(variable):
     return isinstance(variable, int) or isinstance(variable, float)
@@ -92,8 +93,10 @@ class ExceptionGenerator(Exception):
                     msg = msg + ": BOOL."
             case "inv_dt_arith_proc":
                 msg = "INVALID DATATYPE DURING ARITHMETIC PROCEDURE."
-            case "inv_arith_proc":
-                msg = "INVALID ARITHMETIC PROCEDURE."
+            case "inv_arith":
+                msg = "INVALID ARITHMETIC PROCEDURE"
+                if exc_spec == "div":
+                    msg = msg + ": CANNOT DIVIDE BY ZERO."
             case "inv_comp":
                 msg = "INVALID COMPARISON"
                 if exc_spec == "dt":
@@ -121,7 +124,7 @@ class ExceptionGenerator(Exception):
                     msg = msg + ": EXPRESSION"
             case _:
                 return 0  # 0 is the default case if x is not found
-        raise Exception("ERROR:" + msg)
+        raise Exception("ERROR: " + msg)
 
 
 # error types:
@@ -133,5 +136,5 @@ class ExceptionGenerator(Exception):
 
 eg = ExceptionGenerator()
 
-#check_for_var_in_symbol_table(1)
-check_if_validity([1,2])
+# check_for_var_in_symbol_table(1)
+check_if_validity([1, 2])
