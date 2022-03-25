@@ -47,7 +47,7 @@ def analizeCode(nombre_archivo):
     program = parser.parse(arr)
     print_arbol(program)
     directives = program.exec()
-    print(directives)
+    # print(directives)
 
     # run_error_checker(program)
 
@@ -60,10 +60,11 @@ def analizeCode(nombre_archivo):
 # analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
-analizeCode("hola.tam")
+# analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizarCodigo("prueba_def.tam")
 # analizeCode("prueba_en_caso")
+analizeCode("prueba_bool_statements.tam")
 
 # Hardware
 # alternar_direccion_servo()

@@ -271,6 +271,24 @@ class bool_statement():
     def __init__(self, var_name, bool_function):
         self.var_name = var_name
         self.bool_function = bool_function
+    
+    def printear(self, level):
+        level += 1
+        print(indentation*level + "Bool_statement:")
+        level += 1
+        print(indentation*level + self.var_name)
+        print(indentation*level + self.bool_function)
+
+    def exec(self):
+        function = self.bool_function
+        var_name = self.var_name
+        if function == ".Neg":
+            var_value = symbol_table.get(self.var_name)
+            symbol_table.change_value(var_name, not var_value)
+        elif function == ".T":
+            symbol_table.change_value(var_name, True)
+        elif function == ".F":
+            symbol_table.change_value(var_name, False)
 
 
 class if_statement():

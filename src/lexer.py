@@ -48,7 +48,7 @@ reserved = {
     "Golpe": "GOLPE",
     "Vibrato": "VIBRATO",
     "Metronomo": "METRONOMO",
-    "if": "IF",
+    "If": "IF",
     "else": "ELSE",
     "for": "FOR",
     "to": "TO",
