@@ -3,6 +3,9 @@ from symbolTable import *
 indentation = "     "
 
 
+# pendiente : validar tipos de datos en aritmetica
+#               variables bool
+
 def run_error_checker(program):
     if program.block.main:
         print("valid main found.")
@@ -11,7 +14,7 @@ def run_error_checker(program):
             for s in program.block.main.statements.statement_list:
                 print(2 * indentation + "statement found.")
                 if s.condition:
-                    print(3 * indentation + "condition.")
+                    print(3 * indentation + "condition found.")
                     check_condition(s)
                 if s.var_name:
                     print(3 * indentation + s.var_name + " found in symbol table.")
@@ -44,9 +47,8 @@ def check_condition(s):
             check_arith_expr(s.condition.semi_condition.expression.arith_expr_or_bool)
 
 
-
 def check_arith_expr(s_term):
-    print(3 * indentation + "arithmetic or boolean expression found.")
+    print(4 * indentation + "arithmetic or boolean expression found.")
     valid = True
     if s_term.operator:
         if s_term.arith_expr:

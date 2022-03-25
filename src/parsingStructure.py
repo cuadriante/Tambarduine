@@ -262,7 +262,8 @@ class bool_statement():
 
 class if_statement():
     expression = None
-
+    var_decl = None
+    var_name = None
     def __init__(self, condition, statements1, statements2=None):
         self.condition = condition
         self.statements1 = statements1
