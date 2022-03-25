@@ -10,6 +10,12 @@ def run_error_checker(program):
             print(indentation + "valid statement(s) found.")
             for s in program.block.main.statements.statement_list:
                 print(2 * indentation + "statement found.")
+                if s.condition:
+                    print(3 * indentation + "condition.")
+                    check_condition(s)
+                if s.var_name:
+                    print(3 * indentation + s.var_name + " found in symbol table.")
+                    check_var(s)
                 if s.expression:
                     print(3 * indentation + "expression found.")
                     if s.expression.arith_expr_or_bool:
@@ -20,6 +26,23 @@ def run_error_checker(program):
             # eg.raise_exception("miss", "stat")
     else:
         eg.raise_exception("miss", "prin")
+
+
+def check_var(s):
+    if check_for_var_in_symbol_table(s.var_name):
+        if s.expression:
+            print(3 * indentation + "expression found.")
+            if s.expression.arith_expr_or_bool:
+                check_arith_expr(s.expression.arith_expr_or_bool)
+
+
+def check_condition(s):
+    if s.condition.arith_expr:
+        check_arith_expr(s.condition.arith_expr)
+    if s.condition.semi_condition.comparator:
+        if s.condition.semi_condition.expression.arith_expr_or_bool:
+            check_arith_expr(s.condition.semi_condition.expression.arith_expr_or_bool)
+
 
 
 def check_arith_expr(s_term):
@@ -59,8 +82,6 @@ def validate_number_operation(simbolo1, simbolo2):
 
 
 def check_for_var_in_symbol_table(var):
-    if not is_number(var) or is_boolean(var):
-        eg.raise_exception("inv_dt", "")
     if symbol_table.get(var):
         return True
     else:

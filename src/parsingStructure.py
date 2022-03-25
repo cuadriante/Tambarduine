@@ -107,6 +107,7 @@ class arith_expr():
         return result
 
 class expression():
+    arith_expr = None
     def __init__(self, arith_expr_or_bool):
         # print("Aqui", arith_expr_or_bool)
         if isinstance(arith_expr_or_bool, str):
@@ -229,6 +230,7 @@ class condition():
 
 
 class var_decl():
+    condition = None
     def __init__(self, var_name, expression):
         self.var_name = var_name
         self.expression = expression
@@ -259,6 +261,8 @@ class bool_statement():
 
 
 class if_statement():
+    expression = None
+
     def __init__(self, condition, statements1, statements2=None):
         self.condition = condition
         self.statements1 = statements1
