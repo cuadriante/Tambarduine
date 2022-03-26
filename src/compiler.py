@@ -1,4 +1,5 @@
 import codecs
+from hardwareCommunication import *
 
 from lexer import *
 from parser import *
@@ -44,7 +45,7 @@ def analizeCode(nombre_archivo):
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
-    program = parser.parse(arr)
+    # program = parser.parse(arr)
     # print_arbol(program)
     # program.exec()
 
@@ -55,7 +56,7 @@ def analizeCode(nombre_archivo):
 
 
 # analizarCodigo('prueba_if_else.tam')
-analizeCode('prueba_def.tam')
+# analizeCode('prueba_def.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
 # analizeCode("hola.tam")
@@ -63,6 +64,8 @@ analizeCode('prueba_def.tam')
 # analizarCodigo("prueba_def.tam")
 
 # Hardware
-# alternar_direccion_servo()
-# time.sleep(3)
-# detener_servo()
+verticalD()
+abanicoB()
+abanicoB()
+set_metronomo(0.75)
+vibrato_vertical(5)
