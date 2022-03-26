@@ -104,7 +104,12 @@ def check_arith_or_bool_expr(s_term):
 
 
 def is_number(variable):
-    return isinstance(variable, int) or isinstance(variable, float)
+    if not isinstance(variable, int) or isinstance(variable, float):
+        if check_for_var_in_symbol_table(variable):
+            variable = check_var_value_in_symbol_table(variable)
+            return isinstance(variable, int) or isinstance(variable, float)
+    else:
+        return isinstance(variable, int) or isinstance(variable, float)
 
 
 def is_boolean(variable):
@@ -125,7 +130,7 @@ def check_for_var_in_symbol_table(var):
     if symbol_table.get(var):
         return True
     else:
-        eg.raise_exception("inv_var", "un")
+        eg.raise_exception("inv_var", "un", var)
 
 def check_var_value_in_symbol_table(var):
     return symbol_table.get(var)
@@ -152,7 +157,7 @@ class ExceptionGenerator(Exception):
     S_TO = "to"
     S_IF = "if"
 
-    def raise_exception(self, exc_num, exc_spec):
+    def raise_exception(self, exc_num, exc_spec, var = None):
         match exc_num:
             case "inv_dt":
                 msg = "INVALID DATATYPE"
@@ -199,6 +204,8 @@ class ExceptionGenerator(Exception):
                     msg = msg + ": EXPRESSION"
             case _:
                 return 0  # 0 is the default case if x is not found
+        if var:
+            msg = msg + ": " + var
         raise Exception("ERROR: " + msg)
 
 

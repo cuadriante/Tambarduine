@@ -336,7 +336,7 @@ class if_statement():
         condition = self.condition.exec()
         if condition:
             self.statements1.exec()
-        if self.hasElse() and not condition:
+        if self.hasElse() and self.statements2 and not condition:
             self.statements2.exec()
 
 
