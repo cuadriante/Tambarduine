@@ -1,5 +1,5 @@
 import codecs
-from hardwareCommunication import *
+# from hardwareCommunication import *
 
 from lexer import *
 from parser import *
@@ -33,7 +33,7 @@ def print_arbol(program):
 
 def analizeCode(nombre_archivo):
     # READ FILE
-    document_to_compile = 'test/' + nombre_archivo
+    document_to_compile = nombre_archivo
     test = document_to_compile
     fp = codecs.open(test, 'r', None, 'strict', - 1)
     arr = fp.read()
@@ -50,7 +50,7 @@ def analizeCode(nombre_archivo):
     directives = program.exec()
     # print(directives)
 
-    # run_error_checker(program)
+    run_error_checker(program)
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
@@ -65,11 +65,11 @@ def analizeCode(nombre_archivo):
 # print(symbol_table.symbols)
 # analizarCodigo("prueba_def.tam")
 # analizeCode("prueba_en_caso")
-analizeCode("prueba_bool_statements.tam")
+analizeCode("hola.tam")
 
 # Hardware
-verticalD()
-abanicoB()
-abanicoB()
-set_metronomo(0.75)
-vibrato_vertical(5)
+#verticalD()
+#abanicoB()
+#abanicoB()
+#set_metronomo(0.75)
+#vibrato_vertical(5)
