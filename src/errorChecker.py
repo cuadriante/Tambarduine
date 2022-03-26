@@ -35,7 +35,7 @@ def check_statement_list(statement_list):
         if s.expression:  # ARITHMETIC OR BOOL EXPRESSION
             print(3 * indentation + "expression found.")
             if s.expression.arith_expr_or_bool:
-                check_arith_expr(s.expression.arith_expr_or_bool)
+                check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
         else:
             print(4 * indentation + "no expression found.")
             # hacer algo
@@ -52,11 +52,16 @@ def check_for(for_st): # ninguno de estos errores se puede probar, aun
 
 
 def check_if(if_st):
+    arith_con = False
+    arith_semi_con = False
+
     if if_st.condition.arith_expr:
-        check_arith_expr(if_st.condition.arith_expr)
+        arith_con = check_arith_or_bool_expr(if_st.condition.arith_expr)
     if if_st.condition.semi_condition.comparator:
         if if_st.condition.semi_condition.expression.arith_expr_or_bool:
-            check_arith_expr(if_st.condition.semi_condition.expression.arith_expr_or_bool)
+            arith_semi_con = check_arith_or_bool_expr(if_st.condition.semi_condition.expression.arith_expr_or_bool)
+            if arith_con != arith_semi_con:
+                eg.raise_exception(eg.INV_DT, eg.S_IF)
     if if_st.statements1:
         check_statement_list(if_st.statements1.statement_list)
     if if_st.statements2:
@@ -68,25 +73,28 @@ def check_var(s):
         if s.expression:
             print(3 * indentation + "expression found.")
             if s.expression.arith_expr_or_bool:
-                check_arith_expr(s.expression.arith_expr_or_bool)
+                check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
 
 
-def check_arith_expr(s_term):
+def check_arith_or_bool_expr(s_term):
     print(4 * indentation + "arithmetic or boolean expression found.")
     valid = True
-    if s_term.operator:
-        if s_term.arith_expr:
-            valid = check_arith_expr(s_term.arith_expr)
-        if s_term.term.operator:
-            valid = check_arith_expr(s_term.term)
-        if s_term.operator == "//" or s_term.operator == "/":
-            if s_term.factor.factor == 0:
-                eg.raise_exception("inv_arith", "div")
-    elif s_term.term.operator:
-        valid = check_arith_expr(s_term.term)
-    if not valid:
-        eg.raise_exception("inv_param", "")
-    return True
+    if is_boolean(s_term):
+        return False
+    else:
+        if s_term.operator:
+            if s_term.arith_expr:
+                valid = check_arith_or_bool_expr(s_term.arith_expr)
+            if s_term.term.operator:
+                valid = check_arith_or_bool_expr(s_term.term)
+            if s_term.operator == "//" or s_term.operator == "/":
+                if s_term.factor.factor == 0:
+                    eg.raise_exception("inv_arith", "div")
+        elif s_term.term.operator:
+            valid = check_arith_or_bool_expr(s_term.term)
+        if not valid:
+            eg.raise_exception("inv_param", "")
+        return True
 
 
 def is_number(variable):
@@ -94,7 +102,7 @@ def is_number(variable):
 
 
 def is_boolean(variable):
-    return variable == 'True' or variable == 'False'
+    return isinstance(variable, bool)
 
 
 def validate_number_operation(simbolo1, simbolo2):
@@ -134,6 +142,7 @@ class ExceptionGenerator(Exception):
     S_STEP = "step"
     S_STEP_N = "step_neg"
     S_TO = "to"
+    S_IF = "if"
 
     def raise_exception(self, exc_num, exc_spec):
         match exc_num:
@@ -147,6 +156,8 @@ class ExceptionGenerator(Exception):
                     msg = msg + ": 'STEP' DURING FOR LOOP MUST BE A NATURAL NUMBER."
                 if exc_spec == "to":
                     msg = msg + ": 'FOR' DURING FOR LOOP MUST BE A NUMBER."
+                if exc_spec == "if":
+                    msg = msg + " : MISMATCH DURING COMPARISON."
             case "inv_dt_arith_proc":
                 msg = "INVALID DATATYPE DURING ARITHMETIC PROCEDURE."
             case "inv_arith":
