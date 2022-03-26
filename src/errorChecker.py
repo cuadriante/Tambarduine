@@ -93,10 +93,11 @@ def check_arith_or_bool_expr(s_term):
         elif s_term.term.operator:
             valid = check_arith_or_bool_expr(s_term.term)
         elif s_term.term.factor.factor:
-            check_for_var_in_symbol_table(s_term.term.factor.factor)
-            var_value = check_var_value_in_symbol_table(s_term.term.factor.factor)
-            if is_boolean(var_value): # es una variable
-                return False
+            if not is_number(s_term.term.factor.factor):
+                check_for_var_in_symbol_table(s_term.term.factor.factor)
+                var_value = check_var_value_in_symbol_table(s_term.term.factor.factor)
+                if is_boolean(var_value): # es una variable
+                    return False
         if not valid:
             eg.raise_exception("inv_param", "")
         return True
