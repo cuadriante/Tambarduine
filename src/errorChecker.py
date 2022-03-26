@@ -92,6 +92,11 @@ def check_arith_or_bool_expr(s_term):
                     eg.raise_exception("inv_arith", "div")
         elif s_term.term.operator:
             valid = check_arith_or_bool_expr(s_term.term)
+        elif s_term.term.factor.factor:
+            check_for_var_in_symbol_table(s_term.term.factor.factor)
+            var_value = check_var_value_in_symbol_table(s_term.term.factor.factor)
+            if is_boolean(var_value): # es una variable
+                return False
         if not valid:
             eg.raise_exception("inv_param", "")
         return True
@@ -121,6 +126,8 @@ def check_for_var_in_symbol_table(var):
     else:
         eg.raise_exception("inv_var", "un")
 
+def check_var_value_in_symbol_table(var):
+    return symbol_table.get(var)
 
 def check_if_validity(comparison):  # que comparison sea una lista
     if is_number(comparison[0]):
