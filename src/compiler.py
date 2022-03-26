@@ -40,14 +40,15 @@ def analizeCode(nombre_archivo):
     fp.close()
 
     # LEXER - LEXICAL ANALYSIS
-    # lexer.input(arr)
-    # print_lexer()
+    lexer.input(arr)
+    print_lexer()
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
-    # program = parser.parse(arr)
-    # print_arbol(program)
-    # program.exec()
+    program = parser.parse(arr)
+    print_arbol(program)
+    directives = program.exec()
+    # print(directives)
 
     # run_error_checker(program)
 
@@ -57,11 +58,14 @@ def analizeCode(nombre_archivo):
 
 # analizarCodigo('prueba_if_else.tam')
 # analizeCode('prueba_def.tam')
+# analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
 # analizarCodigo("prueba_for_loop.tam")
 # analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizarCodigo("prueba_def.tam")
+# analizeCode("prueba_en_caso")
+analizeCode("prueba_bool_statements.tam")
 
 # Hardware
 verticalD()

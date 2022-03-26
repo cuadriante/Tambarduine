@@ -1,0 +1,23 @@
+Principal(){
+    SET @var1, 6;
+    EnCaso @var1
+        Cuando  == 7 EnTons{
+            SET @var2, 5;
+        }
+        Cuando < 4 EnTons{
+            SET @var3, 5;
+        }
+    SiNo{
+        SET @var4, 5;
+    }
+    FinEnCaso;
+
+};
+
+
+
+
+
+
+
+
