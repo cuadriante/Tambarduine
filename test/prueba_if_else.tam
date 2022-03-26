@@ -3,10 +3,13 @@ Principal(){
         SET @var3, 1;
     }
     if 8 > 2 {
-        SET @var1, 7+2;
+        SET @var1, 1+2;
     }
     else 
     {
         SET @var2, 0;
+    }
+    for @var1 to 5 Step 1{
+
     }
 };

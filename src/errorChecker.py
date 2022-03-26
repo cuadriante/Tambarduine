@@ -1,32 +1,38 @@
 from symbolTable import *
+from parsingStructure import *
 
 indentation = "     "
+
 
 
 # pendiente : validar tipos de datos en aritmetica
 #               variables bool
 
-def run_error_checker(program):
-    if program.block.main:
+def run_error_checker(prog):
+    if prog.block.main:
         print("valid main found.")
-        if program.block.main.statements:
+        if prog.block.main.statements:
             print(indentation + "valid statement(s) found.")
-            check_statement_list(program.block.main.statements.statement_list)
+            check_statement_list(prog.block.main.statements.statement_list)
             # eg.raise_exception("miss", "stat")
     else:
         eg.raise_exception("miss", "prin")
 
 
+# no se puede hacer isinstance para chequear el tipo pq ocuparia los parametros
 def check_statement_list(statement_list):
     for s in statement_list:
         print(2 * indentation + "statement found.")
-        if s.condition:
+        if s.step:  # FOR
+            print(3 * indentation + "for loop found.")
+            check_for(s)
+        if s.condition:  # IF
             print(3 * indentation + "if condition found.")
             check_if(s)
-        if s.var_name:
+        if s.var_name:  # VAR DECLARATION
             print(3 * indentation + s.var_name + " found in symbol table.")
             check_var(s)
-        if s.expression:
+        if s.expression:  # ARITHMETIC OR BOOL EXPRESSION
             print(3 * indentation + "expression found.")
             if s.expression.arith_expr_or_bool:
                 check_arith_expr(s.expression.arith_expr_or_bool)
@@ -35,12 +41,14 @@ def check_statement_list(statement_list):
             # hacer algo
 
 
-def check_var(s):
-    if check_for_var_in_symbol_table(s.var_name):
-        if s.expression:
-            print(3 * indentation + "expression found.")
-            if s.expression.arith_expr_or_bool:
-                check_arith_expr(s.expression.arith_expr_or_bool)
+def check_for(for_st): # ninguno de estos errores se puede probar, aun
+    if not is_number(for_st.step):
+        eg.raise_exception(eg.INV_DT, eg.S_STEP)
+    if for_st.step <= 0:
+        eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
+    if not is_number(for_st.to.factor):
+        eg.raise_exception(eg.INV_DT, eg.S_TO)
+    pass
 
 
 def check_if(if_st):
@@ -53,6 +61,15 @@ def check_if(if_st):
         check_statement_list(if_st.statements1.statement_list)
     if if_st.statements2:
         check_statement_list(if_st.statements2.statement_list)
+
+
+def check_var(s):
+    if check_for_var_in_symbol_table(s.var_name):
+        if s.expression:
+            print(3 * indentation + "expression found.")
+            if s.expression.arith_expr_or_bool:
+                check_arith_expr(s.expression.arith_expr_or_bool)
+
 
 def check_arith_expr(s_term):
     print(4 * indentation + "arithmetic or boolean expression found.")
@@ -112,6 +129,11 @@ def check_if_validity(comparison):  # que comparison sea una lista
 
 
 class ExceptionGenerator(Exception):
+    #   HACER ESTO MAS BONITO CON LA LISTA DE COMANDOS
+    INV_DT = "inv_dt"
+    S_STEP = "step"
+    S_STEP_N = "step_neg"
+    S_TO = "to"
 
     def raise_exception(self, exc_num, exc_spec):
         match exc_num:
@@ -119,6 +141,12 @@ class ExceptionGenerator(Exception):
                 msg = "INVALID DATATYPE"
                 if exc_spec == "bool":
                     msg = msg + ": BOOL."
+                if exc_spec == "step":
+                    msg = msg + ": 'STEP' DURING FOR LOOP MUST BE A NUMBER."
+                if exc_spec == "step_neg":
+                    msg = msg + ": 'STEP' DURING FOR LOOP MUST BE A NATURAL NUMBER."
+                if exc_spec == "to":
+                    msg = msg + ": 'FOR' DURING FOR LOOP MUST BE A NUMBER."
             case "inv_dt_arith_proc":
                 msg = "INVALID DATATYPE DURING ARITHMETIC PROCEDURE."
             case "inv_arith":

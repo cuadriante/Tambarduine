@@ -1,0 +1,24 @@
+Principal(){
+
+    SET @var1, 7*7;
+    SET @var2, 7//7;
+    SET @var5, 9;
+
+    for @var1 to 7 Step -1{
+    print("HOla");
+ }
+
+
+ if 10 < 7 {
+        SET @var3, 1;
+    }
+    if 8 > 2 {
+        SET @var1, 1+2;
+    }
+    else
+    {
+        SET @var2, 0;
+    }
+
+
+};
