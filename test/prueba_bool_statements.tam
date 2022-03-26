@@ -1,0 +1,6 @@
+Principal(){
+    SET @var1, True;
+    SET @var1.Neg;
+    SET @var1.T;
+
+};

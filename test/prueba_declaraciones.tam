@@ -1,7 +1,0 @@
-Principal(){
-    SET @var1, 7*7;
-    SET @var1, 7+7;
-    SET @var1, 67;
-
-};
-

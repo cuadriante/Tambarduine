@@ -19,7 +19,10 @@ class SymbolTable:
             return value
 
     def get_all(self):
-        return self.symbols.values()
+        return (
+            list(self.symbols.keys()),
+            list(self.symbols.values())
+        )
 
     def set(self, name, value):
         self.symbols[name] = value

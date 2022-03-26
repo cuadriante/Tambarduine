@@ -20,8 +20,10 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 def p_program(p):
     "program : block"
     print(symbol_table.symbols)
-    function_table.print_declared_functions()
-    function_table.print_called_functions()
+    # function_table.print_declared_functions()
+    # function_table.print_called_functions()
+    # print(function_table.declared_functions)
+    # print(function_table.called_functions)
     p[0] = program(p[1])
 
 
@@ -46,13 +48,16 @@ def p_function_decls_function_decl(p):
 
 
 def p_functions_decl_empty(p):
-    "function_decls : empty"
+    "function_decl : empty"
     p[0] = p[1]
 
 
 def p_function_decl(p):
-    "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE statements RBRACE SEMICOLON"
+    "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE function_body RBRACE SEMICOLON"
     function_table.add(p[2], p[4])
+    if p[7].statements != None:
+        function_table.declare_new_variables(p[2], p[7].get_var_decls())
+
     p[0] = function_decl(p[2], p[4], p[7])
 
 
@@ -76,6 +81,10 @@ def p_function_decl_params(p):
     p[1].add(p[3])
     p[0] = p[1]
 
+
+def p_function_body_statements(p):
+    "function_body : statements"
+    p[0] = function_body(p[1])
 
 # MAIN) +
 
@@ -107,10 +116,14 @@ def p_statement(p):
                 | var_decl
                 | callable_function
                 | bool_statement
-                | function_call
-                | empty"""
+                | function_call"""
     print("statement")
     p[0] = statement(p[1])
+
+
+def p_statement_empty(p):
+    """statement : empty"""
+    p[0] = p[1]
 
 # FUNCTION_CALL
 
@@ -222,8 +235,9 @@ def p_swich_0_list(p):
 
 def p_en_caso_1(p):
     "en_caso : ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
-    p[0] = en_caso(p[3], p[6], p[2])
     print("en_caso1")
+    p[0] = en_caso(p[3], p[6], p[2])
+
 
 
 def p_switch_1(p):

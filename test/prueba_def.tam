@@ -1,13 +1,20 @@
 Def @rutina (@parametro1, @parametro2){
-
+    SET @varRutina, 431; SET @varRutina3, 590;
+    SET @varRutina2, 2*(@parametro1 + @parametro2) / @varRutina3;
+    SET @varRutina4, false;
 };
 
 Def @rutinota (@parametro2, @parametro3, @parametro4){
+    SET @varRutina5, true;
+};
+
+Def @rutinita (){
 
 };
 
 Principal(){
-    SET @var1, True;
+    SET @var1, false;
     Exec @rutinota("adios", @var1,2131);
     Exec @rutina(123, "ola");
+    Exec @rutina(True, 5234);
 };
