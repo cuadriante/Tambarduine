@@ -83,7 +83,7 @@ def check_var(s):
             if s.expression.arith_expr_or_bool:
                 current = check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
                 if value != current:
-                    eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS)
+                    eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
 
 
 def check_arith_or_bool_expr(s_term):
@@ -226,7 +226,7 @@ class ExceptionGenerator(Exception):
                 if exc_spec == self.S_MISMATCH_IF:
                     msg = msg + " : MISMATCH DURING COMPARISON."
                 if exc_spec == self.S_MISMATCH_AS:
-                    msg = msg + " : MISMATCH DURING ASSIGNATION."
+                    msg = msg + " : MISMATCH DURING ASSIGNATION"
             case self.INV_DT_AP:
                 msg = "INVALID DATATYPE DURING ARITHMETIC PROCEDURE."
             case self.INV_AP:
