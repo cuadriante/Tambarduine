@@ -4,12 +4,15 @@
 
 #include <Servo.h>
 
-String input_value = "";
-float metronomo;
-int tiempoSonido = 100;
+int funcionLlamada = 0;
+float parametroFuncion = 0;
 
-Servo servoVertical;
-Servo servoAbanico;
+const byte cantidadCaracteres = 32;
+char mensaje[cantidadCaracteres];
+
+float tempo = 750;
+int tiempoSonido = 100;
+int anguloInicialPercutores = 155;
 
 Servo servoPercutorA;
 Servo servoPercutorB;
@@ -17,199 +20,208 @@ Servo servoPercutorD;
 Servo servoPercutorI;
 Servo servoPercutorC;
 
+Servo servoVertical;
+Servo servoAbanico;
+
 void setup() {
   pinMode(8, OUTPUT);
 
-  servoAbanico.attach(6);
-  servoVertical.attach(7);
+  servoPercutorA.attach(2);
+  servoPercutorB.attach(3);
+  servoPercutorD.attach(4);
+  servoPercutorI.attach(5);
+  servoPercutorC.attach(6);
 
-  servoPercutorA.attach(1);
-  servoPercutorB.attach(2);
-  servoPercutorD.attach(3);
-  servoPercutorI.attach(4);
-  servoPercutorC.attach(5);
-  
-  setMetronomo(0.75);
+  servoAbanico.attach(7);
+  servoVertical.attach(8);
+
+  posicionarPercutores(anguloInicialPercutores);
+
+  setMetronomo(0.5);
 
   Serial.begin(9600);
   Serial.setTimeout(1);
 }
 
 void loop() {
-  if (Serial.available() > 1) {
-    int message_max_length = 100;
-    char python_message[message_max_length];
-    int idx = 0;
-    while (idx < message_max_length){
-      python_message[idx] = Serial.read();
-      idx += 1;
-    }
-    Serial.println(python_message[0]);
-    Serial.println(python_message[1]);
-    Serial.println(python_message[2]);
-    Serial.println(python_message[3]);
+  recibirInstruccion();
+  
+  if (funcionLlamada == 1) {
+    setMetronomo(parametroFuncion);
   }
-  else if (Serial.available() > 0){
-    input_value = Serial.readString();
+  else if (funcionLlamada == 2){
+    girarSentidoHorario(servoAbanico); //abanicoA
+  }
+  else if (funcionLlamada == 3){
+    girarSentidoAntihorario(servoAbanico); //abanicoB
+  }
+  else if (funcionLlamada == 4){
+    girarSentidoHorario(servoVertical); //verticalD
+  }
+  else if (funcionLlamada == 5){
+    girarSentidoAntihorario(servoVertical); //verticalI
+  }
+  else if (funcionLlamada == 6){
+    usarPercutor(servoPercutorD);
+  }
+  else if (funcionLlamada == 7){
+    usarPercutor(servoPercutorI);
+  }
+  else if (funcionLlamada == 8){
+    usarPercutores(servoPercutorD, servoPercutorI);
+  }
+  else if (funcionLlamada == 9){
+    usarPercutor(servoPercutorA);
+  }
+  else if (funcionLlamada == 10){
+    usarPercutor(servoPercutorB);
+  }
+  else if (funcionLlamada == 11){
+    usarPercutores(servoPercutorA, servoPercutorB);      
+  }
+  else if (funcionLlamada == 12){
+    golpe();
+  }
+  else if (funcionLlamada == 13){
+    vibrato(parametroFuncion);
   }
   else{
-    if (input_value == "1"){
-      setMetronomo(0.3);
-      input_value = "";
+    detenerServos();
+  }
+  funcionLlamada = 0;
+  parametroFuncion = 0;
+}
+
+void recibirInstruccion() {
+  static boolean recibiendoMensaje = false;
+  static byte pos = 0;
+  char marcadorInicio = '<';
+  char marcadorFinal = '>';
+  char caracterRecibido;
+  bool recepcionCompleta = false;
+  
+  while (Serial.available() > 0 && recepcionCompleta == false) {
+    caracterRecibido = Serial.read();
+
+    if (recibiendoMensaje) {
+      if (caracterRecibido != marcadorFinal) {
+        mensaje[pos] = caracterRecibido;
+        pos++;
+        if (pos >= cantidadCaracteres) {
+          pos = cantidadCaracteres - 1;
+        } 
+      }
+      else {
+        procesarMensaje(mensaje);
+        mensaje[0] = '\0';
+        recibiendoMensaje = false;
+        pos = 0;
+        recepcionCompleta = true;
+      }
     }
-      else if (input_value == "2"){
-      abanicoA();
-      input_value = "";
-    }
-      else if (input_value == "3"){
-      abanicoB();
-      input_value = "";
-    }
-      else if (input_value == "4"){
-      verticalD();
-      input_value = "";
-    }
-      else if (input_value == "5"){
-      verticalI();
-      input_value = "";
-    }
-      else if (input_value == "6"){
-      percutorD();
-      input_value = "";
-    }
-      else if (input_value == "7"){
-      percutorI();
-      input_value = "";
-    }
-      else if (input_value == "8"){
-      percutorDI();
-      input_value = "";
-    }
-      else if (input_value == "9"){
-      percutorA();
-      input_value = "";
-    }
-      else if (input_value == "A"){
-      percutorB();
-      input_value = "";
-    }
-      else if (input_value == "B"){
-      percutorAB();
-      input_value = "";
-    }
-      else if (input_value == "C"){
-      golpe();
-      input_value = "";
-    }
-      else if (input_value == "D"){
-      vibrato(5);
-      input_value = "";
-    }
-    else{
-      detenerServos();
+    else if (caracterRecibido == marcadorInicio) {
+      recibiendoMensaje = true;
     }
   }
 }
 
-void detenerServos(){
+void procesarMensaje(char mensajeRecibido[]){
+  char marcadorDeSeparacion = '$';
+  String mensajeString = mensajeRecibido;
+  
+  for (int i = 0; i < mensajeString.length(); i++){
+    char caracter = mensajeRecibido[i];
+    if (caracter == marcadorDeSeparacion){
+      funcionLlamada = mensajeString.substring(0, i).toInt();
+      parametroFuncion = mensajeString.substring(i + 1, mensajeString.length()).toFloat();
+      break;
+    }
+    else{
+      funcionLlamada = mensajeString.toInt();
+    }
+  }
+}
+
+void detenerServos() {
   servoAbanico.write(90);
   servoVertical.write(90);
 }
 
-void setMetronomo(float tiempoEntreGolpes){
-  metronomo = tiempoEntreGolpes/2 * 1000;
+void posicionarPercutores(int angulo) {
+  servoPercutorA.write(angulo);
+  servoPercutorB.write(angulo);
+  servoPercutorD.write(angulo);
+  servoPercutorI.write(angulo);
+  servoPercutorC.write(angulo);
+  delay(500);
 }
 
-void abanicoA(){
-  servoAbanico.write(180);
-  
-  delay(metronomo);
-  
-  servoAbanico.write(0);
-  sonarMetronomo();
-
-  delay(metronomo - tiempoSonido);
-
-  servoVertical.write(90);
+void setMetronomo(float tiempoEntreGolpes) {
+  tempo = tiempoEntreGolpes / 2 * 1000;
 }
 
-void abanicoB(){
-  servoAbanico.write(0);
-  
-  delay(metronomo);
-
-  servoAbanico.write(180);
-  sonarMetronomo();
- 
-  delay(metronomo - tiempoSonido);
-
-  servoVertical.write(90);
-}
-
-void verticalD(){
-  servoVertical.write(0);
-  delay(metronomo);
-
-  servoVertical.write(180);
-  sonarMetronomo();
-
-  delay(metronomo - tiempoSonido);
-
-  servoVertical.write(90);
-}
-
-void verticalI(){
-  servoVertical.write(180);
-  delay(metronomo);
-
-  servoVertical.write(0);
-  sonarMetronomo();
-  
-  delay(metronomo - tiempoSonido);
-
-  servoVertical.write(90);
-}
-
-void percutorD(){
-  
-}
-
-void percutorI(){
-
-}
-
-void percutorDI(){
-
-}
-
-void percutorA(){
-
-}
-
-void percutorB(){
-
-}
-
-void percutorAB(){
-
-}
-
-void golpe(){
-
-}
-
-void vibrato (int cantidadDeRepeticiones){
-  int i = 0;
-  while (i < cantidadDeRepeticiones){
-    verticalD();
-    verticalI();
-    i += 1;
-  }
-
-}
-
-void sonarMetronomo(){
+void sonarMetronomo() {
   digitalWrite(8, HIGH);
   delay(tiempoSonido);
   digitalWrite(8, LOW);
+}
+
+void girarSentidoHorario(Servo servo){
+  servo.write(0);
+
+  delay(tempo);
+
+  servo.write(180);
+  sonarMetronomo();
+
+  delay(tempo - tiempoSonido);
+
+  servoVertical.write(90);
+}
+
+void girarSentidoAntihorario(Servo servo){
+  servo.write(180);
+
+  delay(tempo);
+
+  servo.write(0);
+  sonarMetronomo();
+
+  delay(tempo - tiempoSonido);
+
+  servoVertical.write(90);
+}
+
+void usarPercutor(Servo percutor) {
+  int angulo = anguloInicialPercutores;
+  while (angulo != 65) {
+    angulo -= 1;
+    percutor.write(angulo);
+    delay(tempo / 90);
+  }
+
+  sonarMetronomo();
+
+  while (angulo != 155) {
+    angulo += 1;
+    percutor.write(angulo);
+    delay((tempo - tiempoSonido) / 90);
+  }
+}
+
+void usarPercutores(Servo primerPercutor, Servo segundoPercutor) {
+
+}
+
+void golpe() {
+
+}
+
+void vibrato (int cantidadDeRepeticiones) {
+  int i = 0;
+  while (i < cantidadDeRepeticiones) {
+    girarSentidoHorario(servoVertical);
+    girarSentidoAntihorario(servoVertical);
+    i += 1;
+  }
 }

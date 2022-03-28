@@ -41,7 +41,7 @@ def analizeCode(nombre_archivo):
 
     # LEXER - LEXICAL ANALYSIS
     lexer.input(arr)
-    print_lexer()
+    # print_lexer()
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
@@ -63,13 +63,18 @@ def analizeCode(nombre_archivo):
 # analizarCodigo("prueba_for_loop.tam")
 # analizeCode("hola.tam")
 # print(symbol_table.symbols)
-# analizarCodigo("prueba_def.tam")
+# analizeCode("prueba_def.tam")
 # analizeCode("prueba_en_caso")
-analizeCode("prueba_bool_statements.tam")
+# analizeCode("prueba_bool_statements.tam")
 
 # Hardware
-verticalD()
-abanicoB()
-abanicoB()
-set_metronomo(0.75)
-vibrato_vertical(5)
+# iniciar_comunicacion()
+# set_metronomo(0.75)
+# percutorD()
+# percutorD()
+# set_metronomo(0.5)
+# percutorD()
+# percutorD()
+# set_metronomo(0.3)
+# percutorD()
+# percutorD()
