@@ -49,7 +49,7 @@ reserved = {
     "Vibrato": "VIBRATO",
     "Metronomo": "METRONOMO",
     "If": "IF",
-    "else": "ELSE",
+    "Else": "ELSE",
     "for": "FOR",
     "to": "TO",
     "Step": "STEP",
@@ -57,7 +57,7 @@ reserved = {
     "EnTons": "ENTONS",
     "Cuando": "CUANDO",
     "SiNo": "SINO",
-    "FinEnCaso": "FINENCASO",
+    "Fin-EnCaso": "FINENCASO",
     "Exec": "EXEC",
     "Def": "DEF",
     "print": "PRINT"
@@ -153,14 +153,14 @@ def t_COMMENT(t):
 def t_VAR(t):
     r'@[a-zA-Z_0-9?]{3,10}'
     t.type = reserved.get(t.value, 'VAR')  # Check for reserved words
-    if not symbol_table.get(t.value):
-        symbol_table.set(t.value, None)
+    # if not symbol_table.get(t.value):
+    #     symbol_table.set(t.value, -1)
     return t
 
 
 def t_ID(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
-
+    print(t.value)
     if t.value in reserved:
         t.value = t.value.upper()
         t.type = t.value
