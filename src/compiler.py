@@ -56,12 +56,12 @@ def analizeCode(nombre_archivo):
     # run_semantic_analysis(arr)
 
 
-analizeCode('prueba_if_else.tam')
+analizeCode('uwu.tam')
 # analizeCode('prueba_def.tam')
 # analizeCode('prueba_SET.tam')
 # analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
-# analizeCode("prueba_for_loop.tam")
+#analizeCode("prueba_for_loop.tam")
 # analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizeCode("prueba_def.tam")

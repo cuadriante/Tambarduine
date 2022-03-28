@@ -29,7 +29,7 @@ def check_statement_list(statement_list):
         if s.step:  # FOR
             print(3 * indentation + "for loop found.")
             check_for(s)
-        if s.condition:  # IF
+        if s.condition_or_expression:  # IF
             print(3 * indentation + "if condition found.")
             check_if(s)
         if s.var_name:  # VAR DECLARATION
@@ -55,6 +55,8 @@ def check_for(for_st):  # ninguno de estos errores se puede probar, aun
         eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
     if not is_number(for_st.to.factor):
         eg.raise_exception(eg.INV_DT, eg.S_TO)
+    if not is_number(for_st.var_name):
+        eg.raise_exception(eg.INV_DT, eg.S_TO)
     pass
 
 
@@ -62,11 +64,11 @@ def check_if(if_st):
     arith_con = False
     arith_semi_con = False
 
-    if if_st.condition.arith_expr:
-        arith_con = check_arith_or_bool_expr(if_st.condition.arith_expr)
-    if if_st.condition.semi_condition.comparator:
-        if if_st.condition.semi_condition.expression.arith_expr_or_bool:
-            arith_semi_con = check_arith_or_bool_expr(if_st.condition.semi_condition.expression.arith_expr_or_bool)
+    if if_st.condition_or_expression.arith_expr:
+        arith_con = check_arith_or_bool_expr(if_st.condition_or_expression.arith_expr)
+    if if_st.condition_or_expression.semi_condition.comparator:
+        if if_st.condition_or_expression.semi_condition.expression.arith_expr_or_bool:
+            arith_semi_con = check_arith_or_bool_expr(if_st.condition_or_expression.semi_condition.expression.arith_expr_or_bool)
             if arith_con != arith_semi_con:
                 eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_IF)
     if if_st.statements1:
@@ -77,7 +79,7 @@ def check_if(if_st):
 
 def check_var(s):
     if check_for_var_in_symbol_table(s.var_name):
-        value = not is_boolean(check_var_value_in_symbol_table(s.var_name))
+        value = not is_boolean(get_var_value_in_symbol_table(s.var_name))
         if s.expression:
             print(3 * indentation + "expression found.")
             if s.expression.arith_expr_or_bool:
@@ -106,7 +108,7 @@ def check_arith_or_bool_expr(s_term):
         elif s_term.term.factor.factor:
             if not is_number(s_term.term.factor.factor):
                 check_for_var_in_symbol_table(s_term.term.factor.factor)
-                var_value = check_var_value_in_symbol_table(s_term.term.factor.factor)
+                var_value = get_var_value_in_symbol_table(s_term.term.factor.factor)
                 if is_boolean(var_value):  # es una variable
                     return False
         if not valid:
@@ -119,7 +121,7 @@ def bool_expr(s_term):
         if not check_for_var_in_symbol_table(s_term, True):
             return False
         else:
-            variable = check_var_value_in_symbol_table(s_term)
+            variable = get_var_value_in_symbol_table(s_term)
             return isinstance(variable, bool)
     else:
         return isinstance(s_term, bool)
@@ -128,8 +130,10 @@ def bool_expr(s_term):
 def is_number(variable):
     if not isinstance(variable, int) or isinstance(variable, float):
         if check_for_var_in_symbol_table(variable):
-            variable = check_var_value_in_symbol_table(variable)
-            return isinstance(variable, int) or isinstance(variable, float)
+            var = get_var_value_in_symbol_table(variable)
+            if isinstance(var, bool):
+                return False
+            return isinstance(var, int) or isinstance(var, float)
     else:
         return isinstance(variable, int) or isinstance(variable, float)
 
@@ -137,7 +141,7 @@ def is_number(variable):
 def is_boolean(variable):
     if not isinstance(variable, bool):
         if check_for_var_in_symbol_table(variable, True):
-            variable = check_var_value_in_symbol_table(variable)
+            variable = get_var_value_in_symbol_table(variable)
             return isinstance(variable, bool)
     else:
         return isinstance(variable, bool)
@@ -167,7 +171,7 @@ def check_for_var_in_symbol_table(var, condition=None):
             return False
 
 
-def check_var_value_in_symbol_table(var):
+def get_var_value_in_symbol_table(var):
     return symbol_table.get(var)
 
 
@@ -222,7 +226,7 @@ class ExceptionGenerator(Exception):
                 if exc_spec == self.S_STEP_N:
                     msg = msg + ": 'STEP' DURING FOR LOOP MUST BE A NATURAL NUMBER."
                 if exc_spec == self.S_TO:
-                    msg = msg + ": 'FOR' DURING FOR LOOP MUST BE A NUMBER."
+                    msg = msg + ": CONDITION DURING FOR LOOP MUST BE A NUMBER."
                 if exc_spec == self.S_MISMATCH_IF:
                     msg = msg + " : MISMATCH DURING COMPARISON."
                 if exc_spec == self.S_MISMATCH_AS:

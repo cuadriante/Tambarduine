@@ -257,7 +257,7 @@ class condition():
 
 
 class var_decl():
-    condition = None
+    condition_or_expression = None
     step = None
     switch_list = None
 
@@ -351,7 +351,7 @@ class if_statement():
 
 
 class for_loop():
-    condition = None
+    condition_or_expression = None
     expression = None
     switch_list = None
 
