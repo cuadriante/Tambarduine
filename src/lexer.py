@@ -154,7 +154,7 @@ def t_VAR(t):
     r'@[a-zA-Z_0-9?]{3,10}'
     t.type = reserved.get(t.value, 'VAR')  # Check for reserved words
     if not symbol_table.get(t.value):
-        symbol_table.set(t.value, -1)
+        symbol_table.set(t.value, None)
     return t
 
 

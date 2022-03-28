@@ -256,6 +256,9 @@ class condition():
 class var_decl():
     condition = None
     step = None
+    switch_list = None
+
+
     def __init__(self, var_name, expression):
         self.var_name = var_name
         self.expression = expression
@@ -310,6 +313,7 @@ class if_statement():
     statements1 = None
     statements2 = None
     step = None
+    switch_list = None
 
     def __init__(self, condition, statements1, statements2=None):
         self.condition = condition
@@ -343,6 +347,7 @@ class if_statement():
 class for_loop():
     condition = None
     expression = None
+    switch_list = None
 
     def __init__(self, var_name, to_factor, statements, step_number=None, ):
         self.var_name = var_name
@@ -378,6 +383,9 @@ class for_loop():
 
 
 class en_caso():
+    step = None
+    condition = None
+    var_name = None
     def __init__(self, switch_list, sino_statements, expression=None):
         self.switch_list = switch_list
         self.sino = sino_statements
