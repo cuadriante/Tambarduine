@@ -6,41 +6,29 @@ class FunctionTable:
     def __init__(self):
         self.declared_functions = {}
         self.called_functions = []
+        self.symbol_table = SymbolTable()
 
-    def add(self, id, params):
-        # symbol_table.remove(id)
-        # for param in params.get_param_ids():
-        #     if param != None:
-        #         symbol_table.remove(param)
+    def add(self, id, params, body):
+        self.declared_functions[id] = [params, body]
+        # for param in params:
+        #     self.symbol_table.set(param, None)
+    
+    def get_symbol_table(self):
+        return self.symbol_table
 
-        self.declared_functions[id] = [params, None]
-
-    def get(self, id):
-        value = self.declared_functions.get(id)
-        if value == None:
-            raise Exception(
-                "No existe una variable con el identificador " + id)
-        else:
-            return value
-
-    def call(self, id, params):
-        # symbol_table.remove(id)
-
-        params = params.get_params()
-        function_decl_params = self.declared_functions.get(id)[0]
-        function_decl_variables = self.declared_functions.get(id)[1]
-
-        function_decl_param_ids = function_decl_params.get_param_ids()
-        function_symbol_table = SymbolTable()
-
-        for i in range(len(function_decl_param_ids)):
-            param_id = function_decl_param_ids[i]
-            function_symbol_table.set(param_id, params[i])
-
-        for var_decl in function_decl_variables:
-            function_symbol_table.set(var_decl.var_name, var_decl.expression)
-
-        self.called_functions.append({id: function_symbol_table})
+    """
+    Retorna el nombre de los parametros
+    """
+    def get_params(self, id):
+        params = self.declared_functions[id]
+        params = params[0]
+        # print(params)
+        return params
+    
+    def get_body(self, id):
+        body = self.declared_functions[id]
+        body = body[1]
+        return body
 
     def declare_new_variables(self, id, var_decls):
         self.declared_functions.get(id)[1] = var_decls
@@ -62,7 +50,7 @@ class FunctionTable:
                 if function_decl_variables != None:
                     for var_decl in function_decl_variables:
                         print(var_decl.var_name + ": " +
-                              str(var_decl.expression.get_child()))
+                            str(var_decl.expression.get_child()))
                 print('--------------------------------------------------')
 
     def print_called_functions(self):
@@ -79,10 +67,10 @@ class FunctionTable:
                 for i in range(len(symbol_keys)):
                     if isinstance(symbol_values[i], str) or isinstance(symbol_values[i], int) or isinstance(symbol_values[i], bool):
                         print(str(symbol_keys[i]) + ": " +
-                              str(symbol_values[i]))
+                            str(symbol_values[i]))
                     else:
                         print(str(symbol_keys[i]) + ": " +
-                              str(symbol_values[i].get_child()))
+                            str(symbol_values[i].get_child()))
             print('--------------------------------------------------')
 
 

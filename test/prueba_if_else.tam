@@ -1,9 +1,10 @@
 Principal(){
-    If 10 < 7 {
-        SET @var3, 1;
+    SET @var1, 3;
+    If @var1*2 == 6  {
+        SET @var2, 1;
     } 
-    else 
+    Else 
     {
-        SET @var2, 0;
+        SET @var3, 0;
     }
 };

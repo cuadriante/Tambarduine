@@ -19,7 +19,7 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 # ROOT
 def p_program(p):
     "program : block"
-    print(symbol_table.symbols)
+    # print(symbol_table.symbols)
     # function_table.print_declared_functions()
     # function_table.print_called_functions()
     # print(function_table.declared_functions)
@@ -54,15 +54,16 @@ def p_functions_decl_empty(p):
 
 def p_function_decl(p):
     "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE function_body RBRACE SEMICOLON"
-    function_table.add(p[2], p[4])
-    if p[7].statements != None:
-        function_table.declare_new_variables(p[2], p[7].get_var_decls())
-
+    print("funciton_decl")
+    # function_table.add(p[2], p[4])
+    # if p[7].statements != None:
+    #     function_table.declare_new_variables(p[2], p[7].get_var_decls())
     p[0] = function_decl(p[2], p[4], p[7])
 
 
 def p_function_decl_param_var(p):
     "function_decl_param : VAR"
+    print("function_decl_param")
     p[0] = function_decls_param(p[1])
 
 
@@ -73,11 +74,14 @@ def p_function_decl_param_empty(p):
 
 def p_function_decl_param_to_params(p):
     "function_decl_params : function_decl_param"
+    print("function_decl_param_to_params")
+    print("function_decl_param_to_params")
     p[0] = p[1]
 
 
 def p_function_decl_params(p):
     "function_decl_params : function_decl_params ASSIGN function_decl_param"
+    print("function_decl_paramss")
     p[1].add(p[3])
     p[0] = p[1]
 
@@ -130,7 +134,7 @@ def p_statement_empty(p):
 
 def p_function_call(p):
     "function_call : EXEC VAR LPAREN params RPAREN SEMICOLON"
-    function_table.call(p[2], p[4])
+    # function_table.call(p[2], p[4])
     p[0] = function_call(p[2], p[4])
 
 # VAR-DECL
@@ -186,6 +190,17 @@ def p_if(p):
 
 def p_if_else(p):
     "if_statement : IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
+    print("elseif")
+    p[0] = if_statement(p[2], p[4], p[8])
+
+def p_if_expr(p):
+    "if_statement : IF expression LBRACE statements RBRACE"
+    print("if")
+    p[0] = if_statement(p[2], p[4])
+
+
+def p_if_else_expr(p):
+    "if_statement : IF expression LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
     print("elseif")
     p[0] = if_statement(p[2], p[4], p[8])
 
@@ -313,7 +328,6 @@ def p_term_factor(p):
 def p_factor_num(p):
     'factor : NUMBER'
     p[0] = factor(p[1])
-
 
 def p_factor_var(p):
     "factor : VAR"

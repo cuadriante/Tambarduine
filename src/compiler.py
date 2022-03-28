@@ -1,5 +1,5 @@
 import codecs
-from hardwareCommunication import *
+# from hardwareCommunication import *
 
 from lexer import *
 from parser import *
@@ -48,7 +48,7 @@ def analizeCode(nombre_archivo):
     program = parser.parse(arr)
     print_arbol(program)
     directives = program.exec()
-    # print(directives)
+    print(directives)
 
     # run_error_checker(program)
 
@@ -56,15 +56,16 @@ def analizeCode(nombre_archivo):
     # run_semantic_analysis(arr)
 
 
-# analizarCodigo('prueba_if_else.tam')
+analizeCode('prueba_if_else.tam')
 # analizeCode('prueba_def.tam')
+# analizeCode('prueba_SET.tam')
 # analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
-# analizarCodigo("prueba_for_loop.tam")
+# analizeCode("prueba_for_loop.tam")
 # analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizeCode("prueba_def.tam")
-# analizeCode("prueba_en_caso")
+# analizeCode("prueba_en_caso.tam")
 # analizeCode("prueba_bool_statements.tam")
 
 # Hardware
