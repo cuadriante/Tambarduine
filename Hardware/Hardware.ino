@@ -24,7 +24,7 @@ Servo servoVertical;
 Servo servoAbanico;
 
 void setup() {
-  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
 
   servoPercutorA.attach(2);
   servoPercutorB.attach(3);
@@ -37,9 +37,9 @@ void setup() {
 
   posicionarPercutores(anguloInicialPercutores);
 
-  setMetronomo(0.5);
+  setMetronomo(0.75);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.setTimeout(1);
 }
 
@@ -80,7 +80,7 @@ void loop() {
     usarPercutores(servoPercutorA, servoPercutorB);      
   }
   else if (funcionLlamada == 12){
-    golpe();
+    usarPercutor(servoPercutorC);
   }
   else if (funcionLlamada == 13){
     vibrato(parametroFuncion);
@@ -112,11 +112,11 @@ void recibirInstruccion() {
         } 
       }
       else {
-        procesarMensaje(mensaje);
-        mensaje[0] = '\0';
+        mensaje[pos] = '\0';
         recibiendoMensaje = false;
         pos = 0;
         recepcionCompleta = true;
+        procesarMensaje(mensaje);
       }
     }
     else if (caracterRecibido == marcadorInicio) {
@@ -126,6 +126,7 @@ void recibirInstruccion() {
 }
 
 void procesarMensaje(char mensajeRecibido[]){
+  Serial.println(mensajeRecibido);
   char marcadorDeSeparacion = '$';
   String mensajeString = mensajeRecibido;
   
@@ -161,9 +162,9 @@ void setMetronomo(float tiempoEntreGolpes) {
 }
 
 void sonarMetronomo() {
-  digitalWrite(8, HIGH);
+  tone(9, 1000);
   delay(tiempoSonido);
-  digitalWrite(8, LOW);
+  noTone(9);
 }
 
 void girarSentidoHorario(Servo servo){
@@ -194,7 +195,8 @@ void girarSentidoAntihorario(Servo servo){
 
 void usarPercutor(Servo percutor) {
   int angulo = anguloInicialPercutores;
-  while (angulo != 65) {
+  int anguloFinal = anguloInicialPercutores - 90;
+  while (angulo != anguloFinal) {
     angulo -= 1;
     percutor.write(angulo);
     delay(tempo / 90);
@@ -202,7 +204,7 @@ void usarPercutor(Servo percutor) {
 
   sonarMetronomo();
 
-  while (angulo != 155) {
+  while (angulo != anguloInicialPercutores) {
     angulo += 1;
     percutor.write(angulo);
     delay((tempo - tiempoSonido) / 90);
@@ -210,11 +212,23 @@ void usarPercutor(Servo percutor) {
 }
 
 void usarPercutores(Servo primerPercutor, Servo segundoPercutor) {
+  int angulo = anguloInicialPercutores;
+  int anguloFinal = anguloInicialPercutores - 90;
+  while (angulo != anguloFinal) {
+    angulo -= 1;
+    primerPercutor.write(angulo);
+    segundoPercutor.write(angulo);
+    delay(tempo / 90);
+  }
 
-}
+  sonarMetronomo();
 
-void golpe() {
-
+  while (angulo != anguloInicialPercutores) {
+    angulo += 1;
+    primerPercutor.write(angulo);
+    segundoPercutor.write(angulo);
+    delay((tempo - tiempoSonido) / 90);
+  }
 }
 
 void vibrato (int cantidadDeRepeticiones) {

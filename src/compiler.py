@@ -1,5 +1,5 @@
 import codecs
-from hardwareCommunication import *
+import hardwareCommunication
 
 from lexer import *
 from parser import *
@@ -68,13 +68,31 @@ def analizeCode(nombre_archivo):
 # analizeCode("prueba_bool_statements.tam")
 
 # Hardware
-# iniciar_comunicacion()
-# set_metronomo(0.75)
-# percutorD()
-# percutorD()
-# set_metronomo(0.5)
-# percutorD()
-# percutorD()
-# set_metronomo(0.3)
-# percutorD()
-# percutorD()
+# hardwareCommunication.set_metronomo(0.75)
+
+# hardwareCommunication.percutorA()
+# hardwareCommunication.percutorD()
+# hardwareCommunication.golpe()
+# hardwareCommunication.percutorAB()
+# hardwareCommunication.percutorB()
+# hardwareCommunication.percutorI()
+# hardwareCommunication.golpe()
+# hardwareCommunication.percutorAB()
+# hardwareCommunication.percutorDI()
+# hardwareCommunication.set_metronomo(0.4)
+# hardwareCommunication.percutorA()
+# hardwareCommunication.percutorD()
+# hardwareCommunication.golpe()
+# hardwareCommunication.percutorDI()
+# hardwareCommunication.golpe()
+# hardwareCommunication.percutorB()
+# hardwareCommunication.percutorI()
+# hardwareCommunication.percutorAB()
+# hardwareCommunication.percutorA()
+# hardwareCommunication.golpe()
+# hardwareCommunication.percutorD()
+# hardwareCommunication.percutorB()
+# hardwareCommunication.percutorI()
+# hardwareCommunication.golpe()
+
+# hardwareCommunication.enviar_instrucciones()

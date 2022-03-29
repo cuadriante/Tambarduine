@@ -1,80 +1,78 @@
-import time
-import serial  # pip install pyserial
+import serial
 
-# Hay que poner el puerto al que esta conectado el arduino
-
-signal = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
+puertoSerial = serial.Serial('/dev/ttyACM0', baudrate=115200, timeout=1)
 metronomo = 0.75
-
-
-def iniciar_comunicacion():
-    signal.write(bytes('<0>', 'utf-8'))
-    time.sleep(1)
+instrucciones = ''
 
 
 def set_metronomo(tiempo_entre_golpes):
     global metronomo
     metronomo = tiempo_entre_golpes
 
-    signal.write(bytes('<1$' + str(metronomo) + '>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<1$' + str(metronomo) + '>')
 
 
 def abanicoA():
-    signal.write(bytes('<2>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<2>')
 
 
 def abanicoB():
-    signal.write(bytes('<3>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<3>')
 
 
 def verticalD():
-    signal.write(bytes('<4>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<4>')
 
 
 def verticalI():
-    signal.write(bytes('<5>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<5>')
 
 
 def percutorD():
-    signal.write(bytes('<6>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<6>')
 
 
 def percutorI():
-    signal.write(bytes('<7>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<7>')
 
 
 def percutorDI():
-    signal.write(bytes('<8>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<8>')
 
 
 def percutorA():
-    signal.write(bytes('<9>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<9>')
 
 
 def percutorB():
-    signal.write(bytes('<10>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<10>')
 
 
 def percutorAB():
-    signal.write(bytes('<11>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<11>')
 
 
 def golpe():
-    signal.write(bytes('<12>', 'utf-8'))
-    time.sleep(metronomo)
+    global instrucciones
+    instrucciones += ('<12>')
 
 
 def vibrato_vertical(cantidad_de_repeticiones):
-    signal.write(bytes('<13$' + str(cantidad_de_repeticiones) + '>', 'utf-8'))
-    time.sleep(cantidad_de_repeticiones * metronomo)
+    global instrucciones
+    instrucciones += ('<13$' + str(cantidad_de_repeticiones) + '>')
+
+
+def enviar_instrucciones():
+    global instrucciones
+    puertoSerial.write(bytes(instrucciones, 'utf-8'))
