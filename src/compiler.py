@@ -23,7 +23,7 @@ def print_lexer():
 
 def print_arbol(program):
     print("-----------Arbol------------")
-    program.printear()
+    program.print()
 
 
 """-----> Los archivos de prueba se ponen en la carpeta test y se llama a la funcion con el nombre del archivo <-----"""
@@ -41,7 +41,7 @@ def analizeCode(nombre_archivo):
 
     # LEXER - LEXICAL ANALYSIS
     lexer.input(arr)
-    # print_lexer()
+    print_lexer()
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
@@ -50,15 +50,15 @@ def analizeCode(nombre_archivo):
     directives = program.exec()
     print(directives)
 
-    run_error_checker(program)
+    # run_error_checker(program)
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
 
 
-analizeCode('uwu.tam')
+# analizeCode('uwu.tam')
 # analizeCode('prueba_def.tam')
-# analizeCode('prueba_SET.tam')
+analizeCode('prueba_SET.tam')
 # analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
 #analizeCode("prueba_for_loop.tam")
@@ -67,6 +67,7 @@ analizeCode('uwu.tam')
 # analizeCode("prueba_def.tam")
 # analizeCode("prueba_en_caso.tam")
 # analizeCode("prueba_bool_statements.tam")
+# analizeCode("prueba_if_else.tam")
 
 # Hardware
 # hardwareCommunication.set_metronomo(0.75)

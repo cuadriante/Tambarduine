@@ -10,7 +10,7 @@ Principal(){
     SiNo{
         SET @var4, 5;
     }
-    Fin-EnCaso;
+    FinEnCaso;
 
 };
 

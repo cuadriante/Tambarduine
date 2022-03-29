@@ -6,24 +6,54 @@ indentation = "   "
 directives = []
 
 class factor():
-    def __init__(self, factor):
+    def __init__(self, factor, lineno):
+        self.lineno = lineno
         self.factor = factor
 
-    def printear(self, level):
-        valor = str(self.factor)
+    def print(self, level):
         print(indentation * level + "Factor:")
         level += 1
-        print(indentation*level + valor)
+        if self.isArithExpr():
+            self.factor.print(level)
+        else:
+            valor = str(self.factor)
+            print(indentation*level + valor)
 
     def exec(self):
         factor = self.factor
         if isinstance(factor, int):
             return self.factor
+        elif self.isArithExpr():
+            return self.factor.exec()
         else:
             return symbol_table.get(self.factor)
 
     def get_child(self):
         return self.factor
+    
+    def isArithExpr(self):
+        return isinstance(self.factor, arith_expr)
+
+class negative():
+    def __init__(self, factor, line):
+        self.factor = factor
+        self.line = line
+
+
+    def print(self, level):
+        print(indentation * level + "NEGATIVE:")
+        level += 1
+        self.factor.print(level)
+        # print(indentation * level + str(self.factor))
+    
+    def exec(self):
+        #SI LA EXPRESIÓN ES BOOL DEBE MANDAR ERROR 
+        factor = self.factor.exec()
+        return - factor
+
+
+
+
 
 
 class term():
@@ -36,13 +66,13 @@ class term():
             self.operator = operator
         self.factor = factor
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Term:")
         level += 1
         if hasattr(self, "term") and hasattr(self, "operator"):
-            self.term.printear(level)
+            self.term.print(level)
             print(indentation * level + self.operator)
-        self.factor.printear(level)
+        self.factor.print(level)
 
     def exec(self):
         factor = self.factor.exec()
@@ -81,16 +111,16 @@ class arith_expr():
             self.operator = operator
         self.term = term
 
-    def printear(self, level):
+    def print(self, level):
         if arith_expr == None:
             print("xd")
         else:
             print(indentation * level + "Arith_expr:")
             level += 1
             if hasattr(self, "arith_expr") and hasattr(self, "operator"):
-                self.arith_expr.printear(level)
+                self.arith_expr.print(level)
                 print(indentation * level + self.operator)
-            self.term.printear(level)
+            self.term.print(level)
 
     def exec(self):
         term = self.term.exec()
@@ -131,13 +161,13 @@ class expression():
             self.arith_expr_or_bool = arith_expr_or_bool
         # print("Then", self.arith_expr_or_bool)
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Expression:")
         level += 1
         if self.isBool():
             print(indentation*level + str(self.arith_expr_or_bool))
         else:
-            self.arith_expr_or_bool.printear(level)
+            self.arith_expr_or_bool.print(level)
 
     def exec(self):
         if self.isBool():
@@ -166,13 +196,13 @@ class param():
     def add(self, next_param):
         self.param_list.append(next_param.param_list[0])
 
-    def printear(self, level):
+    def print(self, level):
         # print(self.param_list)
         for param in self.param_list:
             if self.isString(param):
                 print(indentation*level + param)
             else:
-                param.printear(level)
+                param.print(level)
 
     def isString(self, param):
         return isinstance(param, str)
@@ -205,15 +235,16 @@ class param():
 
 
 class semi_condition():
-    def __init__(self, comparator, expression):
+    def __init__(self, comparator, expression, line):
+        self.line = line
         self.comparator = comparator
         self.expression = expression
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Semi_condition:")
         level += 1
         print(indentation*level + self.comparator)
-        self.expression.printear(level)
+        self.expression.print(level)
 
     def exec(self):
         expression = self.expression.exec()
@@ -223,15 +254,16 @@ class semi_condition():
 
 
 class condition():
-    def __init__(self, arith_expr, semi_condition):
+    def __init__(self, arith_expr, semi_condition, line):
+        self.line = line
         self.arith_expr = arith_expr
         self.semi_condition = semi_condition
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Condition:")
         level += 1
-        self.arith_expr.printear(level)
-        self.semi_condition.printear(level)
+        self.arith_expr.print(level)
+        self.semi_condition.print(level)
 
     def exec(self):
         result = None
@@ -262,15 +294,16 @@ class var_decl():
     switch_list = None
 
 
-    def __init__(self, var_name, expression):
+    def __init__(self, var_name, expression, line):
+        self.line = line
         self.var_name = var_name
         self.expression = expression
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Var_decl:")
         level += 1
         print(indentation * level + self.var_name)
-        self.expression.printear(level)
+        self.expression.print(level)
 
     def exec(self, function_symbol_table = None):
         valor = self.expression.exec()
@@ -287,7 +320,7 @@ class bool_statement():
         self.var_name = var_name
         self.bool_function = bool_function
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Bool_statement:")
         level += 1
         print(indentation*level + self.var_name)
@@ -330,14 +363,14 @@ class if_statement():
         if statements2:
             self.statements2 = statements2
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "If_statement:")
         level += 1
-        self.condition_or_expression.printear(level)
-        self.statements1.printear(level)
+        self.condition_or_expression.print(level)
+        self.statements1.print(level)
 
         if self.statements2 and self.hasElse():
-            self.statements2.printear(level)
+            self.statements2.print(level)
 
     def hasElse(self):
         return hasattr(self, "statements2")
@@ -362,14 +395,14 @@ class for_loop():
         if step_number:
             self.step = step_number
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "For_loop:")
         level += 1
         print(indentation*level + self.var_name)
-        self.to.printear(level)
+        self.to.print(level)
         if self.hasStep():
             print(indentation*level + "Step " + str(self.step))
-        self.statements.printear(level)
+        self.statements.print(level)
 
     def hasStep(self):
         return hasattr(self, "step")
@@ -397,15 +430,15 @@ class en_caso():
         if expression:
             self.expression = expression
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "En_caso:")
         level += 1
         if self.hasExpression():
-            self.expression.printear(level)
-        self.switch_list.printear(level)
+            self.expression.print(level)
+        self.switch_list.print(level)
         print(indentation*level + "Si_no:")
         level += 1
-        self.sino.printear(level)
+        self.sino.print(level)
 
     def hasExpression(self):
         return hasattr(self, "expression")
@@ -428,11 +461,11 @@ class switch0():
         self.condition = condition
         self.statements = statements
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Switch0:")
         level += 1
-        self.condition.printear(level)
-        self.statements.printear(level)
+        self.condition.print(level)
+        self.statements.print(level)
 
     def exec(self):
         condition = self.condition.exec()
@@ -453,11 +486,11 @@ class switch_list0():
     def add(self, next_switch):
         self.switch_list.append(next_switch)
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Switch_list0:")
         level += 1
         for switch in self.switch_list:
-            switch.printear(level)
+            switch.print(level)
 
     def exec(self):
         useSiNo = True
@@ -473,11 +506,11 @@ class switch1():
         self.semi_condition = semi_condition
         self.statements = statements
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Switch1:")
         level += 1
-        self.semi_condition.printear(level)
-        self.statements.printear(level)
+        self.semi_condition.print(level)
+        self.statements.print(level)
 
     def exec(self, expression):
         """LAS CONDITION NO RECIBEN BOOLS COMO PRIMER ELEMENTO"""
@@ -515,11 +548,11 @@ class switch_list1():
     def add(self, next_switch):
         self.switch_list.append(next_switch)
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Switch_list1:")
         level += 1
         for switch in self.switch_list:
-            switch.printear(level)
+            switch.print(level)
 
 
     def exec(self, expression):
@@ -540,11 +573,11 @@ class statement():
     def add(self, next_statement):
         self.statement_list.append(next_statement)
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Statements:")
         level += 1
         for statement in self.statement_list:
-            statement.printear(level)
+            statement.print(level)
 
     def exec(self, symbol_table = None):
         for statement in self.statement_list:
@@ -558,8 +591,8 @@ class callable_function():
     def __init__(self, function):
         self.function = function
 
-    def printear(self, level):
-        self.function.printear(level)
+    def print(self, level):
+        self.function.print(level)
 
     def exec(self):
         self.function.exec()
@@ -569,15 +602,14 @@ class printer():
     def __init__(self, params):
         self.params = params
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Printer:")
         level += 1
-        self.params.printear(level)
+        self.params.print(level)
 
     # DEBE DE GUARDAR EL PRINT Y EJECUTARSE JUNTO CON LAS FUNCIONES BUILD-IN
     def exec(self):
         param_list = self.params.exec()
-        print(param_list)
         directives.append(("print", param_list))
 
 
@@ -585,10 +617,10 @@ class abanico():
     def __init__(self, param):
         self.param = param
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Abanico:")
         level += 1
-        self.param.printear(level)
+        self.param.print(level)
 
     def exec(self):
         params = self.param.exec()
@@ -596,18 +628,14 @@ class abanico():
         direction = params[0]
         directives.append((function, direction))
 
-
-
-
-
 class vertical():
     def __init__(self, param):
         self.param = param
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Vertical:")
         level += 1
-        self.param.printear(level)
+        self.param.print(level)
 
     def exec(self):
         params = self.param.exec()
@@ -621,10 +649,10 @@ class percutor():
     def __init__(self, param):
         self.param = param
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Percutor:")
         level += 1
-        self.param.printear(level)
+        self.param.print(level)
 
     def exec(self):
         params = self.param.exec()
@@ -638,7 +666,7 @@ class golpe():
     def __init__(self, param):
         self.param = param
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Golpe:")
 
 
@@ -652,10 +680,10 @@ class vibrato():
     def __init__(self, param):
         self.param = param
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Vibrato:")
         level += 1
-        self.param.printear(level)
+        self.param.print(level)
 
     def exec(self):
         params = self.param.exec()
@@ -668,10 +696,10 @@ class metronomo():
     def __init__(self, param):
         self.param = param
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation*level + "Metronomo:")
         level += 1
-        self.param.printear(level)
+        self.param.print(level)
 
     def exec(self):
         parametros = self.param.exec()
@@ -689,9 +717,9 @@ class main():
     def __init__(self, statements):
         self.statements = statements
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Main:")
-        self.statements.printear(level + 1)
+        self.statements.print(level + 1)
 
     def exec(self):
         self.statements.exec()
@@ -704,7 +732,7 @@ class function_call():
         self.function_name = function_name
         self.params = params
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Function_call:")
         level += 1
         print(indentation * level + self.function_name)
@@ -714,6 +742,7 @@ class function_call():
         params = function_table.get_params(self.function_name)
         statements = function_table.get_body(self.function_name)
         attri = self.params.exec()
+        print(params)
 
         function_symbol_table = function_table.get_symbol_table()
         symbol_table.set_child_table(function_symbol_table)
@@ -721,16 +750,16 @@ class function_call():
         for i in range(len(params)):
             function_symbol_table.set(params[i], attri[i])
 
+        print(function_symbol_table.symbols)
         statements.exec(function_symbol_table)
 
-        print(symbol_table.child_table.symbols)
+        # symbol_table.print()
 
-        #elimina table de la función
-        symbol_table.set_child_table(function_symbol_table)
+        #elimina tabla de la función
+        function_table.delete_symbol_table()
+        symbol_table.delete_child_table()
 
-
-
-
+        # symbol_table.print()
 
 class function_decl():
     def __init__(self, function_name, function_decl_params, statements):
@@ -738,12 +767,12 @@ class function_decl():
         self.function_decl_params = function_decl_params
         self.function_body = statements
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Function_decl:")
         level +=1
         print(indentation * level + self.function_name)
-        self.function_decl_params.printear(level)
-        self.function_body.printear(level)
+        self.function_decl_params.print(level)
+        self.function_body.print(level)
 
     def exec(self):
         params = self.function_decl_params.exec()
@@ -754,7 +783,6 @@ class function_decl():
         # ERROR: EL BODY DE LA FUNCION NO DEBE ESTAR VACIO
         # function_table.declare_new_variables(self.function_name, self.function_body.get_var_decls())
 
-
 class function_decls():
     def __init__(self, function_decl):
         self.function_decl_list = [function_decl]
@@ -762,12 +790,12 @@ class function_decls():
     def add(self, function_decl):
         self.function_decl_list.append(function_decl)
 
-    def printear(self, level):
+    def print(self, level):
         # print(self.function_decl_list)
         print(indentation * level + "Function_decls:")
         level += 1
         for function_decl in self.function_decl_list:
-            function_decl.printear(level)
+            function_decl.print(level)
 
     def exec(self):
         for function_decl in self.function_decl_list:
@@ -786,7 +814,7 @@ class function_decls_param():
     def get_param_ids(self):
         return self.param_list
 
-    def printear(self, level):
+    def print(self, level):
         for param in self.param_list:
             print(indentation*level + param)
 
@@ -810,10 +838,10 @@ class function_body():
 
         return result
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Function_dody:")
         level += 1
-        self.statements.printear(level)
+        self.statements.print(level)
 
     def exec(self, function_symbol_table):
         self.statements.exec(function_symbol_table)
@@ -823,12 +851,12 @@ class block():
         self.function_decls = function_decls
         self.main = main
 
-    def printear(self, level):
+    def print(self, level):
         print(indentation * level + "Block:")
         level += 1
         if self.hasFunct():
-            self.function_decls.printear(level)
-        self.main.printear(level)
+            self.function_decls.print(level)
+        self.main.print(level)
 
     def exec(self):
         if self.hasFunct():
@@ -842,9 +870,9 @@ class program():
     def __init__(self, block):
         self.block = block
 
-    def printear(self):
+    def print(self):
         print("Program:")
-        self.block.printear(2)
+        self.block.print(2)
 
     def exec(self):
         self.block.exec()

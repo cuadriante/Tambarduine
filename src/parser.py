@@ -1,3 +1,5 @@
+from numpy import negative
+from pyparsing import line
 import ply.yacc as yacc
 from lexer import tokens
 from parsingStructure import *
@@ -9,7 +11,7 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
     ('right', 'ASSIGN'),
     ('left', 'LESSTHAN', 'LESSTHANE', 'MORETHAN', 'MORETHANE'),
     ("left", "NEGATIVE"),
-    ('left', 'PLUS', 'MINUS'),
+    ('left', 'MINUS', 'PLUS'),
     ('left', 'TIMES', 'DIVIDE', 'WHOLEDIVIDE', 'MODULE'),
     ('left', 'POWER'),
     ('left', 'TRUE', 'FALSE'),
@@ -129,6 +131,11 @@ def p_statement_empty(p):
     """statement : empty"""
     p[0] = p[1]
 
+def p_negative(p):
+    """factor : MINUS factor"""
+    line = p.lineno(2)
+    p[0] = negative(p[2], line)
+
 # FUNCTION_CALL
 
 
@@ -142,8 +149,9 @@ def p_function_call(p):
 
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
+    line = p.lineno(3)
     print("var_decl")
-    p[0] = var_decl(p[2], p[4])
+    p[0] = var_decl(p[2], p[4], line)
 
 
 # Funciones booleanas
@@ -279,7 +287,8 @@ def p_swich_1_list(p):
 def p_cond_arith(p):
     "condition : arith-expression semi_condition"
     print("condition")
-    p[0] = condition(p[1], p[2])
+    line = p.lineno(1)
+    p[0] = condition(p[1], p[2], line)
 
 # semi_condition
 
@@ -292,7 +301,8 @@ def p_semi_condition(p):
                 | LESSTHANE expression
                 | MORETHANE expression"""
     print("semi_condition")
-    p[0] = semi_condition(p[1], p[2])
+    line = p.lineno(2)
+    p[0] = semi_condition(p[1], p[2], line)
 
 # arith-expr
 
@@ -327,16 +337,19 @@ def p_term_factor(p):
 
 def p_factor_num(p):
     'factor : NUMBER'
-    p[0] = factor(p[1])
+    line = p.lineno(1)
+    p[0] = factor(p[1], line)
 
 def p_factor_var(p):
     "factor : VAR"
-    p[0] = factor(p[1])
+    line = p.lineno(1)
+    p[0] = factor(p[1], line)
 
 
 def p_factor_expr(p):
     'factor : LPAREN arith-expression RPAREN'
-    p[0] = factor(p[2])
+    line = p.lineno(2)
+    p[0] = factor(p[2], line)
 
 
 def p_empty(p):

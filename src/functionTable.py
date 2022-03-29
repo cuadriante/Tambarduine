@@ -13,6 +13,9 @@ class FunctionTable:
         # for param in params:
         #     self.symbol_table.set(param, None)
     
+    def delete_symbol_table(self):
+        self.symbol_table.clear_table()
+
     def get_symbol_table(self):
         return self.symbol_table
 

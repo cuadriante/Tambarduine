@@ -7,4 +7,11 @@ Principal(){
     {
         SET @var3, 0;
     }
+
+    If True{
+        print("if");
+    }
+    Else{
+        print("Else");
+    }
 };

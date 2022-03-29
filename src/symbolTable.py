@@ -1,4 +1,5 @@
 from logging import exception
+from time import process_time_ns
 from sympy import symbols
 
 
@@ -14,7 +15,7 @@ class SymbolTable:
         elif value == None and self.child_table == None:
             # raise Exception(
             #    "No existe una variable con el identificador " + name)
-            return False
+            return None
         else:
             return value
 
@@ -43,7 +44,15 @@ class SymbolTable:
     def print(self):
         print("Principal :" )
         print( self.symbols)
-
+        if self.child_table:
+            print("Secundario: ")
+            print(self.child_table.symbols)
+    
+    def delete_child_table(self):
+        self.child_table.clear_table()
+    
+    def clear_table(self):
+        self.symbols = {}
 
 # La tabla de simbolos es la misma para el parser y el semantico
 symbol_table = SymbolTable()

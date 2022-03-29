@@ -1,3 +1,7 @@
 Principal(){
-    SET @var1, -5 +4;
+    SET @var1, 4*-3;
+    SET @var2, -4*-3;
+    SET @var3, -4*3;
+    SET @var4, -4+2;
+    SET @var5, -@var1;
 };

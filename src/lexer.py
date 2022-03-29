@@ -57,7 +57,7 @@ reserved = {
     "EnTons": "ENTONS",
     "Cuando": "CUANDO",
     "SiNo": "SINO",
-    "Fin-EnCaso": "FINENCASO",
+    "FinEnCaso": "FINENCASO",
     "Exec": "EXEC",
     "Def": "DEF",
     "print": "PRINT"
@@ -113,7 +113,6 @@ def t_newline(t):
 def t_ccode_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-
 
 # Error handling rule
 def t_error(t):
