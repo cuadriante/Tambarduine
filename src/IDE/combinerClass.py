@@ -39,6 +39,10 @@ class Editor (tk.Frame):
                                             "Try a '.tam' file\n"
                                             "##########################")
 
+    def GetFilePath(self):
+        path = self.__filePath
+        return path
+
     def __SetFilePath(self, path):
         self.__filePath = path
 
@@ -80,12 +84,17 @@ class Editor (tk.Frame):
                                             "##############################################")
 
     def __Compile(self):
-        code = self.__text.get('1.0', END)
-        self.__codeOutput.insert('1.0', code)
+        path = self.__filePath
+
+        if path == '':
+            self.__Save()
 
 
     def __Run(self):
-        pass
+        path = self.__filePath
+
+        if path == '':
+            self.__Save()
 
     def __StartUp(self):
         self.__text.configure(yscrollcommand = self.__vsb.set)
