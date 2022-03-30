@@ -110,6 +110,8 @@ def run_directives(directives):
         elif directive[0] == "print":
             print("print")
             pass
+        
+        enviar_instrucciones()
             
 # analizeCode('uwu.tam')
 # analizeCode('prueba_def.tam')
