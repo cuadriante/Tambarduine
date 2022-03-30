@@ -56,7 +56,6 @@ def p_functions_decl_empty(p):
 
 def p_function_decl(p):
     "function_decl : DEF VAR LPAREN function_decl_params RPAREN LBRACE function_body RBRACE SEMICOLON"
-    print("funciton_decl")
     # function_table.add(p[2], p[4])
     # if p[7].statements != None:
     #     function_table.declare_new_variables(p[2], p[7].get_var_decls())
@@ -65,7 +64,6 @@ def p_function_decl(p):
 
 def p_function_decl_param_var(p):
     "function_decl_param : VAR"
-    print("function_decl_param")
     p[0] = function_decls_param(p[1])
 
 
@@ -76,14 +74,11 @@ def p_function_decl_param_empty(p):
 
 def p_function_decl_param_to_params(p):
     "function_decl_params : function_decl_param"
-    print("function_decl_param_to_params")
-    print("function_decl_param_to_params")
     p[0] = p[1]
 
 
 def p_function_decl_params(p):
     "function_decl_params : function_decl_params ASSIGN function_decl_param"
-    print("function_decl_paramss")
     p[1].add(p[3])
     p[0] = p[1]
 
@@ -97,7 +92,6 @@ def p_function_body_statements(p):
 
 def p_main(p):
     "main : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON"
-    print("main")
     p[0] = main(p[5])
 
 # statements
@@ -105,7 +99,6 @@ def p_main(p):
 
 def p_statement_statements(p):
     """statements : statement"""
-    print("statements")
     p[0] = p[1]
 
 
@@ -123,7 +116,6 @@ def p_statement(p):
                 | callable_function
                 | bool_statement
                 | function_call"""
-    print("statement")
     p[0] = statement(p[1])
 
 
@@ -150,7 +142,6 @@ def p_function_call(p):
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
     line = p.lineno(3)
-    print("var_decl")
     p[0] = var_decl(p[2], p[4], line)
 
 
@@ -192,24 +183,20 @@ def p_expression_boolean(p):
 # IF
 def p_if(p):
     "if_statement : IF condition LBRACE statements RBRACE"
-    print("if")
     p[0] = if_statement(p[2], p[4])
 
 
 def p_if_else(p):
     "if_statement : IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
-    print("elseif")
     p[0] = if_statement(p[2], p[4], p[8])
 
 def p_if_expr(p):
     "if_statement : IF expression LBRACE statements RBRACE"
-    print("if")
     p[0] = if_statement(p[2], p[4])
 
 
 def p_if_else_expr(p):
     "if_statement : IF expression LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
-    print("elseif")
     p[0] = if_statement(p[2], p[4], p[8])
 
 
@@ -220,14 +207,12 @@ FOR
 
 def p_for_step(p):
     "for_loop : FOR VAR TO factor STEP NUMBER LBRACE statements RBRACE"
-    print("for_loop_step")
     p[0] = for_loop(p[2], p[4], p[8], p[6])
 
 
 def p_for(p):
     "for_loop : FOR VAR TO factor LBRACE statements RBRACE"
     p[0] = for_loop(p[2], p[4], p[6])
-    print("for_loop")
 
 # en_caso
 
@@ -235,13 +220,11 @@ def p_for(p):
 def p_en_caso_0(p):
     "en_caso : ENCASO switch_list_0 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
     p[0] = en_caso(p[2], p[5])
-    print("en_caso0")
 
 
 def p_swich_0(p):
     "switch0 : CUANDO condition ENTONS LBRACE statements RBRACE"
     p[0] = switch0(p[2], p[5])
-    print("switch0")
 
 
 def p_switch0_to_list(p):
@@ -251,21 +234,18 @@ def p_switch0_to_list(p):
 
 def p_swich_0_list(p):
     "switch_list_0 : switch_list_0 switch0"
-    print("switch_list0")
     p[1].add(p[2])
     p[0] = p[1]
 
 
 def p_en_caso_1(p):
     "en_caso : ENCASO expression switch_list_1 SINO LBRACE statements RBRACE FINENCASO SEMICOLON"
-    print("en_caso1")
     p[0] = en_caso(p[3], p[6], p[2])
 
 
 
 def p_switch_1(p):
     "switch1 : CUANDO semi_condition ENTONS LBRACE statements RBRACE"
-    print("switch1")
     p[0] = switch1(p[2], p[5])
 
 
@@ -276,7 +256,6 @@ def p_switch1_to_list(p):
 
 def p_swich_1_list(p):
     "switch_list_1 : switch_list_1 switch1"
-    print("switch_list1")
     p[1].add(p[2])
     p[0] = p[1]
 
@@ -286,7 +265,6 @@ def p_swich_1_list(p):
 
 def p_cond_arith(p):
     "condition : arith-expression semi_condition"
-    print("condition")
     line = p.lineno(1)
     p[0] = condition(p[1], p[2], line)
 
@@ -300,7 +278,6 @@ def p_semi_condition(p):
                 | MORETHAN expression
                 | LESSTHANE expression
                 | MORETHANE expression"""
-    print("semi_condition")
     line = p.lineno(2)
     p[0] = semi_condition(p[1], p[2], line)
 
@@ -366,44 +343,37 @@ def p_callable_function(p):
                         | metronomo
                         | print   """
     p[0] = callable_function(p[1])
-    print("función llamable")
 
 
 # FUNCIONES
 def p_abanico(p):
     "abanico : ABANICO LPAREN params RPAREN SEMICOLON"
     p[0] = abanico(p[3])
-    print(p[1])
 
 
 def p_vertical(p):
     "vertical : VERTICAL LPAREN params RPAREN SEMICOLON"
     p[0] = vertical(p[3])
-    print(p[1])
 
 
 def p_percutor(p):
     "percutor : PERCUTOR LPAREN params RPAREN SEMICOLON"
     p[0] = percutor(p[3])
-    print(p[1])
 
 
 def p_golpe(p):
     "golpe : GOLPE LPAREN params RPAREN SEMICOLON"
     p[0] = golpe(p[3])
-    print(p[1])
 
 
 def p_vibrato(p):
     "vibrato : VIBRATO LPAREN params RPAREN SEMICOLON"
     p[0] = vibrato(p[3])
-    print(p[1])
 
 
 def p_metronomo(p):
     "metronomo : METRONOMO LPAREN params RPAREN SEMICOLON"
     p[0] = metronomo(p[3])
-    print(p[1])
 
 
 def p_print(p):
