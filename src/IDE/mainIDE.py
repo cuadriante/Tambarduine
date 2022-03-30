@@ -1,4 +1,4 @@
-from combinerClass import Editor
+from src.combinerClass import Editor
 import tkinter as tk
 
 # Main

@@ -215,6 +215,11 @@ class ExceptionGenerator(Exception):
     S_STAT = "stat"
     S_EXPR = "expr"
 
+    ERROR_MSG = ''
+
+    def get_error_msg(self):
+        return self.ERROR_MSG
+
     def raise_exception(self, exc_num, exc_spec, var=None):
         match exc_num:
             case self.INV_DT:
@@ -266,7 +271,11 @@ class ExceptionGenerator(Exception):
                 return 0  # 0 is the default case if x is not found
         if var:
             msg = msg + ": " + var
+
+        self.ERROR_MSG = "ERROR: " + msg
+        self.get_error_msg()
         raise Exception("ERROR: " + msg)
+
 
 
 # error types:

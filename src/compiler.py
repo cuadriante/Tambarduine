@@ -1,10 +1,9 @@
 import codecs
 # from hardwareCommunication import *
-
+import tkinter as tk
+from errorChecker import *
 from lexer import *
 from parser import *
-from errorChecker import *
-from semanticAnalyzer import run_semantic_analysis
 
 # from hardwareCommunication import *
 
@@ -33,7 +32,7 @@ def print_arbol(program):
 
 def analizeCode(nombre_archivo):
     # READ FILE
-    document_to_compile = 'test/' + nombre_archivo
+    document_to_compile = nombre_archivo
     test = document_to_compile
     fp = codecs.open(test, 'r', None, 'strict', - 1)
     arr = fp.read()
@@ -46,11 +45,13 @@ def analizeCode(nombre_archivo):
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
     program = parser.parse(arr)
-    print_arbol(program)
-    directives = program.exec()
-    print(directives)
+    # print_arbol(program)
+    # directives = program.exec()
+    # print(directives)
 
-    # run_error_checker(program)
+    output = run_error_checker(program)
+
+    return output
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
@@ -58,7 +59,7 @@ def analizeCode(nombre_archivo):
 
 # analizeCode('uwu.tam')
 # analizeCode('prueba_def.tam')
-analizeCode('prueba_SET.tam')
+# analizeCode('prueba_SET.tam')
 # analizarCodigo('prueba_declaraciones.tam')
 # analizarCodigo('prueba_semantico.tam')
 #analizeCode("prueba_for_loop.tam")
