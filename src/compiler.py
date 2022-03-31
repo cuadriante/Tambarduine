@@ -56,7 +56,8 @@ def analizeCode(nombre_archivo):
     print(directives)
     run_directives(directives)
 
-    error_output = run_error_checker(program)
+
+    # error_output = run_error_checker(program)
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
@@ -64,7 +65,6 @@ def analizeCode(nombre_archivo):
 def run_directives(directives):
     if (error_output != None):
         return
-
 
     for directive in directives:
         if directive[0] == "abanico":
@@ -112,15 +112,23 @@ def run_directives(directives):
             print("metronomo",activate, cantidad)
             set_metronomo(cantidad)
         elif directive[0] == "print":
-            print("print")
-            pass
-
+            # print("printeo")
+            params = directive[1]
+            text = "print( "
+            for param in params:
+                if not isinstance(param, str):
+                    param = str(param)
+                    text += param
+                else:
+                    text += param
+                text += " "
+            text += ")"
+            print(text)
+            # self.__text.insert("1.0", text)
         enviar_instrucciones()
 
 # analizeCode('uwu.tam')
 analizeCode('prueba_def.tam')
-# analizeCode('prueba_SET.tam')
-# analizeCode('prueba_def.tam')
 # analizeCode('prueba_SET.tam')
 # analizarCodigo('prueba_declaraciones.tam')
 # analizeCode('prueba_semantico.tam')
@@ -130,7 +138,7 @@ analizeCode('prueba_def.tam')
 # analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizeCode("prueba_def.tam")
-analizeCode("prueba_funciones.tam")
+# analizeCode("prueba_funciones.tam")
 # analizeCode("prueba_en_caso.tam")
 # analizeCode("prueba_bool_statements.tam")
 # analizeCode("prueba_if_else.tam")

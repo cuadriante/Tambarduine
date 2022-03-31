@@ -20,7 +20,7 @@ Def @_RiRi (@param){
 };
 
 Principal(){
-    SET @var1, true;
+    SET @var1, false;
     Exec @Yordi?(@var1, 100);
     Vibrato(-1);
     print(@parametro2);
