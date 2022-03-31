@@ -1,5 +1,17 @@
 Def @Yordi? (@parametro1, @parametro2){
-    If @parametro1{
+    SET @parametro1.Neg;
+    Abanico("A");
+    print(@var1);
+    SET @parametro2.T;
+};
+
+Def @_Adriana (@param){
+    Vibrato(@param);
+};
+
+
+Def @_RiRi (@param){
+     If @parametro1{
         print("if");
     }
     Else{
@@ -10,4 +22,6 @@ Def @Yordi? (@parametro1, @parametro2){
 Principal(){
     SET @var1, true;
     Exec @Yordi?(@var1, 100);
+    Vibrato(-1);
+    print(@parametro2);
 };

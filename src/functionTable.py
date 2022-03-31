@@ -19,6 +19,11 @@ class FunctionTable:
     def get_symbol_table(self):
         return self.symbol_table
 
+    def get_declared_function_keys(self):
+        result = list(self.declared_functions.keys())
+        return result
+
+
     """
     Retorna el nombre de los parametros
     """

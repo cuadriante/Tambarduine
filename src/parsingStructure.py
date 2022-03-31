@@ -59,6 +59,7 @@ class negative():
 class term():
     operator = None
     arith_expr = None
+    function_name = None
 
     def __init__(self, factor, term=None, operator=None):
         if term and operator:
@@ -103,8 +104,11 @@ class term():
 
 
 class arith_expr():
+
     factor = None
     operator = None
+    function_name = None
+
     def __init__(self, term, arith_expr=None, operator=None):
         if arith_expr and operator:
             self.arith_expr = arith_expr
@@ -145,7 +149,10 @@ class arith_expr():
 
 
 class expression():
+
     arith_expr = None
+    function_name = None
+
     def __init__(self, arith_expr_or_bool):
         # print("Aqui", arith_expr_or_bool)
         if isinstance(arith_expr_or_bool, str):
@@ -292,6 +299,7 @@ class var_decl():
     condition_or_expression = None
     step = None
     switch_list = None
+    function_name = None
 
 
     def __init__(self, var_name, expression, line):
@@ -355,6 +363,7 @@ class if_statement():
     statements2 = None
     step = None
     switch_list = None
+    function_name = None
 
 
     def __init__(self, condition_or_expression, statements1, statements2=None):
@@ -387,6 +396,7 @@ class for_loop():
     condition_or_expression = None
     expression = None
     switch_list = None
+    function_name = None
 
     def __init__(self, var_name, to_factor, statements, step_number=None, ):
         self.var_name = var_name
@@ -424,6 +434,9 @@ class en_caso():
     step = None
     condition = None
     var_name = None
+    function_name = None
+    condition_or_expression = None
+
     def __init__(self, switch_list, sino_statements, expression=None):
         self.switch_list = switch_list
         self.sino = sino_statements
@@ -566,6 +579,7 @@ class switch_list1():
 
 class statement():
     expression = None
+    function_name = None
 
     def __init__(self, statement):
         self.statement_list = [statement]
@@ -588,6 +602,13 @@ class statement():
 
 
 class callable_function():
+    switch_list = None
+    step = None
+    condition_or_expression = None
+    var_name = None
+    expression = None
+    function_name = None
+
     def __init__(self, function):
         self.function = function
 
@@ -729,6 +750,14 @@ class main():
 
 
 class function_call():
+    switch_list = None
+    step = None
+    condition_or_expression = None
+    var_name = None
+    expression = None
+
+
+
     def __init__(self, function_name, params):
         self.function_name = function_name
         self.params = params

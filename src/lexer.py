@@ -31,7 +31,6 @@ tokens = (
     'COMMENT',
     'VAR',
     'SEMICOLON',
-    'CCODE',
     'FUNCTION',
     'TRUE',
     'FALSE',
@@ -91,7 +90,6 @@ t_SEMICOLON = r';'
 t_LBRACE = r'\{'
 t_RBRACE = r'\}'
 t_ignore = ' \t'
-t_ccode_ignore = " \t\n"
 t_TRUE = r'.T'
 t_FALSE = r'.F'
 t_PRINT = r'print'
@@ -99,9 +97,6 @@ t_STRING = r'".*"'
 # t_STRING = r'[a-zA-Z?][a-zA-Z?]*'
 
 # Declare the state
-states = (
-    ('ccode', 'inclusive'),
-)
 
 
 # Define a rule so we can track line numbers
@@ -110,18 +105,9 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 
-def t_ccode_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-
 # Error handling rule
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
-
-
-def t_ccode_error(t):
-    print("Illegal character in bracket '%s'" % t.value[0])
     t.lexer.skip(1)
 
 # A regular expression rule with some action code
@@ -168,32 +154,5 @@ def t_ID(t):
         print("Illegal character '%s'" % t.value)
         t.lexer.skip(1)
 
-'''
-# Match the first {. Enter ccode state.
-def t_ccode(t):
-    r'\('
-    t.lexer.code_start = t.lexer.lexpos  # Record the starting position
-    t.lexer.level = 1  # Initial brace level
-    t.lexer.begin('ccode')  # Enter 'ccode' state
 
-
-# # Rules for the ccode state
-# def t_ccode_lbrace(t):
-#     r'\('
-#     t.lexer.level += 1
-
-
-# def t_ccode_rbrace(t):
-#     r'\)'
-#     t.lexer.level -= 1
-
-#     # If closing brace, return the code fragment
-#     if t.lexer.level == 0:
-#         t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos + 1]
-#         t.type = "PARAM"
-#         t.lexer.lineno += t.value.count('\n')
-#         t.lexer.begin('INITIAL')
-#         return t
-
-'''
 lexer = lex.lex()
