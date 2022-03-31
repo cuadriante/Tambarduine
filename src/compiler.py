@@ -47,21 +47,23 @@ def analizeCode(nombre_archivo):
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
     program = parser.parse(arr)
     print_arbol(program)
+
+
     directives = program.exec()
+
+    run_error_checker(program)
     print(directives)
 
-    # run_error_checker(program)
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
 
-
 # analizeCode('uwu.tam')
-# analizeCode('prueba_def.tam')
-analizeCode('prueba_SET.tam')
+analizeCode('prueba_def.tam')
+# analizeCode('prueba_SET.tam')
 # analizarCodigo('prueba_declaraciones.tam')
-# analizarCodigo('prueba_semantico.tam')
-#analizeCode("prueba_for_loop.tam")
+# analizeCode('prueba_semantico.tam')
+# analizeCode("prueba_for_loop.tam")
 # analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizeCode("prueba_def.tam")
