@@ -6,9 +6,10 @@ from parser import *
 from errorChecker import *
 from semanticAnalyzer import run_semantic_analysis
 
-# from hardwareCommunication import *
+from hardwareCommunication import *
 
 parser = yacc.yacc()
+error_output = None
 
 
 def print_lexer():
@@ -53,20 +54,83 @@ def analizeCode(nombre_archivo):
 
     run_error_checker(program)
     print(directives)
+    run_directives(directives)
 
+    error_output = run_error_checker(program)
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
 
+def run_directives(directives):
+    if (error_output != None):
+        return
+
+
+    for directive in directives:
+        if directive[0] == "abanico":
+            print("entró Abanico")
+            direction = directive[1]
+            if direction == '"A"':
+                print("abaniqueoA")
+                abanicoA()
+            elif direction == '"B"':
+                abanicoB()
+        elif directive[0] == "vertical":
+            direction = directive[1]
+            if direction == '"D"':
+                print("Vertical D")
+                verticalD()
+            elif direction == '"I"':
+                verticalI()
+        elif directive[0] == "percutor":
+            if direction == '"D"':
+                print("percutor D")
+                percutorD()
+            elif direction == '"I"':
+                percutorI()
+            elif direction == '"DI"':
+                percutorDI()
+            elif direction == '"A"':
+                percutorA()
+            elif direction == '"B"':
+                percutorB()
+            elif direction == '"AB"':
+                percutorAB()
+        elif directive[0] == "golpe":
+            print("golpe")
+            golpe()
+        elif directive[0] == "vibrato":
+            cantidad = int(directive[1])
+            print("vibrato", cantidad)
+            vibrato_vertical(cantidad)
+        elif directive[0] == "metronomo":
+            activate = directive[1]
+            if activate == '"D"':
+                cantidad = 0
+            elif  activate == '"A"':
+                cantidad = directive[2]
+            print("metronomo",activate, cantidad)
+            set_metronomo(cantidad)
+        elif directive[0] == "print":
+            print("print")
+            pass
+
+        enviar_instrucciones()
+
 # analizeCode('uwu.tam')
 analizeCode('prueba_def.tam')
+# analizeCode('prueba_SET.tam')
+# analizeCode('prueba_def.tam')
 # analizeCode('prueba_SET.tam')
 # analizarCodigo('prueba_declaraciones.tam')
 # analizeCode('prueba_semantico.tam')
 # analizeCode("prueba_for_loop.tam")
+# analizarCodigo('prueba_semantico.tam')
+# analizeCode("prueba_for_loop.tam")
 # analizeCode("hola.tam")
 # print(symbol_table.symbols)
 # analizeCode("prueba_def.tam")
+analizeCode("prueba_funciones.tam")
 # analizeCode("prueba_en_caso.tam")
 # analizeCode("prueba_bool_statements.tam")
 # analizeCode("prueba_if_else.tam")

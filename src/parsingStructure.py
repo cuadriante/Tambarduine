@@ -672,7 +672,7 @@ class golpe():
 
     def exec(self):
         function = "golpe"
-        directives.append((function))
+        directives.append((function, None))
 
 
 
@@ -706,6 +706,7 @@ class metronomo():
 
     def exec(self):
         params = self.param.exec()
+        print(params)
         function = "metronomo"
         on_off = params[0]
         time_range = params[1]
