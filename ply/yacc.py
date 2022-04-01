@@ -3028,7 +3028,7 @@ class ParserReflect(object):
     def validate_start(self):
         if self.start is not None:
             if not isinstance(self.start, string_types):
-                self.log.error("'start' must be a string")
+                self.log.parser_error("'start' must be a string")
 
     # Look for error handler
     def get_error_func(self):
@@ -3042,7 +3042,7 @@ class ParserReflect(object):
             elif isinstance(self.error_func, types.MethodType):
                 ismethod = 1
             else:
-                self.log.error("'p_error' defined, but is not a function or method")
+                self.log.parser_error("'p_error' defined, but is not a function or method")
                 self.error = True
                 return
 
@@ -3053,24 +3053,24 @@ class ParserReflect(object):
 
             argcount = self.error_func.__code__.co_argcount - ismethod
             if argcount != 1:
-                self.log.error('%s:%d: p_error() requires 1 argument', efile, eline)
+                self.log.parser_error('%s:%d: p_error() requires 1 argument', efile, eline)
                 self.error = True
 
     # Get the tokens map
     def get_tokens(self):
         tokens = self.pdict.get('tokens')
         if not tokens:
-            self.log.error('No token list is defined')
+            self.log.parser_error('No token list is defined')
             self.error = True
             return
 
         if not isinstance(tokens, (list, tuple)):
-            self.log.error('tokens must be a list or tuple')
+            self.log.parser_error('tokens must be a list or tuple')
             self.error = True
             return
 
         if not tokens:
-            self.log.error('tokens is empty')
+            self.log.parser_error('tokens is empty')
             self.error = True
             return
 
@@ -3080,7 +3080,7 @@ class ParserReflect(object):
     def validate_tokens(self):
         # Validate the tokens.
         if 'error' in self.tokens:
-            self.log.error("Illegal token name 'error'. Is a reserved word")
+            self.log.parser_error("Illegal token name 'error'. Is a reserved word")
             self.error = True
             return
 
@@ -3099,27 +3099,27 @@ class ParserReflect(object):
         preclist = []
         if self.prec:
             if not isinstance(self.prec, (list, tuple)):
-                self.log.error('precedence must be a list or tuple')
+                self.log.parser_error('precedence must be a list or tuple')
                 self.error = True
                 return
             for level, p in enumerate(self.prec):
                 if not isinstance(p, (list, tuple)):
-                    self.log.error('Bad precedence table')
+                    self.log.parser_error('Bad precedence table')
                     self.error = True
                     return
 
                 if len(p) < 2:
-                    self.log.error('Malformed precedence entry %s. Must be (assoc, term, ..., term)', p)
+                    self.log.parser_error('Malformed precedence entry %s. Must be (assoc, term, ..., term)', p)
                     self.error = True
                     return
                 assoc = p[0]
                 if not isinstance(assoc, string_types):
-                    self.log.error('precedence associativity must be a string')
+                    self.log.parser_error('precedence associativity must be a string')
                     self.error = True
                     return
                 for term in p[1:]:
                     if not isinstance(term, string_types):
-                        self.log.error('precedence items must be strings')
+                        self.log.parser_error('precedence items must be strings')
                         self.error = True
                         return
                     preclist.append((term, assoc, level+1))
@@ -3151,7 +3151,7 @@ class ParserReflect(object):
         grammar = []
         # Check for non-empty symbols
         if len(self.pfuncs) == 0:
-            self.log.error('no rules of the form p_rulename are defined')
+            self.log.parser_error('no rules of the form p_rulename are defined')
             self.error = True
             return
 
@@ -3163,10 +3163,10 @@ class ParserReflect(object):
             else:
                 reqargs = 1
             if func.__code__.co_argcount > reqargs:
-                self.log.error('%s:%d: Rule %r has too many arguments', file, line, func.__name__)
+                self.log.parser_error('%s:%d: Rule %r has too many arguments', file, line, func.__name__)
                 self.error = True
             elif func.__code__.co_argcount < reqargs:
-                self.log.error('%s:%d: Rule %r requires an argument', file, line, func.__name__)
+                self.log.parser_error('%s:%d: Rule %r requires an argument', file, line, func.__name__)
                 self.error = True
             elif not func.__doc__:
                 self.log.warning('%s:%d: No documentation string specified in function %r (ignored)',
@@ -3177,7 +3177,7 @@ class ParserReflect(object):
                     for g in parsed_g:
                         grammar.append((name, g))
                 except SyntaxError as e:
-                    self.log.error(str(e))
+                    self.log.parser_error(str(e))
                     self.error = True
 
                 # Looks like a valid grammar rule

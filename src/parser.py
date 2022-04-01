@@ -6,6 +6,8 @@ from parsingStructure import *
 from symbolTable import SymbolTable, symbol_table
 from functionTable import function_table
 
+parser_error = False
+
 precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
 
     ('right', 'ASSIGN'),
@@ -18,6 +20,7 @@ precedence = (  # evitar errores del analizador sintactico , definir prioridad d
 )
 
 parsing_symbol_table = SymbolTable()
+
 
 # ROOT
 def p_program(p):
@@ -35,6 +38,7 @@ def p_program(p):
 def p_block(p):
     "block : function_decls main"
     p[0] = block(p[1], p[2])
+
 
 # funciones
 
@@ -88,12 +92,14 @@ def p_function_body_statements(p):
     "function_body : statements"
     p[0] = function_body(p[1])
 
+
 # MAIN) +
 
 
 def p_main(p):
     "main : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON"
     p[0] = main(p[5])
+
 
 # statements
 
@@ -124,10 +130,12 @@ def p_statement_empty(p):
     """statement : empty"""
     p[0] = p[1]
 
+
 def p_negative(p):
     """factor : MINUS factor"""
     line = p.lineno(2)
     p[0] = negative(p[2], line)
+
 
 # FUNCTION_CALL
 
@@ -136,6 +144,7 @@ def p_function_call(p):
     "function_call : EXEC VAR LPAREN params RPAREN SEMICOLON"
     # function_table.call(p[2], p[4])
     p[0] = function_call(p[2], p[4])
+
 
 # VAR-DECL
 
@@ -169,6 +178,7 @@ def p_boolean_to_false(p):
     'boolean_false : SET VAR FALSE SEMICOLON'
     p[0] = bool_statement(p[2], p[3])
 
+
 # EXPR
 
 
@@ -191,6 +201,7 @@ def p_if(p):
 def p_if_else(p):
     "if_statement : IF condition LBRACE statements RBRACE ELSE LBRACE statements RBRACE"
     p[0] = if_statement(p[2], p[4], p[8])
+
 
 def p_if_expr(p):
     "if_statement : IF expression LBRACE statements RBRACE"
@@ -215,6 +226,7 @@ def p_for_step(p):
 def p_for(p):
     "for_loop : FOR VAR TO factor LBRACE statements RBRACE"
     p[0] = for_loop(p[2], p[4], p[6])
+
 
 # en_caso
 
@@ -245,7 +257,6 @@ def p_en_caso_1(p):
     p[0] = en_caso(p[3], p[6], p[2])
 
 
-
 def p_switch_1(p):
     "switch1 : CUANDO semi_condition ENTONS LBRACE statements RBRACE"
     p[0] = switch1(p[2], p[5])
@@ -270,6 +281,7 @@ def p_cond_arith(p):
     line = p.lineno(1)
     p[0] = condition(p[1], p[2], line)
 
+
 # semi_condition
 
 
@@ -282,6 +294,7 @@ def p_semi_condition(p):
                 | MORETHANE expression"""
     line = p.lineno(2)
     p[0] = semi_condition(p[1], p[2], line)
+
 
 # arith-expr
 
@@ -311,6 +324,7 @@ def p_term_factor(p):
     'term : factor'
     p[0] = term(p[1])
 
+
 # FACTOR
 
 
@@ -318,6 +332,7 @@ def p_factor_num(p):
     'factor : NUMBER'
     line = p.lineno(1)
     p[0] = factor(p[1], line)
+
 
 def p_factor_var(p):
     "factor : VAR"
@@ -406,9 +421,16 @@ def p_params_empty(p):
 
 
 def p_error(p):
+    global parser_error
+    parser_error = True
     if p == None:
         token = "end of file"
     else:
         token = f"{p.type}({p.value}) on line {p.lineno}"
 
     print(f"Syntax error: Unexpected {token}")
+
+
+def get_parser_error():
+    global parser_error
+    return parser_error

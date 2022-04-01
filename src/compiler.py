@@ -42,25 +42,38 @@ def analizeCode(nombre_archivo):
 
     # LEXER - LEXICAL ANALYSIS
     lexer.input(arr)
-    print_lexer()
+    # print_lexer()
+
+    lexer_error_result = get_lexer_error()
+    print("LEXER ERROR: " + str(lexer_error_result))
 
     # PARSER - SYNTACTIC ANALYSIS
     # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
     program = parser.parse(arr)
-    print_arbol(program)
+    # print_arbol(program)
 
+    lexer_error_result = get_lexer_error()
+    print("LEXER ERROR: " + str(lexer_error_result))
+
+    parser_error_result = get_parser_error()
+    print("PARSER ERROR: " + str(parser_error_result))
 
     directives = program.exec()
 
     run_error_checker(program)
-    print(directives)
+
+    semantic_error_result = eg.get_error()
+
+    # print(directives)
     run_directives(directives)
 
+    print("SEMANTIC ERROR: " + str(semantic_error_result))
 
     # error_output = run_error_checker(program)
 
     # SEMANTIC ANALYSIS
     # run_semantic_analysis(arr)
+
 
 def run_directives(directives):
     if (error_output != None):
@@ -107,9 +120,9 @@ def run_directives(directives):
             activate = directive[1]
             if activate == '"D"':
                 cantidad = 0
-            elif  activate == '"A"':
+            elif activate == '"A"':
                 cantidad = directive[2]
-            print("metronomo",activate, cantidad)
+            print("metronomo", activate, cantidad)
             set_metronomo(cantidad)
         elif directive[0] == "print":
             # print("printeo")
@@ -127,21 +140,24 @@ def run_directives(directives):
             # self.__text.insert("1.0", text)
         enviar_instrucciones()
 
-# analizeCode('uwu.tam')
-analizeCode('prueba_def.tam')
-# analizeCode('prueba_SET.tam')
-# analizarCodigo('prueba_declaraciones.tam')
-# analizeCode('prueba_semantico.tam')
+
+# analizeCode("hola.tam") ### NO DA ERRORES ###
+analizeCode("prueba_bool_statements.tam") ### NO DA ERRORES ###
+# analizeCode('prueba_def.tam')
+# analizeCode("prueba_en_caso.tam")
 # analizeCode("prueba_for_loop.tam")
+# analizeCode("prueba_funciones.tam")
+# analizeCode("prueba_if_else.tam")
 # analizarCodigo('prueba_semantico.tam')
+# analizeCode('prueba_SET.tam')
+# analizeCode('uwu.tam')
+
+
 # analizeCode("prueba_for_loop.tam")
-# analizeCode("hola.tam")
+
 # print(symbol_table.symbols)
 # analizeCode("prueba_def.tam")
-# analizeCode("prueba_funciones.tam")
-# analizeCode("prueba_en_caso.tam")
-# analizeCode("prueba_bool_statements.tam")
-# analizeCode("prueba_if_else.tam")
+
 
 # Hardware
 # hardwareCommunication.set_metronomo(0.75)

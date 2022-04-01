@@ -1,7 +1,6 @@
 Def @Yordi? (@parametro1, @parametro2){
     SET @parametro1.Neg;
     Abanico("A");
-    print(@var1);
     SET @parametro2.T;
 };
 

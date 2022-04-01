@@ -4,14 +4,13 @@ from parsingStructure import *
 
 indentation = "     "
 
-
 # pendiente : validar tipos de datos en aritmetica
 #               variables bool
 
 
 def run_error_checker(prog):
     if prog.block:
-        if prog.block.function_decls:
+        if len(prog.block.function_decls.function_decl_list) > 1:
             check_function_decls(prog.block.function_decls.function_decl_list)
         if prog.block.main:
             print("valid main found.")
@@ -27,28 +26,30 @@ def run_error_checker(prog):
 def check_statement_list(statement_list):
     for s in statement_list:
         print(2 * indentation + "statement found.")
-        if isinstance(s, bool_statement):
+        if is_boolean(s):
             print(3 * indentation + "en caso found.")
             check_bool_statement(s)
-        if s.function:
-            print(3 * indentation + "en caso found.")
-            check_function(s)
-        if s.switch_list:  # ENCASO
-            print(3 * indentation + "en caso found.")
-            check_en_caso(s)
-        if s.step:  # FOR
-            print(3 * indentation + "for loop found.")
-            check_for_loop(s)
-        if s.condition_or_expression:  # IF
+        if isinstance(s, callable_function):
+            check_callable_function(s)
+        if isinstance(s, if_statement):
             print(3 * indentation + "if condition found.")
             check_if(s)
-        if s.var_name:  # VAR DECLARATION
+        if isinstance(s, en_caso):
+            print(3 * indentation + "en caso found.")
+            check_en_caso(s)
+        if isinstance(s, for_loop):  # FOR
+            print(3 * indentation + "for loop found.")
+            check_for_loop(s)
+        if isinstance(s, var_decl):  # VAR DECLARATION
             print(3 * indentation + s.var_name + " found in symbol table.")
             check_var(s)
-        if s.expression:  # ARITHMETIC OR BOOL EXPRESSION
+        if isinstance(s, expression):  # ARITHMETIC OR BOOL EXPRESSION
             print(3 * indentation + "expression found.")
             if s.expression.arith_expr_or_bool:
                 check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
+        if isinstance(s, callable_function):
+            print(3 * indentation + "en caso found.")
+            check_callable_function(s)
         else:
             print(4 * indentation + "no expression found.")
             # hacer algo
@@ -56,11 +57,13 @@ def check_statement_list(statement_list):
 
 def check_bool_statement(s):
     if not is_boolean(s.var_name):
-        eg.raise_exception(eg.INV_DT, eg.S_BOOL, s.var_name)
+        if not is_number(s.var_name, True):
+            return True
+        else:
+            eg.raise_exception(eg.INV_DT, eg.S_BOOL, s.var_name)
 
 
 def check_function_decls(fd):
-
     for f in fd:
         if f.function_name:
             check_for_func_in_function_table(f.function_name)
@@ -72,11 +75,12 @@ def check_function_decls(fd):
                     eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
 
 
-def check_function(s):
-    if isinstance(s, vibrato):
-        if s.param.param_list[0] <= 0:
-            eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
-    if isinstance(s, metronomo):
+def check_callable_function(s):
+    if isinstance(s.function, vibrato):
+        pass
+        #if s.param.param_list[0].arith_or_bool.term.factor.factor <= 0:
+          #  eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
+    if isinstance(s.function, metronomo):
         if s.param.param_list[0] <= 0:
             eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
 
@@ -96,9 +100,6 @@ def check_en_caso(s):
             check_statement_list(sc.statements.statement_list)
         else:
             eg.raise_exception(eg.INV_COMP, eg.S_DT)
-
-
-
 
 
 def check_for_loop(for_st):  # ninguno de estos errores se puede probar, aun
@@ -130,7 +131,8 @@ def check_if(if_st):
     else:
         if if_st.condition_or_expression.semi_condition.comparator:
             if if_st.condition_or_expression.semi_condition.expression.arith_expr_or_bool:
-                arith_semi_con = check_arith_or_bool_expr(if_st.condition_or_expression.semi_condition.expression.arith_expr_or_bool)
+                arith_semi_con = check_arith_or_bool_expr(
+                    if_st.condition_or_expression.semi_condition.expression.arith_expr_or_bool)
                 if arith_con != arith_semi_con:
                     eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_IF)
         if if_st.statements1:
@@ -207,7 +209,6 @@ def is_boolean(variable):
         return isinstance(variable, bool)
 
 
-
 def validate_number_operation(simbolo1, simbolo2):
     if is_boolean(simbolo1) or is_boolean(simbolo2):
         eg.raise_exception(eg.INV_DT, eg.S_BOOL)
@@ -228,7 +229,7 @@ def check_for_func_in_function_table(var, condition=None):
 
 def check_for_var_in_symbol_table(var, condition=None):
     # FALTA QUE EL BICHO RECONOZCA SI EL FOR SE RECORRE HASTA EL INFINITO
-    if symbol_table.get(var):
+    if symbol_table.get(var) is not None:
         return True
     else:
         if not isinstance(var, str):
@@ -259,6 +260,8 @@ def check_if_validity(comparison):  # que comparison sea una lista
 
 class ExceptionGenerator(Exception):
 
+    error = False
+
     INV_DT = "inv_dt"
     INV_DT_AP = "inv_dt_arith_proc"
     INV_AP = "inv_arith"
@@ -287,6 +290,9 @@ class ExceptionGenerator(Exception):
     S_FUNC_CALL = "call"
     S_FUNC_PARAM = "param"
     S_VIBRATO = "vib"
+
+    def get_error(self):
+        return self.error
 
     def raise_exception(self, exc_num, exc_spec, var=None):
         match exc_num:
@@ -350,7 +356,9 @@ class ExceptionGenerator(Exception):
                 return 0  # 0 is the default case if x is not found
         if var:
             msg = msg + ": " + var
-        raise Exception("ERROR: " + msg)
+        self.error = True
+        print("ERROR: " + msg)
+        # raise Exception("ERROR: " + msg)
 
 
 # error types:

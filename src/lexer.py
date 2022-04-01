@@ -1,6 +1,8 @@
 import ply.lex as lex
 from symbolTable import symbol_table
 
+lexer_error = False
+
 # List of token names.   This is always required
 tokens = (
     'IN',
@@ -92,7 +94,6 @@ t_RBRACE = r'\}'
 t_ignore = ' \t'
 t_TRUE = r'.T'
 t_FALSE = r'.F'
-t_PRINT = r'print'
 t_STRING = r'".*"'
 # t_STRING = r'[a-zA-Z?][a-zA-Z?]*'
 
@@ -107,6 +108,8 @@ def t_newline(t):
 
 # Error handling rule
 def t_error(t):
+    global lexer_error
+    lexer_error = True
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
@@ -153,6 +156,11 @@ def t_ID(t):
     else:
         print("Illegal character '%s'" % t.value)
         t.lexer.skip(1)
+
+
+def get_lexer_error():
+    global lexer_error
+    return lexer_error
 
 
 lexer = lex.lex()

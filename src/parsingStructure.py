@@ -152,6 +152,7 @@ class expression():
 
     arith_expr = None
     function_name = None
+    semi_condition = None
 
     def __init__(self, arith_expr_or_bool):
         # print("Aqui", arith_expr_or_bool)
