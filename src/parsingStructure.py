@@ -781,7 +781,7 @@ class function_call():
         for i in range(len(params)):
             function_symbol_table.set(params[i], attri[i])
 
-        print(function_symbol_table.symbols)
+        # print(function_symbol_table.symbols)
         statements.exec(function_symbol_table)
 
         # symbol_table.print()

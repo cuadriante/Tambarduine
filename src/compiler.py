@@ -9,155 +9,146 @@ from semanticAnalyzer import run_semantic_analysis
 from hardwareCommunication import *
 
 parser = yacc.yacc()
-error_output = None
 
+class Compiler:
+    def __init__(self, nombre_archivo):
+        self.nombre_archivo = nombre_archivo
+        self.thereWasAnError = False
+        self.error = None
+        self.directives = []
+        self.program = None
 
-def print_lexer():
-    print("--------LISTA DE TOKENS-------")
-    while True:
-        token = lexer.token()
-        if not token:
-            break
-        print(token)
-    print("------------------------------")
+    """-----> Los archivos de prueba se ponen en la carpeta test y se llama a la funcion con el nombre del archivo <-----"""
+    """-----> Correr el programa desde la raiz del proyecto <-----"""
+    def compile(self):
+        document_to_compile = 'test/' + self.nombre_archivo
+        test = document_to_compile
+        fp = codecs.open(test, 'r', None, 'strict', - 1)
+        arr = fp.read()
+        fp.close()
 
+        lexer.input(arr)
+        self.print_lexer()
 
-def print_arbol(program):
-    print("-----------Arbol------------")
-    program.print()
+        self.program = parser.parse(arr)
+        if self.program:
+            self.print_arbol()
+            # run_error_checker(self.program)
+        
+        if not self.thereWasAnError:
+            self.directives = self.program.exec()
+        else:
+            self.sendErrors()
+        
 
-
-"""-----> Los archivos de prueba se ponen en la carpeta test y se llama a la funcion con el nombre del archivo <-----"""
-
-"""-----> Correr el programa desde la raiz del proyecto <-----"""
-
-
-def analizeCode(nombre_archivo):
-    # READ FILE
-    document_to_compile = 'test/' + nombre_archivo
-    test = document_to_compile
-    fp = codecs.open(test, 'r', None, 'strict', - 1)
-    arr = fp.read()
-    fp.close()
-
-    # LEXER - LEXICAL ANALYSIS
-    lexer.input(arr)
-    # print_lexer()
-
-    lexer_error_result = get_lexer_error()
-    print("LEXER ERROR: " + str(lexer_error_result))
-
-    # PARSER - SYNTACTIC ANALYSIS
-    # El parser tiene que generar la tabla de simbolos para que el semantico sirva <------------
-    program = parser.parse(arr)
-    # print_arbol(program)
-
-    lexer_error_result = get_lexer_error()
-    print("LEXER ERROR: " + str(lexer_error_result))
-
-    parser_error_result = get_parser_error()
-    print("PARSER ERROR: " + str(parser_error_result))
-
-    directives = program.exec()
-
-    run_error_checker(program)
-
-    semantic_error_result = eg.get_error()
-
-    # print(directives)
-    run_directives(directives)
-
-    print("SEMANTIC ERROR: " + str(semantic_error_result))
-
-    # error_output = run_error_checker(program)
-
-    # SEMANTIC ANALYSIS
-    # run_semantic_analysis(arr)
-
-
-def run_directives(directives):
-    if (error_output != None):
-        return
-
-    for directive in directives:
-        if directive[0] == "abanico":
-            print("entró Abanico")
-            direction = directive[1]
-            if direction == '"A"':
-                print("abaniqueoA")
-                abanicoA()
-            elif direction == '"B"':
-                abanicoB()
-        elif directive[0] == "vertical":
-            direction = directive[1]
-            if direction == '"D"':
-                print("Vertical D")
-                verticalD()
-            elif direction == '"I"':
-                verticalI()
-        elif directive[0] == "percutor":
-            if direction == '"D"':
-                print("percutor D")
-                percutorD()
-            elif direction == '"I"':
-                percutorI()
-            elif direction == '"DI"':
-                percutorDI()
-            elif direction == '"A"':
-                percutorA()
-            elif direction == '"B"':
-                percutorB()
-            elif direction == '"AB"':
-                percutorAB()
-        elif directive[0] == "golpe":
-            print("golpe")
-            golpe()
-        elif directive[0] == "vibrato":
-            cantidad = int(directive[1])
-            print("vibrato", cantidad)
-            vibrato_vertical(cantidad)
-        elif directive[0] == "metronomo":
-            activate = directive[1]
-            if activate == '"D"':
-                cantidad = 0
-            elif activate == '"A"':
-                cantidad = directive[2]
-            print("metronomo", activate, cantidad)
-            set_metronomo(cantidad)
-        elif directive[0] == "print":
-            # print("printeo")
-            params = directive[1]
-            text = "print( "
-            for param in params:
-                if not isinstance(param, str):
-                    param = str(param)
-                    text += param
-                else:
-                    text += param
-                text += " "
-            text += ")"
-            print(text)
+    def print_lexer(self):
+        print("--------LISTA DE TOKENS-------")
+        while True:
+            token = lexer.token()
+            if not token:
+                break
+            print(token)
+        print("------------------------------")
+    
+    def exec(self):
+        if self.program == None:
+            # ENVIAR AL IDE
             # self.__text.insert("1.0", text)
-        enviar_instrucciones()
+            return "Nada que ejecutar"
+        else:
+            self.run_directives()
+            
 
 
-# analizeCode("hola.tam") ### NO DA ERRORES ###
-analizeCode("prueba_bool_statements.tam") ### NO DA ERRORES ###
-# analizeCode('prueba_def.tam')
-# analizeCode("prueba_en_caso.tam")
-# analizeCode("prueba_for_loop.tam")
-# analizeCode("prueba_funciones.tam")
-# analizeCode("prueba_if_else.tam")
-# analizarCodigo('prueba_semantico.tam')
-# analizeCode('prueba_SET.tam')
-# analizeCode('uwu.tam')
+    def compile_exec(self):
+        self.compile()
+        self.exec()
 
 
-# analizeCode("prueba_for_loop.tam")
+    def run_directives(self):
+        for directive in self.directives:
+            if directive[0] == "abanico":
+                direction = directive[1]
+                if direction == '"A"':
+                    abanicoA()
+                elif direction == '"B"':
+                    abanicoB()
+            elif directive[0] == "vertical":
+                direction = directive[1]
+                if direction == '"D"':
+                    verticalD()
+                elif direction == '"I"':
+                    verticalI()
+            elif directive[0] == "percutor":
+                if direction == '"D"':
+                    percutorD()
+                elif direction == '"I"':
+                    percutorI()
+                elif direction == '"DI"':
+                    percutorDI()
+                elif direction == '"A"':
+                    percutorA()
+                elif direction == '"B"':
+                    percutorB()
+                elif direction == '"AB"':
+                    percutorAB()
+            elif directive[0] == "golpe":
+                golpe()
+            elif directive[0] == "vibrato":
+                cantidad = int(directive[1])
+                vibrato_vertical(cantidad)
+            elif directive[0] == "metronomo":
+                activate = directive[1]
+                if activate == '"D"':
+                    cantidad = 0
+                elif  activate == '"A"':
+                    cantidad = directive[2]
+                set_metronomo(cantidad)
+            elif directive[0] == "print":
+                params = directive[1]
+                text = "print( "
+                for param in params:
+                    if not isinstance(param, str):
+                        param = str(param)
+                        text += param
+                    else:
+                        text += param
+                    text += " "
+                text += ")"
+                # self.__text.insert("1.0", text)
+            enviar_instrucciones()
 
-# print(symbol_table.symbols)
-# analizeCode("prueba_def.tam")
+    def print_arbol(self):
+        print("-----------Arbol------------")
+        if self.program:
+            self.program.print()
+    
+    def send_error(self):
+        # Enviar string de self.error al IDE
+        pass
 
+    def print_directives(self):
+        print(self.directives)
+
+
+
+
+# archivo = 'prueba_def.tam'
+# archivo = 'prueba_SET.tam'
+# archivo = 'prueba_semantico.tam'
+# archivo = "prueba_for_loop.tam"
+# archivo = "prueba_for_loop.tam"
+archivo = "hola.tam"
+# archivo = "prueba_def.tam"
+# archivo = "prueba_funciones.tam"
+# archivo = "prueba_en_caso.tam"
+# archivo = "prueba_bool_statements.tam"
+# archivo = "prueba_if_else.tam"
+
+compiler = Compiler(archivo)
+compiler.compile()
+compiler.exec()
+compiler.print_directives()
 
 # Hardware
 # hardwareCommunication.set_metronomo(0.75)

@@ -30,7 +30,6 @@ class FunctionTable:
     def get_params(self, id):
         params = self.declared_functions[id]
         params = params[0]
-        # print(params)
         return params
     
     def get_body(self, id):
