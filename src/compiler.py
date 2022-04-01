@@ -133,7 +133,7 @@ class Compiler:
 
 # archivo = "hola.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
-# archivo = 'prueba_def.tam'
+archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"
 # archivo = "prueba_for_loop.tam"
 # archivo = "prueba_funciones.tam"
