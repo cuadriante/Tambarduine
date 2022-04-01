@@ -1,4 +1,4 @@
-from symbolTable import *
+from parser import parsing_symbol_table
 from functionTable import *
 from parsingStructure import *
 
@@ -18,6 +18,8 @@ def run_error_checker(prog):
                 print(indentation + "valid statement(s) found.")
                 check_statement_list(prog.block.main.statements.statement_list)
                 # eg.raise_exception("miss", "stat")
+        else:
+            eg.raise_exception(eg.MISS, eg.S_PRIN)
     else:
         eg.raise_exception(eg.MISS, eg.S_PRIN)
 
@@ -29,8 +31,10 @@ def check_statement_list(statement_list):
         if is_boolean(s):
             print(3 * indentation + "en caso found.")
             check_bool_statement(s)
-        if isinstance(s, callable_function):
+        if isinstance(s, callable_function): # las predeterminadas
             check_callable_function(s)
+        if isinstance(s, function_call):
+            check_function_call(s)
         if isinstance(s, if_statement):
             print(3 * indentation + "if condition found.")
             check_if(s)
@@ -63,24 +67,37 @@ def check_bool_statement(s):
             eg.raise_exception(eg.INV_DT, eg.S_BOOL, s.var_name)
 
 
+
 def check_function_decls(fd):
     for f in fd:
-        if f.function_name:
-            check_for_func_in_function_table(f.function_name)
+        check_function_call(f)
+
+
+def check_function_call(f):
+    if f.function_name:
+        check_for_func_in_function_table(f.function_name)
+    if f.function_body:
         if f.function_body.statements.statement_list:
             check_statement_list(f.function_body.statements.statement_list)
-        if f.function_decl_params:
-            for p in f.function_decl_params.param_list:
-                if check_for_var_in_symbol_table(p, True):
-                    eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
+    if f.function_decl_params:
+        for p in f.function_decl_params.param_list:
+            if check_for_var_in_symbol_table(p, True):
+                eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
+                check_arith_or_bool_expr(p.arith_expr_or_bool)
+    else:
+        for p in f.params.param_list:
+            if check_for_var_in_symbol_table(p, True):
+                eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
+                check_arith_or_bool_expr(p.arith_expr_or_bool)
 
 
 def check_callable_function(s):
     if isinstance(s.function, vibrato):
-        pass
-        #if s.param.param_list[0].arith_or_bool.term.factor.factor <= 0:
-          #  eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
-    if isinstance(s.function, metronomo):
+        if s.function.param.param_list[0]:
+            if is_number(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, True): # preguntarle a ricardo
+                if s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor <= 0:
+                    eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
+    elif isinstance(s.function, metronomo):
         if s.param.param_list[0] <= 0:
             eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
 
@@ -105,8 +122,12 @@ def check_en_caso(s):
 def check_for_loop(for_st):  # ninguno de estos errores se puede probar, aun
     if not is_number(for_st.step, True):
         eg.raise_exception(eg.INV_DT, eg.S_STEP)
+    else:
+        eg.raise_exception(eg.INV_DT, eg.S_TO)
     if for_st.step <= 0:
         eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
+    else:
+        eg.raise_exception(eg.INV_DT, eg.S_TO)
     if not is_number(for_st.to.factor, True):
         if for_st.to.factor <= 0:
             eg.raise_exception(eg.INV_DT, eg.S_TO)
@@ -117,7 +138,6 @@ def check_for_loop(for_st):  # ninguno de estos errores se puede probar, aun
             eg.raise_exception(eg.INV_DT, eg.S_TO)
     else:
         eg.raise_exception(eg.INV_DT, eg.S_TO)
-    pass
 
 
 def check_if(if_st):
@@ -227,9 +247,13 @@ def check_for_func_in_function_table(var, condition=None):
     return False
 
 
+def get_function_body(function_name):
+    pass
+
+
 def check_for_var_in_symbol_table(var, condition=None):
     # FALTA QUE EL BICHO RECONOZCA SI EL FOR SE RECORRE HASTA EL INFINITO
-    if symbol_table.get(var) is not None:
+    if parsing_symbol_table.get(var) is not None:
         return True
     else:
         if not isinstance(var, str):
@@ -241,7 +265,7 @@ def check_for_var_in_symbol_table(var, condition=None):
 
 
 def get_var_value_in_symbol_table(var):
-    return symbol_table.get(var)
+    return parsing_symbol_table.get(var)
 
 
 def check_if_validity(comparison):  # que comparison sea una lista
@@ -357,8 +381,8 @@ class ExceptionGenerator(Exception):
         if var:
             msg = msg + ": " + var
         self.error = True
-        print("ERROR: " + msg)
-        # raise Exception("ERROR: " + msg)
+        #print("ERROR: " + msg)
+        raise Exception("ERROR: " + msg)
 
 
 # error types:

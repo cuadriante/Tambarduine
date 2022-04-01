@@ -756,6 +756,8 @@ class function_call():
     condition_or_expression = None
     var_name = None
     expression = None
+    function_body = None
+    function_decl_params = None
 
 
 

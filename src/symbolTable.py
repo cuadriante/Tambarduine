@@ -54,5 +54,4 @@ class SymbolTable:
     def clear_table(self):
         self.symbols = {}
 
-# La tabla de simbolos es la misma para el parser y el semantico
 symbol_table = SymbolTable()
