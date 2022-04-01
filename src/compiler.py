@@ -4,6 +4,7 @@ import codecs
 from lexer import *
 from parser import *
 from errorChecker import *
+from combinerClass import *
 from semanticAnalyzer import run_semantic_analysis
 
 from hardwareCommunication import *
@@ -21,7 +22,7 @@ class Compiler:
     """-----> Los archivos de prueba se ponen en la carpeta test y se llama a la funcion con el nombre del archivo <-----"""
     """-----> Correr el programa desde la raiz del proyecto <-----"""
     def compile(self):
-        document_to_compile = 'test/' + self.nombre_archivo
+        document_to_compile =  self.nombre_archivo
         test = document_to_compile
         fp = codecs.open(test, 'r', None, 'strict', - 1)
         arr = fp.read()
@@ -33,13 +34,14 @@ class Compiler:
         self.program = parser.parse(arr)
         if self.program:
             self.print_arbol()
-            run_error_checker(self.program)
+            # run_error_checker(self.program)
         
         if not self.thereWasAnError:
             self.directives = self.program.exec()
+            return None
         else:
-            self.sendErrors()
-        
+            # self.sendErrors()
+            return self.error
 
     def print_lexer(self):
         print("--------LISTA DE TOKENS-------")
@@ -118,6 +120,9 @@ class Compiler:
                 # self.__text.insert("1.0", text)
             enviar_instrucciones()
 
+    def set_nombre_archivo(self, nombre):
+        self.nombre_archivo = nombre
+
     def print_arbol(self):
         print("-----------Arbol------------")
         if self.program:
@@ -133,7 +138,7 @@ class Compiler:
 
 # archivo = "hola.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
-archivo = 'prueba_def.tam'
+# archivo = 'D:\OneDrive - Estudiantes ITCR\TEC\\2022 I Semestre\Lenguajes, Compiladores e Intérpretes\Progras\Tambarduine\Tambarduine\\test\prueba_def.tam'
 # archivo = "prueba_en_caso.tam"
 # archivo = "prueba_for_loop.tam"
 # archivo = "prueba_funciones.tam"
@@ -142,10 +147,12 @@ archivo = 'prueba_def.tam'
 # archivo = 'uwu.tam'
 
 
-compiler = Compiler(archivo)
-compiler.compile()
-compiler.exec()
-compiler.print_directives()
+
+
+# compiler = Compiler(archivo)
+# compiler.compile()
+# compiler.exec()
+# compiler.print_directives()
 
 # Hardware
 # hardwareCommunication.set_metronomo(0.75)
