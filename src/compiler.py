@@ -10,6 +10,7 @@ from hardwareCommunication import *
 
 parser = yacc.yacc()
 
+
 class Compiler:
     def __init__(self, nombre_archivo):
         self.nombre_archivo = nombre_archivo
@@ -20,6 +21,7 @@ class Compiler:
 
     """-----> Los archivos de prueba se ponen en la carpeta test y se llama a la funcion con el nombre del archivo <-----"""
     """-----> Correr el programa desde la raiz del proyecto <-----"""
+
     def compile(self):
         document_to_compile = 'test/' + self.nombre_archivo
         test = document_to_compile
@@ -39,7 +41,6 @@ class Compiler:
             self.directives = self.program.exec()
         else:
             self.sendErrors()
-        
 
     def print_lexer(self):
         print("--------LISTA DE TOKENS-------")
@@ -49,7 +50,7 @@ class Compiler:
                 break
             print(token)
         print("------------------------------")
-    
+
     def exec(self):
         if self.program == None:
             # ENVIAR AL IDE
@@ -57,13 +58,10 @@ class Compiler:
             return "Nada que ejecutar"
         else:
             self.run_directives()
-            
-
 
     def compile_exec(self):
         self.compile()
         self.exec()
-
 
     def run_directives(self):
         for directive in self.directives:
@@ -101,7 +99,7 @@ class Compiler:
                 activate = directive[1]
                 if activate == '"D"':
                     cantidad = 0
-                elif  activate == '"A"':
+                elif activate == '"A"':
                     cantidad = directive[2]
                 set_metronomo(cantidad)
             elif directive[0] == "print":
@@ -122,7 +120,7 @@ class Compiler:
         print("-----------Arbol------------")
         if self.program:
             self.program.print()
-    
+
     def send_error(self):
         # Enviar string de self.error al IDE
         pass
@@ -146,33 +144,3 @@ compiler = Compiler(archivo)
 compiler.compile()
 compiler.exec()
 compiler.print_directives()
-
-# Hardware
-# hardwareCommunication.set_metronomo(0.75)
-
-# hardwareCommunication.percutorA()
-# hardwareCommunication.percutorD()
-# hardwareCommunication.golpe()
-# hardwareCommunication.percutorAB()
-# hardwareCommunication.percutorB()
-# hardwareCommunication.percutorI()
-# hardwareCommunication.golpe()
-# hardwareCommunication.percutorAB()
-# hardwareCommunication.percutorDI()
-# hardwareCommunication.set_metronomo(0.4)
-# hardwareCommunication.percutorA()
-# hardwareCommunication.percutorD()
-# hardwareCommunication.golpe()
-# hardwareCommunication.percutorDI()
-# hardwareCommunication.golpe()
-# hardwareCommunication.percutorB()
-# hardwareCommunication.percutorI()
-# hardwareCommunication.percutorAB()
-# hardwareCommunication.percutorA()
-# hardwareCommunication.golpe()
-# hardwareCommunication.percutorD()
-# hardwareCommunication.percutorB()
-# hardwareCommunication.percutorI()
-# hardwareCommunication.golpe()
-
-# hardwareCommunication.enviar_instrucciones()
