@@ -1,9 +1,9 @@
 Principal(){
-    Metronomo("A", 3/4); 
-    Abanico("A");
-    Vertical("D");
+    Metronomo("A", 2/4); 
     Percutor("D");
-    Golpe();
-    Vibrato(2);
-    print("hola");
+    Percutor("A");
+    Percutor("AB");
+    Percutor("B");
+    Percutor("D");
+    Percutor("DI");
 };

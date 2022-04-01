@@ -10,7 +10,7 @@ float parametroFuncion = 0;
 const byte cantidadCaracteres = 32;
 char mensaje[cantidadCaracteres];
 
-float tempo = 750;
+float tempo = 400;
 int tiempoSonido = 100;
 int anguloInicialPercutores = 155;
 
@@ -163,7 +163,7 @@ void setMetronomo(float tiempoEntreGolpes) {
 
 void sonarMetronomo() {
   tone(9, 1000);
-  delay(tiempoSonido);
+  delay(tiempoSonido); 
   noTone(9);
 }
 
@@ -177,7 +177,7 @@ void girarSentidoHorario(Servo servo){
 
   delay(tempo - tiempoSonido);
 
-  servoVertical.write(90);
+  servo.write(90);
 }
 
 void girarSentidoAntihorario(Servo servo){
@@ -190,7 +190,7 @@ void girarSentidoAntihorario(Servo servo){
 
   delay(tempo - tiempoSonido);
 
-  servoVertical.write(90);
+  servo.write(90);
 }
 
 void usarPercutor(Servo percutor) {
