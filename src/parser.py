@@ -152,6 +152,7 @@ def p_function_call(p):
 def p_var_decl(p):
     """var_decl : SET VAR ASSIGN expression SEMICOLON"""
     parsing_symbol_table.set(p[2], p[4].exec())
+    parsing_symbol_table.print()
     line = p.lineno(3)
     p[0] = var_decl(p[2], p[4], line)
 
