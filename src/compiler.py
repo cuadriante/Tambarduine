@@ -138,8 +138,8 @@ class Compiler:
 # archivo = 'prueba_semantico.tam'
 # archivo = "prueba_for_loop.tam"
 # archivo = "prueba_for_loop.tam"
-archivo = "hola.tam"
-# archivo = "prueba_def.tam"
+# archivo = "hola.tam"
+archivo = "prueba_def.tam"
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_en_caso.tam"
 # archivo = "prueba_bool_statements.tam"

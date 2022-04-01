@@ -6,6 +6,7 @@ Def @Yordi? (@parametro1, @parametro2){
 
 Def @_Adriana (@param){
     Vibrato(@param);
+    SET @var2, 5;
 };
 
 
