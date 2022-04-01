@@ -10,6 +10,7 @@ from hardwareCommunication import *
 
 parser = yacc.yacc()
 
+
 class Compiler:
     def __init__(self, nombre_archivo):
         self.nombre_archivo = nombre_archivo
@@ -20,6 +21,7 @@ class Compiler:
 
     """-----> Los archivos de prueba se ponen en la carpeta test y se llama a la funcion con el nombre del archivo <-----"""
     """-----> Correr el programa desde la raiz del proyecto <-----"""
+
     def compile(self):
         document_to_compile = 'test/' + self.nombre_archivo
         test = document_to_compile
@@ -32,14 +34,14 @@ class Compiler:
 
         self.program = parser.parse(arr)
         if self.program:
-            self.print_arbol()
             run_error_checker(self.program)
-        
+            self.print_arbol()
+
         if not self.thereWasAnError:
             self.directives = self.program.exec()
+
         else:
             self.sendErrors()
-        
 
     def print_lexer(self):
         print("--------LISTA DE TOKENS-------")
@@ -49,7 +51,7 @@ class Compiler:
                 break
             print(token)
         print("------------------------------")
-    
+
     def exec(self):
         if self.program == None:
             # ENVIAR AL IDE
@@ -57,13 +59,10 @@ class Compiler:
             return "Nada que ejecutar"
         else:
             self.run_directives()
-            
-
 
     def compile_exec(self):
         self.compile()
         self.exec()
-
 
     def run_directives(self):
         for directive in self.directives:
@@ -101,7 +100,7 @@ class Compiler:
                 activate = directive[1]
                 if activate == '"D"':
                     cantidad = 0
-                elif  activate == '"A"':
+                elif activate == '"A"':
                     cantidad = directive[2]
                 set_metronomo(cantidad)
             elif directive[0] == "print":
@@ -122,7 +121,7 @@ class Compiler:
         print("-----------Arbol------------")
         if self.program:
             self.program.print()
-    
+
     def send_error(self):
         # Enviar string de self.error al IDE
         pass
@@ -132,10 +131,10 @@ class Compiler:
 
 
 # archivo = "hola.tam" ### FUNCIONA BIEN ###
-# archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
-# archivo = 'prueba_def.tam'
-# archivo = "prueba_en_caso.tam"
-# archivo = "prueba_for_loop.tam"
+archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
+# archivo = 'prueba_def.tam' !!!
+# archivo = "prueba_en_caso.tam" ### FUNCIONA BIEN !!! FALTA VERIFICAR QUE NO SE PUEDAN PONER BOOLS
+# archivo = "prueba_for_loop.tam"  ### FUNCIONA BIEN !!! EXCEPTO LA VERIFICACION DE QUE EL STEP SEA MENOR A CERO, PORQUE DA ERROR DE SINTAXIS
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_if_else.tam"
 # archivo = 'prueba_SET.tam'

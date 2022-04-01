@@ -31,6 +31,8 @@ def check_statement_list(statement_list):
         if is_boolean(s):
             print(3 * indentation + "en caso found.")
             check_bool_statement(s)
+        if isinstance(s, bool_statement):
+            check_bool_statement(s, True)
         if isinstance(s, callable_function): # las predeterminadas
             check_callable_function(s)
         if isinstance(s, function_call):
@@ -59,12 +61,20 @@ def check_statement_list(statement_list):
             # hacer algo
 
 
-def check_bool_statement(s):
-    if not is_boolean(s.var_name):
-        if not is_number(s.var_name, True):
-            return True
-        else:
-            eg.raise_exception(eg.INV_DT, eg.S_BOOL, s.var_name)
+def check_bool_statement(s, assignation=None):
+    if not assignation:
+        if not is_boolean(s.var_name):
+            if not is_number(s.var_name, True):
+                return True
+            else:
+                eg.raise_exception(eg.INV_DT, eg.S_BOOL, s.var_name)
+    else:
+        if s.var_name:
+            var = get_var_value_in_symbol_table(s.var_name)
+            if not is_boolean(var):
+                eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
+            else:
+                pass
 
 
 
@@ -119,20 +129,18 @@ def check_en_caso(s):
             eg.raise_exception(eg.INV_COMP, eg.S_DT)
 
 
-def check_for_loop(for_st):  # ninguno de estos errores se puede probar, aun
-    if not is_number(for_st.step, True):
-        eg.raise_exception(eg.INV_DT, eg.S_STEP)
-    else:
-        eg.raise_exception(eg.INV_DT, eg.S_TO)
-    if for_st.step <= 0:
-        eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
-    else:
-        eg.raise_exception(eg.INV_DT, eg.S_TO)
-    if not is_number(for_st.to.factor, True):
-        if for_st.to.factor <= 0:
+def check_for_loop(for_st):
+    # ninguno de estos errores se puede probar, aun
+    if is_number(for_st.to.factor, True):
+        if not isinstance(for_st.to.factor, int):
             eg.raise_exception(eg.INV_DT, eg.S_TO)
     else:
         eg.raise_exception(eg.INV_DT, eg.S_TO)
+    if not is_number(for_st.step, True):
+        eg.raise_exception(eg.INV_DT, eg.S_STEP)
+    if for_st.step <= 0:
+        eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
+
     if is_number(for_st.var_name):
         if get_var_value_in_symbol_table(for_st.var_name) <= 0:
             eg.raise_exception(eg.INV_DT, eg.S_TO)
@@ -189,10 +197,12 @@ def check_arith_or_bool_expr(s_term):
                     eg.raise_exception(eg.INV_AP, eg.S_DIV)
         elif s_term.term.operator:
             valid = check_arith_or_bool_expr(s_term.term)
-        elif s_term.term.factor.factor:
+        if s_term.term.factor.factor:
             if not is_number(s_term.term.factor.factor, True):
                 if is_boolean(s_term.term.factor.factor):  # es una variable
                     return False
+                else:
+                    check_for_var_in_symbol_table(s_term.term.factor.factor)
         if not valid:
             eg.raise_exception(eg.INV_PARAM, "")
         return True
@@ -216,6 +226,8 @@ def is_number(variable, condition=None):
             if isinstance(var, bool):
                 return False
             return isinstance(var, int) or isinstance(var, float)
+        else:
+            return False
     else:
         return isinstance(variable, int) or isinstance(variable, float)
 
@@ -225,6 +237,8 @@ def is_boolean(variable):
         if check_for_var_in_symbol_table(variable, True):
             variable = get_var_value_in_symbol_table(variable)
             return isinstance(variable, bool)
+        else:
+            return False
     else:
         return isinstance(variable, bool)
 
@@ -284,7 +298,7 @@ def check_if_validity(comparison):  # que comparison sea una lista
 
 class ExceptionGenerator(Exception):
 
-    error = False
+    error = " "
 
     INV_DT = "inv_dt"
     INV_DT_AP = "inv_dt_arith_proc"
@@ -380,7 +394,8 @@ class ExceptionGenerator(Exception):
                 return 0  # 0 is the default case if x is not found
         if var:
             msg = msg + ": " + var
-        self.error = True
+        self.error = "ERROR: " + msg
+        print(self.error)
         #print("ERROR: " + msg)
         raise Exception("ERROR: " + msg)
 
