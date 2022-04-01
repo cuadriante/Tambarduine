@@ -1,3 +1,9 @@
 /src/__pycache__/
 /src/parser.out
 /src/parsetab.py
+.idea/workspace.xml
+ply/__pycache__/__init__.cpython-310.pyc
+ply/__pycache__/__init__.cpython-38.pyc
+ply/__pycache__/lex.cpython-310.pyc
+ply/__pycache__/lex.cpython-38.pyc
+ply/__pycache__/yacc.cpython-310.pyc
