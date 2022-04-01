@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 from numberLinesClass import LineNumbers
 from editorClass import IDE
-# from compiler import analizeCode
+from compiler import *
 
 # Colors
 editorBg = "#363636"
@@ -11,6 +11,10 @@ editorText = "#9AD7DD"
 
 
 class Editor(tk.Frame):
+    # compiler = Compiler(archivo)
+    # compiler.compile()
+    # compiler.exec()
+    # compiler.print_directives()
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
         self.__text = IDE(self)
@@ -18,6 +22,7 @@ class Editor(tk.Frame):
         self.__lineNumbers = LineNumbers(self, width=30)
         self.__codeOutput = tk.Text()
         self.__filePath = ''
+        self.__compiler = Compiler(self.__filePath)
         self.__StartUp()
 
     def __OnChange(self, event):
@@ -47,6 +52,7 @@ class Editor(tk.Frame):
 
     def __SetFilePath(self, path):
         self.__filePath = path
+        self.__compiler.set_nombre_archivo(self.__filePath)
 
     def __SaveAs(self):
         path = asksaveasfilename(filetypes=[('Tambarduine files', '*.tam')])
@@ -91,19 +97,29 @@ class Editor(tk.Frame):
         if path == '':
             self.__Save()
 
+        output = self.__compiler.compile()
         # output = analizeCode(self.__filePath)
         self.__codeOutput.delete('1.0', END)
-        # if output is None:
-        #     self.__codeOutput.insert('1.0', "Executed")
-        # else:
-        #     # print(output)
-        #     self.__codeOutput.insert('1.0', str(output))
+        if output is None:
+            self.__codeOutput.insert('1.0', "Compiled")
+        else:
+            print(output)
+            self.__codeOutput.insert('1.0', str(output))
 
     def __Run(self):
         path = self.__filePath
 
         if path == '':
             self.__Save()
+
+        output = self.__compiler.exec()
+        # output = analizeCode(self.__filePath)
+        self.__codeOutput.delete('1.0', END)
+        if output is None:
+            self.__codeOutput.insert('1.0', "Executed")
+        else:
+            print(output)
+            self.__codeOutput.insert('1.0', str(output))
 
     def __StartUp(self):
         self.__text.configure(yscrollcommand=self.__vsb.set)
