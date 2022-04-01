@@ -6,6 +6,7 @@ from sympy import symbols
 class SymbolTable:
     def __init__(self):
         self.symbols = {}
+        self.lineno = {}
         self.child_table = None
 
     def get(self, name):
@@ -18,6 +19,12 @@ class SymbolTable:
             return None
         else:
             return value
+    
+    def set_lineno(self, name, lineno):
+        self.lineno[name] = lineno       
+
+    def get_lineno(self, name):
+        return self.lineno[name]
 
     def get_all(self):
         return (
@@ -32,7 +39,7 @@ class SymbolTable:
         self.symbols[name] = value
 
     def remove(self, name):
-        del self.symbols[name]
+        del self.symbols[name] 
 
     def change_value(self, name, new_value):
         # if self.symbols[name]:

@@ -117,7 +117,7 @@ class Compiler:
                     text += " "
                 text += ")"
                 # self.__text.insert("1.0", text)
-            enviar_instrucciones()
+        enviar_instrucciones()
 
     def set_nombre_archivo(self, nombre):
         self.nombre_archivo = nombre
