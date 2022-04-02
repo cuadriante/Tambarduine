@@ -429,8 +429,8 @@ def p_error(p):
         token = "end of file"
     else:
         token = f"{p.type}({p.value}) on line {p.lineno}"
-
-    print(f"Syntax error: Unexpected {token}")
+    raise Exception(f"Syntax error: Unexpected {token}")
+    # print(f"Syntax error: Unexpected {token}")
 
 
 def get_parser_error():

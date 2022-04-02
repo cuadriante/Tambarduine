@@ -110,7 +110,8 @@ def t_newline(t):
 def t_error(t):
     global lexer_error
     lexer_error = True
-    print("Illegal character '%s'" % t.value[0])
+    raise Exception("Illegal character '%s'" % t.value[0])
+    #print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 # A regular expression rule with some action code

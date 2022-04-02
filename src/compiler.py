@@ -139,8 +139,8 @@ class Compiler:
 # archivo = "hola.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
 # archivo = prueba_def.tam'
-archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN
-# archivo = "prueba_for_loop.tam"
+# archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
+archivo = "prueba_for_loop.tam"
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_if_else.tam"
 # archivo = 'prueba_SET.tam'
