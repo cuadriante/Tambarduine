@@ -115,7 +115,7 @@ def check_function_call(f):
 def check_callable_function(s):
     if isinstance(s.function, vibrato):
         if s.function.param.param_list[0]:
-            if not isinstance(s.function.param.param_list[0], arith_expr):
+            if not isinstance(s.function.param.param_list[0], expression):
                 eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
             if isinstance(s.function.param.param_list[0].arith_expr_or_bool.term.factor, negative):
                 eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
