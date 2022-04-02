@@ -235,7 +235,7 @@ def check_arith_or_bool_expr(s_term):
 def check_line_validity(var, current_line):
     set_line = parsing_symbol_table.get_lineno(var)
     if current_line <= set_line:
-        eg.raise_exception(eg.INV_DT, eg.S_UN, var, current_line)
+        eg.raise_exception(eg.INV_VAR, eg.S_UN, var, current_line)
     else:
         return True
 
