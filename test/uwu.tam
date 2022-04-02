@@ -1,16 +1,9 @@
 Principal(){
-
     SET @var1, 3;
-    SET @var2, 7//7;
-    SET @var3, 1;
-    SET @var5, 1;
-    SET @var6, -1;
-
+    SET @var6, 1;
     for @var6 to 7 Step 1{
     print("HOla");
  }
-
-
     If @var1*2 == 6  {
         SET @var2, 1;
     }
@@ -18,6 +11,4 @@ Principal(){
     {
         SET @var3, 0;
     }
-
-
 };

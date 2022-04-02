@@ -189,7 +189,9 @@ def check_var(s, line=None):
             if s.expression.arith_expr_or_bool:
                 current = check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
                 if value != current:
-                    eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
+                    eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name, eg.line)
+        if get_var_value_in_symbol_table(s.var_name) is None:
+            pass
 
 
 def check_arith_or_bool_expr(s_term):
