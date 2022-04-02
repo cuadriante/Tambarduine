@@ -1,6 +1,6 @@
 Principal(){
-    SET @var1, 3;
-    If @var2*2 == 6  {
+    SET @var1, True;
+    If @var1*2 == 6  {
         SET @var2, 1;
     } 
     Else 

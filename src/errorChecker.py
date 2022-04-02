@@ -228,7 +228,7 @@ def check_arith_or_bool_expr(s_term):
                     if check_for_var_in_symbol_table(s_term.term.factor.factor, True):
                         check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
         if not valid:
-            eg.raise_exception(eg.INV_PARAM, "")
+            eg.raise_exception(eg.INV_PARAM, eg.S_ARITH, None, eg.line)
         return True
 
 
@@ -345,6 +345,7 @@ class ExceptionGenerator(Exception):
     UNEX = "unex"
     MISS = "miss"
 
+    S_ARITH = "arith"
     S_EN_CASO = "en_caso"
     S_BOOL = "bool"
     S_STEP = "step"
@@ -381,6 +382,7 @@ class ExceptionGenerator(Exception):
                 msg = "INVALID DATATYPE"
                 if exc_spec == self.S_BOOL:
                     msg = msg + ": BOOL."
+
                 if exc_spec == self.S_STEP:
                     msg = msg + ": 'STEP' DURING FOR LOOP MUST BE A NUMBER."
                 if exc_spec == self.S_STEP_N:
@@ -408,7 +410,9 @@ class ExceptionGenerator(Exception):
                 if exc_spec == self.S_UN:
                     msg = msg + ": UNASSIGNED VARIABLE CALLED."
             case self.INV_PARAM:
-                raise Exception("INVALID PARAMETER.")
+                msg = "INVALID PARAMETER"
+                if exc_spec == self.S_ARITH:
+                    msg = msg + " DURING ARITHMETIC PROCEDURE: MISMATCHED DATATYPES"
             case self.UNEX:
                 msg = "UNEXPECTED"
                 if exc_spec == self.S_DT:
