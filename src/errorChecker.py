@@ -16,6 +16,7 @@ def run_error_checker(prog):
         if prog.block.main:
             print("valid main found.")
             if prog.block.main.statements:
+                eg.line += 1
                 print(indentation + "valid statement(s) found.")
                 check_statement_list(prog.block.main.statements.statement_list)
                 # eg.raise_exception("miss", "stat")
@@ -27,6 +28,7 @@ def run_error_checker(prog):
 
 # no se puede hacer isinstance para chequear el tipo pq ocuparia los parametros
 def check_statement_list(statement_list, isFunction=None):
+    eg.line += 1
     for s in statement_list:
         eg.line += 1
         check_statement(s, isFunction)
@@ -87,9 +89,11 @@ def check_bool_statement(s, assignation=None, isFunction=None):
 
 
 def check_function_decls(fd):
+    eg.line += 1
     for f in fd:
         eg.line += 1
         check_function_call(f)
+    eg.line += 1
 
 
 def check_function_call(f):
@@ -119,6 +123,11 @@ def check_callable_function(s):
                 eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
             if isinstance(s.function.param.param_list[0].arith_expr_or_bool.term.factor, negative):
                 eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
+            else:
+                if s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor == 0:
+                    eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
+                if check_for_var_in_symbol_table(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, True):
+                    check_line_validity(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, s.function.param.param_list[0].arith_expr_or_bool.term.factor.lineno)
     elif isinstance(s.function, metronomo):
         if s.param.param_list[0] <= 0:
             eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
@@ -126,10 +135,14 @@ def check_callable_function(s):
         for p in s.function.param.param_list:
             if not (p == '"A"' or p == '"B"'):
                 eg.raise_exception(eg.INV_FUNC, eg.S_ABANICO, None, eg.line)
+    elif isinstance(s.function, vertical):
+        for p in s.function.param.param_list:
+            if not (p == '"D"' or p == '"I"'):
+                eg.raise_exception(eg.INV_FUNC, eg.S_VERTICAL, None, eg.line)
     elif isinstance(s.function, percutor):
         for p in s.function.param.param_list:
             if not (p == '"D"' or p == '"I"'or p == '"A"' or p == '"B"' or p == '"DI"' or p == '"AB"'):
-                eg.raise_exception(eg.INV_FUNC, eg.S_ABANICO, None, eg.line)
+                eg.raise_exception(eg.INV_FUNC, eg.S_PERCUTOR, None, eg.line)
     elif isinstance(s.function, golpe):
         for p in s.function.param.param_list:
             eg.raise_exception(eg.INV_FUNC, eg.S_PERCUTOR, None, eg.line)
@@ -182,7 +195,7 @@ def check_for_loop(for_st):
 def check_if(if_st):
     arith_con = False
     arith_semi_con = False
-
+    eg.line += 1
     if if_st.condition_or_expression.arith_expr:
         arith_con = check_arith_or_bool_expr(if_st.condition_or_expression.arith_expr)
     if not if_st.condition_or_expression.semi_condition:
@@ -195,8 +208,10 @@ def check_if(if_st):
                 if arith_con != arith_semi_con:
                     eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_IF)
         if if_st.statements1:
+            eg.line += 1
             check_statement_list(if_st.statements1.statement_list)
         if if_st.statements2:
+            eg.line += 1
             check_statement_list(if_st.statements2.statement_list)
 
 
@@ -410,8 +425,10 @@ class ExceptionGenerator(Exception):
                     msg = msg + " CALL METRONOME: PARAMETER MUST BE A NATURAL NUMBER."
                 if exc_spec == self.S_ABANICO:
                     msg = msg + " CALL ABANICO: PARAMETER MUST BE EITHER 'A' OR 'B'."
+                if exc_spec == self.S_VERTICAL:
+                    msg = msg + " CALL VERTICAL: PARAMETER MUST BE EITHER 'D' OR 'I'."
                 if exc_spec == self.S_PERCUTOR:
-                    msg = msg + " CALL PERCUTOR: PARAMETER MUST BE A NATURAL NUMBER."
+                    msg = msg + " CALL PERCUTOR: PARAMETER MUST BE 'D', 'I', 'A', 'B, 'DI' OR 'AB'."
                 if exc_spec == self.S_GOLPE:
                     msg = msg + " CALL GOLPE: UNEXPECTED PARAMETER."
 
