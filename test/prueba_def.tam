@@ -1,4 +1,5 @@
 Def @Yordi? (@parametro1, @parametro2){
+    Vibrato("A");
     SET @parametro1.Neg;
     Abanico("A");
     SET @parametro2.T;
@@ -20,9 +21,8 @@ Def @_RiRi (@param){
 };
 
 Principal(){
-    SET @var1, false;
+    SET @var1, False;
     Exec @Yordi?(@var1, 100);
-    Vibrato(1);
     print(@parametro2);
 };
 

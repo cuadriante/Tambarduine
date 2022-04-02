@@ -4,9 +4,9 @@ from parsingStructure import *
 
 indentation = "     "
 
+
 # pendiente : validar tipos de datos en aritmetica
 #               variables bool
-
 
 
 def run_error_checker(prog):
@@ -26,45 +26,48 @@ def run_error_checker(prog):
 
 
 # no se puede hacer isinstance para chequear el tipo pq ocuparia los parametros
-def check_statement_list(statement_list):
+def check_statement_list(statement_list, isFunction=None):
     for s in statement_list:
-        global line
         eg.line += 1
-        print(2 * indentation + "statement found.")
-        if is_boolean(s):
-            print(3 * indentation + "en caso found.")
-            check_bool_statement(s)
-        if isinstance(s, bool_statement):
-            check_bool_statement(s, True)
-        if isinstance(s, callable_function):  # las predeterminadas
-            check_callable_function(s)
-        if isinstance(s, function_call):
-            check_function_call(s)
-        if isinstance(s, if_statement):
-            print(3 * indentation + "if condition found.")
-            check_if(s)
-        if isinstance(s, en_caso):
-            print(3 * indentation + "en caso found.")
-            check_en_caso(s)
-        if isinstance(s, for_loop):  # FOR
-            print(3 * indentation + "for loop found.")
-            check_for_loop(s)
-        if isinstance(s, var_decl):  # VAR DECLARATION
-            print(3 * indentation + s.var_name + " found in symbol table.")
-            check_var(s)
-        if isinstance(s, expression):  # ARITHMETIC OR BOOL EXPRESSION
-            print(3 * indentation + "expression found.")
-            if s.expression.arith_expr_or_bool:
-                check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
-        if isinstance(s, callable_function):
-            print(3 * indentation + "en caso found.")
-            check_callable_function(s)
-        else:
-            print(4 * indentation + "no expression found.")
-            # hacer algo
+        check_statement(s, isFunction)
 
 
-def check_bool_statement(s, assignation=None):
+def check_statement(s, isFunction=None):
+    print(2 * indentation + "statement found.")
+    if is_boolean(s):
+        print(3 * indentation + "en caso found.")
+        check_bool_statement(s)
+    if isinstance(s, bool_statement):
+        check_bool_statement(s, True, isFunction)
+    if isinstance(s, callable_function):  # las predeterminadas
+        check_callable_function(s)
+    if isinstance(s, function_call):
+        check_function_call(s)
+    if isinstance(s, if_statement):
+        print(3 * indentation + "if condition found.")
+        check_if(s)
+    if isinstance(s, en_caso):
+        print(3 * indentation + "en caso found.")
+        check_en_caso(s)
+    if isinstance(s, for_loop):  # FOR
+        print(3 * indentation + "for loop found.")
+        check_for_loop(s)
+    if isinstance(s, var_decl):  # VAR DECLARATION
+        print(3 * indentation + s.var_name + " found in symbol table.")
+        check_var(s)
+    if isinstance(s, expression):  # ARITHMETIC OR BOOL EXPRESSION
+        print(3 * indentation + "expression found.")
+        if s.expression.arith_expr_or_bool:
+            check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
+    if isinstance(s, callable_function):
+        print(3 * indentation + "en caso found.")
+        check_callable_function(s)
+    else:
+        print(4 * indentation + "no expression found.")
+        # hacer algo
+
+
+def check_bool_statement(s, assignation=None, isFunction=None):
     if not assignation:
         if not is_boolean(s.var_name):
             if not is_number(s.var_name, True):
@@ -74,14 +77,18 @@ def check_bool_statement(s, assignation=None):
     else:
         if s.var_name:
             var = get_var_value_in_symbol_table(s.var_name)
-            if not is_boolean(var):
-                eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
+            if var is None:
+                if not isFunction:
+                    eg.raise_exception(eg.INV_VAR, eg.S_UN, s.var_name, eg.line)
             else:
-                pass
+                if not is_boolean(var):
+                    eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
+
 
 
 def check_function_decls(fd):
     for f in fd:
+        eg.line += 1
         check_function_call(f)
 
 
@@ -90,29 +97,44 @@ def check_function_call(f):
         check_for_func_in_function_table(f.function_name)
     if f.function_body:
         if f.function_body.statements.statement_list:
-            check_statement_list(f.function_body.statements.statement_list)
+            check_statement_list(f.function_body.statements.statement_list, True)
     if f.function_decl_params:
         for p in f.function_decl_params.param_list:
             if check_for_var_in_symbol_table(p, True):
                 eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
+                eg.line += 1
                 check_arith_or_bool_expr(p.arith_expr_or_bool)
     else:
         for p in f.params.param_list:
             if check_for_var_in_symbol_table(p, True):
                 eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
+                eg.line += 1
                 check_arith_or_bool_expr(p.arith_expr_or_bool)
 
 
 def check_callable_function(s):
     if isinstance(s.function, vibrato):
         if s.function.param.param_list[0]:
-            if is_number(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor,
-                         True):  # preguntarle a ricardo
-                if s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor <= 0:
-                    eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
+            if not isinstance(s.function.param.param_list[0], arith_expr):
+                eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
+            if isinstance(s.function.param.param_list[0].arith_expr_or_bool.term.factor, negative):
+                eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
     elif isinstance(s.function, metronomo):
         if s.param.param_list[0] <= 0:
-            eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
+            eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
+    elif isinstance(s.function, abanico):
+        for p in s.function.param.param_list:
+            if not (p == '"A"' or p == '"B"'):
+                eg.raise_exception(eg.INV_FUNC, eg.S_ABANICO, None, eg.line)
+    elif isinstance(s.function, percutor):
+        for p in s.function.param.param_list:
+            if not (p == '"D"' or p == '"I"'or p == '"A"' or p == '"B"' or p == '"DI"' or p == '"AB"'):
+                eg.raise_exception(eg.INV_FUNC, eg.S_ABANICO, None, eg.line)
+    elif isinstance(s.function, golpe):
+        for p in s.function.param.param_list:
+            eg.raise_exception(eg.INV_FUNC, eg.S_PERCUTOR, None, eg.line)
+
+
 
 
 def check_en_caso(s):
@@ -331,7 +353,6 @@ def check_if_validity(comparison):  # que comparison sea una lista
 
 
 class ExceptionGenerator(Exception):
-
     line = 1
 
     error = " "
@@ -365,6 +386,12 @@ class ExceptionGenerator(Exception):
     S_FUNC_CALL = "call"
     S_FUNC_PARAM = "param"
     S_VIBRATO = "vib"
+    S_ABANICO = "aban"
+    S_VERTICAL = "vert"
+    S_PERCUTOR = "perc"
+    S_GOLPE = "golpe"
+    S_METRO = "metro"
+
 
     def get_error(self):
         return self.error
@@ -378,7 +405,15 @@ class ExceptionGenerator(Exception):
                 if exc_spec == self.S_FUNC_PARAM:
                     msg = msg + " PARAM: NAME ALREADY IN USE."
                 if exc_spec == self.S_VIBRATO:
-                    msg = msg + " VIBRAT0: PARAMETER MUST BE A NATURAL NUMBER."
+                    msg = msg + " CALL VIBRAT0: PARAMETER MUST BE A NATURAL NUMBER."
+                if exc_spec == self.S_METRO:
+                    msg = msg + " CALL METRONOME: PARAMETER MUST BE A NATURAL NUMBER."
+                if exc_spec == self.S_ABANICO:
+                    msg = msg + " CALL ABANICO: PARAMETER MUST BE EITHER 'A' OR 'B'."
+                if exc_spec == self.S_PERCUTOR:
+                    msg = msg + " CALL PERCUTOR: PARAMETER MUST BE A NATURAL NUMBER."
+                if exc_spec == self.S_GOLPE:
+                    msg = msg + " CALL GOLPE: UNEXPECTED PARAMETER."
 
             case self.INV_DT:
                 msg = "INVALID DATATYPE"
