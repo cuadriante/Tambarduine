@@ -4,7 +4,7 @@ import codecs
 from lexer import *
 from parser import *
 from errorChecker import *
-from combinerClass import *
+# from combinerClass import *
 from semanticAnalyzer import run_semantic_analysis
 
 from hardwareCommunication import *
@@ -14,7 +14,8 @@ parser = yacc.yacc()
 
 class Compiler:
     def __init__(self, nombre_archivo):
-        self.nombre_archivo = nombre_archivo
+        # self.nombre_archivo = nombre_archivo
+        self.nombre_archivo = "./test/" + nombre_archivo  # no borren esto o me enojo
         self.thereWasAnError = False
         self.error = None
         self.directives = []
@@ -24,7 +25,7 @@ class Compiler:
     """-----> Correr el programa desde la raiz del proyecto <-----"""
 
     def compile(self):
-        document_to_compile =  self.nombre_archivo
+        document_to_compile = self.nombre_archivo
         test = document_to_compile
         fp = codecs.open(test, 'r', None, 'strict', - 1)
         arr = fp.read()
@@ -117,7 +118,7 @@ class Compiler:
                     text += " "
                 text += ")"
                 # self.__text.insert("1.0", text)
-        enviar_instrucciones()
+            enviar_instrucciones()
 
     def set_nombre_archivo(self, nombre):
         self.nombre_archivo = nombre
@@ -137,10 +138,13 @@ class Compiler:
 
 # archivo = "hola.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
-# archivo = 'D:\OneDrive - Estudiantes ITCR\TEC\\2022 I Semestre\Lenguajes, Compiladores e Intérpretes\Progras\Tambarduine\Tambarduine\\test\prueba_def.tam'
-# archivo = "prueba_en_caso.tam"
+# archivo = prueba_def.tam'
+archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN
 # archivo = "prueba_for_loop.tam"
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_if_else.tam"
 # archivo = 'prueba_SET.tam'
 # archivo = 'uwu.tam'
+
+c = Compiler(archivo)  # no me lo borren por fis
+c.compile()  # tampoco este

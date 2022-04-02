@@ -1,7 +1,7 @@
 import time
 import serial
 
-puertoSerial = serial.Serial('/dev/ttyACM0', baudrate=115200, timeout=1)
+#puertoSerial = serial.Serial('/dev/ttyACM0', baudrate=115200, timeout=1)
 metronomo = 0.75
 instrucciones = ''
 

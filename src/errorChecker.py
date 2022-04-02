@@ -114,19 +114,23 @@ def check_callable_function(s):
 
 def check_en_caso(s):
     condition_type = False
-    if is_number(s.expression.arith_expr_or_bool.term.factor.factor):
-        condition_type = True
-    elif is_boolean(s.expression.arith_expr_or_bool.term.factor.factor):
-        condition_type = False
-    else:
-        eg.raise_exception(eg.INV_DT, eg.S_EN_CASO)
-
-    check_statement_list(s.sino.statement_list)
-    for sc in s.switch_list.switch_list:
-        if is_number(sc.semi_condition.expression.arith_expr_or_bool.term.factor.factor) == condition_type:
-            check_statement_list(sc.statements.statement_list)
+    if check_for_var_in_symbol_table(s.expression.arith_expr_or_bool.term.factor.factor):
+        if not check_line_validity(s.expression.arith_expr_or_bool.term.factor.factor, s.expression.arith_expr_or_bool.term.factor.lineno):
+            return eg.raise_exception(eg.INV_DT, eg.S_UN, s.expression.arith_expr_or_bool.term.factor.factor)
+        if is_number(s.expression.arith_expr_or_bool.term.factor.factor):
+            condition_type = True
+        elif is_boolean(s.expression.arith_expr_or_bool.term.factor.factor):
+            condition_type = False
         else:
-            eg.raise_exception(eg.INV_COMP, eg.S_DT)
+            eg.raise_exception(eg.INV_DT, eg.S_EN_CASO)
+        check_statement_list(s.sino.statement_list)
+        for sc in s.switch_list.switch_list:
+            if is_number(sc.semi_condition.expression.arith_expr_or_bool.term.factor.factor) == condition_type:
+                check_statement_list(sc.statements.statement_list)
+            else:
+                eg.raise_exception(eg.INV_COMP, eg.S_DT)
+    else:
+        eg.raise_exception(eg.INV_DT, eg.S_UN)
 
 
 def check_for_loop(for_st):
@@ -205,6 +209,14 @@ def check_arith_or_bool_expr(s_term):
                     check_for_var_in_symbol_table(s_term.term.factor.factor)
         if not valid:
             eg.raise_exception(eg.INV_PARAM, "")
+        return True
+
+
+def check_line_validity(var, current_line):
+    set_line = parsing_symbol_table.get_lineno(var)
+    if current_line <= set_line:
+        return False
+    else:
         return True
 
 
@@ -332,7 +344,7 @@ class ExceptionGenerator(Exception):
     def get_error(self):
         return self.error
 
-    def raise_exception(self, exc_num, exc_spec, var=None):
+    def raise_exception(self, exc_num, exc_spec, var=None, line=None):
         match exc_num:
             case self.INV_FUNC:
                 msg = "INVALID FUNCTION"
@@ -394,6 +406,8 @@ class ExceptionGenerator(Exception):
                 return 0  # 0 is the default case if x is not found
         if var:
             msg = msg + ": " + var
+        if line:
+            msg = msg + " ON LINE " + line
         self.error = "ERROR: " + msg
         print(self.error)
         #print("ERROR: " + msg)
