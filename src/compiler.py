@@ -7,6 +7,7 @@ from errorChecker import *
 # from combinerClass import *
 from semanticAnalyzer import run_semantic_analysis
 
+
 from hardwareCommunication import *
 
 parser = yacc.yacc()
@@ -140,9 +141,9 @@ class Compiler:
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
 # archivo = prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
-archivo = "prueba_for_loop.tam"
+# archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
-# archivo = "prueba_if_else.tam"
+archivo = "prueba_if_else.tam"
 # archivo = 'prueba_SET.tam'
 # archivo = 'uwu.tam'
 

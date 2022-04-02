@@ -8,6 +8,7 @@ indentation = "     "
 #               variables bool
 
 
+
 def run_error_checker(prog):
     if prog.block:
         if len(prog.block.function_decls.function_decl_list) > 1:
@@ -27,13 +28,15 @@ def run_error_checker(prog):
 # no se puede hacer isinstance para chequear el tipo pq ocuparia los parametros
 def check_statement_list(statement_list):
     for s in statement_list:
+        global line
+        eg.line += 1
         print(2 * indentation + "statement found.")
         if is_boolean(s):
             print(3 * indentation + "en caso found.")
             check_bool_statement(s)
         if isinstance(s, bool_statement):
             check_bool_statement(s, True)
-        if isinstance(s, callable_function): # las predeterminadas
+        if isinstance(s, callable_function):  # las predeterminadas
             check_callable_function(s)
         if isinstance(s, function_call):
             check_function_call(s)
@@ -77,7 +80,6 @@ def check_bool_statement(s, assignation=None):
                 pass
 
 
-
 def check_function_decls(fd):
     for f in fd:
         check_function_call(f)
@@ -104,7 +106,8 @@ def check_function_call(f):
 def check_callable_function(s):
     if isinstance(s.function, vibrato):
         if s.function.param.param_list[0]:
-            if is_number(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, True): # preguntarle a ricardo
+            if is_number(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor,
+                         True):  # preguntarle a ricardo
                 if s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor <= 0:
                     eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO)
     elif isinstance(s.function, metronomo):
@@ -115,8 +118,10 @@ def check_callable_function(s):
 def check_en_caso(s):
     condition_type = False
     if check_for_var_in_symbol_table(s.expression.arith_expr_or_bool.term.factor.factor):
-        if not check_line_validity(s.expression.arith_expr_or_bool.term.factor.factor, s.expression.arith_expr_or_bool.term.factor.lineno):
-            return eg.raise_exception(eg.INV_DT, eg.S_UN, s.expression.arith_expr_or_bool.term.factor.factor)
+        if not check_line_validity(s.expression.arith_expr_or_bool.term.factor.factor,
+                                   s.expression.arith_expr_or_bool.term.factor.lineno):
+            return eg.raise_exception(eg.INV_DT, eg.S_UN, s.expression.arith_expr_or_bool.term.factor.factor,
+                                      s.expression.arith_expr_or_bool.term.factor.lineno)
         if is_number(s.expression.arith_expr_or_bool.term.factor.factor):
             condition_type = True
         elif is_boolean(s.expression.arith_expr_or_bool.term.factor.factor):
@@ -173,8 +178,11 @@ def check_if(if_st):
             check_statement_list(if_st.statements2.statement_list)
 
 
-def check_var(s):
+def check_var(s, line=None):
     if check_for_var_in_symbol_table(s.var_name):
+        if line:
+            if not check_line_validity(line, s.lineno):
+                eg.raise_exception(eg.INV_DT, eg.S_UN, s.var_name, line)
         value = not is_boolean(get_var_value_in_symbol_table(s.var_name))
         if s.expression:
             print(3 * indentation + "expression found.")
@@ -202,11 +210,23 @@ def check_arith_or_bool_expr(s_term):
         elif s_term.term.operator:
             valid = check_arith_or_bool_expr(s_term.term)
         if s_term.term.factor.factor:
-            if not is_number(s_term.term.factor.factor, True):
-                if is_boolean(s_term.term.factor.factor):  # es una variable
-                    return False
+            if isinstance(s_term.term.factor, negative):
+                if not is_number(s_term.term.factor.factor.factor, True):
+                    if is_boolean(s_term.term.factor.factor.factor):  # es una variable
+                        return False
+                    else:
+                        check_for_var_in_symbol_table(s_term.term.factor.factor.factor)
+                        check_var(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
+
+            else:
+                if not is_number(s_term.term.factor.factor, True):
+                    if is_boolean(s_term.term.factor.factor):  # es una variable
+                        return False
+                    else:
+                        check_for_var_in_symbol_table(s_term.term.factor.factor)
                 else:
-                    check_for_var_in_symbol_table(s_term.term.factor.factor)
+                    if check_for_var_in_symbol_table(s_term.term.factor.factor, True):
+                        check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
         if not valid:
             eg.raise_exception(eg.INV_PARAM, "")
         return True
@@ -215,7 +235,7 @@ def check_arith_or_bool_expr(s_term):
 def check_line_validity(var, current_line):
     set_line = parsing_symbol_table.get_lineno(var)
     if current_line <= set_line:
-        return False
+        eg.raise_exception(eg.INV_DT, eg.S_UN, var, current_line)
     else:
         return True
 
@@ -309,6 +329,8 @@ def check_if_validity(comparison):  # que comparison sea una lista
 
 
 class ExceptionGenerator(Exception):
+
+    line = 1
 
     error = " "
 
@@ -407,10 +429,10 @@ class ExceptionGenerator(Exception):
         if var:
             msg = msg + ": " + var
         if line:
-            msg = msg + " ON LINE " + line
+            msg = msg + " ON LINE " + str(self.line)
         self.error = "ERROR: " + msg
         print(self.error)
-        #print("ERROR: " + msg)
+        # print("ERROR: " + msg)
         raise Exception("ERROR: " + msg)
 
 
