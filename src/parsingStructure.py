@@ -635,9 +635,9 @@ class type_function():
 
 
         if isinstance(expression, bool):
-            directives.append(["type","bool"])
+            directives.append(("type","bool"))
         elif isinstance(expression, int):
-            directives.append(["type","int"])
+            directives.append(("type","int"))
 
 
 
@@ -925,6 +925,8 @@ class program():
         self.block.print(2)
 
     def exec(self):
+        global directives
+        directives = []
         self.block.exec()
         symbol_table.print()
         return directives
