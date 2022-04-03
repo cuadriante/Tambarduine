@@ -6,5 +6,5 @@ Principal(){
     Vibrato(45);
     Metronomo("A", 3/4); 
     println!("hola");
+    type(@var1);
 };
-

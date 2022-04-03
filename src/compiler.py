@@ -16,7 +16,7 @@ class Compiler:
         # self.nombre_archivo = nombre_archivo
         self.nombre_archivo = "./test/" + nombre_archivo  # no borren esto o me enojo
         self.thereWasAnError = False
-        self.error = ''
+        self.error = None
         self.directives = []
         self.program = None
 
@@ -24,6 +24,7 @@ class Compiler:
     """-----> Correr el programa desde la raiz del proyecto <-----"""
 
     def compile(self):
+        self.error = None
         document_to_compile = self.nombre_archivo
         test = document_to_compile
         fp = codecs.open(test, 'r', None, 'strict', - 1)
@@ -35,7 +36,6 @@ class Compiler:
 
         self.program = parser.parse(arr)
         
-        error = None
         if self.program:
             eg.set_error()
             # run_error_checker(self.program)
@@ -44,15 +44,12 @@ class Compiler:
             self.print_arbol()
 
         self.check_for_errors()
-
-        # print("There is the error: " + self.error)
-
-        if not self.thereWasAnError and self.error is None:
-            # print("ejecucion")
+        
+        # if not self.thereWasAnError and self.error is None:
+        if not self.thereWasAnError:
             self.directives = self.program.exec()
-            print(self.directives)
-            return ""
-
+            # print(self.directives)
+            return None
         else:
             return self.send_error()
 
@@ -96,6 +93,7 @@ class Compiler:
                 elif direction == '"I"':
                     verticalI()
             elif directive[0] == "percutor":
+                direction = directive[1]
                 if direction == '"D"':
                     percutorD()
                 elif direction == '"I"':
@@ -135,8 +133,10 @@ class Compiler:
             elif directive[0] == "type":
                 var_type = directive[1]
                 texts.append(var_type)
-            enviar_instrucciones()
+        print(texts)
         return texts
+        enviar_instrucciones()
+
 
     def set_nombre_archivo(self, nombre):
         self.nombre_archivo = nombre
@@ -147,7 +147,6 @@ class Compiler:
             self.program.print()
 
     def send_error(self):
-        # print("Errorrrrrr: " + str(self.error))
         return self.error
 
     def print_directives(self):
@@ -159,10 +158,11 @@ class Compiler:
 # archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
-# archivo = "prueba_funciones.tam"
-# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
+archivo = "prueba_funciones.tam"
+# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! 
 # archivo = 'prueba_SET.tam' ###da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
-# c = Compiler(archivo)  # no me lo borren por fis
-# c.compile()  # tampoco este
+c = Compiler(archivo)  # no me lo borren por fis
+c.compile()  # tampoco este
+c.exec()

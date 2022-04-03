@@ -1,6 +1,6 @@
 Principal(){
     SET @var1, 3;
-    EnCaso @var5
+    EnCaso @var1
         Cuando  == 7 EnTons{
             SET @var2, 5;
         }

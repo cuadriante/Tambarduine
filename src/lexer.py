@@ -114,7 +114,6 @@ def t_error(t):
     # raise Exception("Illegal character '%s'" % t.value[0])
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
-    return "Illegal character"
 
 
 # A regular expression rule with some action code
