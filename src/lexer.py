@@ -59,6 +59,7 @@ reserved = {
     "EnTons": "ENTONS",
     "Cuando": "CUANDO",
     "SiNo": "SINO",
+    "type" : "TYPE",
     "FinEnCaso": "FINENCASO",
     "Exec": "EXEC",
     "Def": "DEF",
@@ -110,9 +111,11 @@ def t_newline(t):
 def t_error(t):
     global lexer_error
     lexer_error = True
-    raise Exception("Illegal character '%s'" % t.value[0])
-    #print("Illegal character '%s'" % t.value[0])
+    # raise Exception("Illegal character '%s'" % t.value[0])
+    print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
+    return "Illegal character"
+
 
 # A regular expression rule with some action code
 
@@ -156,7 +159,6 @@ def t_PRINTLN(t):
 
 def t_ID(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'
-    print(t.value)
     if t.value in reserved:
         t.value = t.value.upper()
         t.type = t.value
@@ -166,9 +168,9 @@ def t_ID(t):
         t.lexer.skip(1)
 
 
-def get_lexer_error():
-    global lexer_error
-    return lexer_error
+# def get_lexer_error():
+#     # global lexer_error
+#     return lexer_error
 
 
 lexer = lex.lex()

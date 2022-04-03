@@ -11,7 +11,6 @@ from semanticAnalyzer import run_semantic_analysis
 from hardwareCommunication import *
 parser = yacc.yacc()
 
-
 class Compiler:
     def __init__(self, nombre_archivo):
         # self.nombre_archivo = nombre_archivo
@@ -35,7 +34,8 @@ class Compiler:
         # self.print_lexer()
 
         self.program = parser.parse(arr)
-
+        
+        error = None
         if self.program:
             eg.set_error()
             run_error_checker(self.program)
@@ -43,8 +43,12 @@ class Compiler:
             # print("Inicia error: ################\n" + self.error + "\nTermina error ##############")
             self.print_arbol()
 
-        if not self.thereWasAnError and not error:
+        self.check_for_errors()
+        
+        if not self.thereWasAnError and error == None:
+            # print("ejecucion")
             self.directives = self.program.exec()
+            print(self.directives)
             return None
 
         else:
@@ -60,22 +64,22 @@ class Compiler:
         print("------------------------------")
 
     def exec(self):
-        self.run_directives()
+        return self.run_directives()
 
-    def compile_exec(self):
-        self.compile()
-        self.exec()
+
     
     def check_for_errors(self):
-        parser_error = get_parser_error()
-        lexer_error = get_lexer_error()
+        parser_error = wasAnError()
+        # lexer_error = get_lexer_error()
         if parser_error == True:
+            self.error = get_parser_error()
             self.thereWasAnError = True
         elif lexer_error == True:
             self.thereWasAnError = True
         
 
     def run_directives(self):
+        texts = []
         for directive in self.directives:
             if directive[0] == "abanico":
                 direction = directive[1]
@@ -125,8 +129,12 @@ class Compiler:
                         text += param
                     text += " "
                 text += ")"
-                # self.__text.insert("1.0", text)
+                texts.append(text)
+            elif directive[0] == "type":
+                var_type = directive[1]
+                texts.append(var_type)
             enviar_instrucciones()
+        return texts
 
     def set_nombre_archivo(self, nombre):
         self.nombre_archivo = nombre
@@ -137,7 +145,6 @@ class Compiler:
             self.program.print()
 
     def send_error(self):
-        # print("Errores: " + self.error)
         return self.error
 
     def print_directives(self):
@@ -150,9 +157,9 @@ class Compiler:
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
-# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! da error  de mismatch si se asigna la variable en if y else con tipos diferentes
+archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! 
 # archivo = 'prueba_SET.tam' ###da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
-# c = Compiler(archivo)  # no me lo borren por fis
-# c.compile()  # tampoco este
+c = Compiler(archivo)  # no me lo borren por fis
+c.compile()  # tampoco este

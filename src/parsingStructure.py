@@ -1,4 +1,5 @@
 
+from fileinput import lineno
 from symbolTable import symbol_table
 from functionTable import function_table
 
@@ -41,7 +42,7 @@ class negative():
 
 
     def print(self, level):
-        print(indentation * level + "NEGATIVE:")
+        print(indentation * level + "NEGATIVE:", lineno)
         level += 1
         self.factor.print(level)
         # print(indentation * level + str(self.factor))
@@ -243,8 +244,8 @@ class param():
 
 
 class semi_condition():
-    def __init__(self, comparator, expression, line):
-        self.line = line
+    def __init__(self, comparator, expression, lineno):
+        self.lineno = lineno
         self.comparator = comparator
         self.expression = expression
 
@@ -617,7 +618,27 @@ class callable_function():
         self.function.print(level)
 
     def exec(self):
+        # print("Type funcion llamable")
         self.function.exec()
+
+class type_function():
+    def __init__(self, expression):
+        self.expression = expression
+    
+    def print(self, level):
+        print(indentation*level + "Type:")
+        level += 1
+        self.expression.print(level)
+    
+    def exec(self):
+        expression = self.expression.exec()
+
+
+        if isinstance(expression, bool):
+            directives.append(["type","bool"])
+        elif isinstance(expression, int):
+            directives.append(["type","int"])
+
 
 
 class printer():
@@ -723,8 +744,6 @@ class metronomo():
         level += 1
         self.param.print(level)
 
-    def exec(self):
-        parametros = self.param.exec()
 
     def exec(self):
         params = self.param.exec()

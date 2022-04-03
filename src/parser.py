@@ -7,6 +7,7 @@ from symbolTable import SymbolTable, symbol_table
 from functionTable import function_table
 
 parser_error = False
+error = None
 
 precedence = (  # evitar errores del analizador sintactico , definir prioridad de tokens
 
@@ -193,6 +194,9 @@ def p_expression_boolean(p):
     'expression : BOOL'
     p[0] = expression(p[1])
 
+def p_type(p):
+    "type : TYPE LPAREN expression RPAREN SEMICOLON"
+    p[0] = type_function(p[3])
 
 # IF
 def p_if(p):
@@ -360,7 +364,8 @@ def p_callable_function(p):
                         | golpe
                         | vibrato
                         | metronomo
-                        | print   """
+                        | print 
+                        | type  """
     p[0] = callable_function(p[1])
 
 
@@ -423,17 +428,23 @@ def p_params_empty(p):
 
 
 def p_error(p):
-    global parser_error
+    global parser_error, error
     parser_error = True
     if p == None:
         token = "end of file"
     else:
         token = f"{p.type}({p.value}) on line {p.lineno}"
     # raise Exception(f"Syntax error: Unexpected {token}")
-    print(f"Syntax error: Unexpected {token}")
+    text = "Syntax error: Unexpected" + token
+    print(text)
+    error = text
 
 
 def get_parser_error():
-    global parser_error
+    # global parser_error
+    return error
+
+def wasAnError():
     return parser_error
+
 

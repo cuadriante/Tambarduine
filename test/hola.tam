@@ -1,5 +1,4 @@
 Principal(){
-    SET @var1, false;
-    SET @var1.Neg;
+    SET @var1, 35;
 };
 

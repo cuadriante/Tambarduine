@@ -75,6 +75,8 @@ semi_condition          : (EQUALS|DIFFERENT|LESSTHAN|MORETHAN|LESSTHANE|MORETHAN
 expression              : arith-expr
                         | BOOL
 
+type                    : type LPAREN expression RPAREN
+
 arith-expr              : arith-expression (PLUS|MINUS) term
                         | term
 
@@ -98,6 +100,7 @@ callable_function       : abanico
                         | vibrato
                         | metronomo
                         | print
+                        | type
 
 abanico                 : ABANICO LPAREN params RPAREN SEMICOLON
 vertical                : VERTICAL LPAREN params RPAREN SEMICOLON
