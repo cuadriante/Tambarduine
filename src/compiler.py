@@ -138,13 +138,13 @@ class Compiler:
 
 # archivo = "hola.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
-archivo = 'prueba_def.tam'
+# archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! da error  de mismatch si se asigna la variable en if y else con tipos diferentes
 # archivo = 'prueba_SET.tam' ###da error sintactico
-# archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
+archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
 c = Compiler(archivo)  # no me lo borren por fis
 c.compile()  # tampoco este

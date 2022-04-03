@@ -12,11 +12,11 @@ indentation = "     "
 def run_error_checker(prog):
     if prog.block:
         if len(prog.block.function_decls.function_decl_list) > 1:
+            eg.line += 1
             check_function_decls(prog.block.function_decls.function_decl_list)
         if prog.block.main:
             print("valid main found.")
             if prog.block.main.statements:
-                eg.line += 1
                 print(indentation + "valid statement(s) found.")
                 check_statement_list(prog.block.main.statements.statement_list)
                 # eg.raise_exception("miss", "stat")
@@ -344,7 +344,7 @@ def check_for_var_in_symbol_table(var, condition=None):
         if not isinstance(var, str):
             var = str(var)
         if not condition:
-            eg.raise_exception(eg.INV_VAR, "un", var)
+            eg.raise_exception(eg.INV_VAR, "un", var, eg.line)
         else:
             return False
 

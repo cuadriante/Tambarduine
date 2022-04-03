@@ -1,9 +1,9 @@
 Principal(){
-    SET @var1, 3;
+    SET @var1, 4;
     SET @var6, 1;
     for @var6 to 7 Step 1{
     print("HOla");
- }
+    }
     If @var1*2 == 6  {
         SET @var2, 1;
     }
@@ -11,4 +11,15 @@ Principal(){
     {
         SET @var3, 0;
     }
+    EnCaso @var2
+        Cuando  == 7 EnTons{
+            SET @var7, 5;
+        }
+        Cuando < 4 EnTons{
+            SET @var3, 5;
+        }
+    SiNo{
+        SET @var4, 5;
+    }
+    FinEnCaso;
 };
