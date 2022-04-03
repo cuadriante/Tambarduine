@@ -372,7 +372,7 @@ def check_if_validity(comparison):  # que comparison sea una lista
 class ExceptionGenerator(Exception):
     line = 1
 
-    error = " "
+    error = ''
 
     INV_DT = "inv_dt"
     INV_DT_AP = "inv_dt_arith_proc"
@@ -411,6 +411,7 @@ class ExceptionGenerator(Exception):
 
 
     def get_error(self):
+        # print("ERRORRRRR: " + self.error)
         return self.error
 
     def raise_exception(self, exc_num, exc_spec, var=None, line=None):
@@ -490,11 +491,13 @@ class ExceptionGenerator(Exception):
             msg = msg + ": " + var
         if line:
             msg = msg + " ON LINE " + str(self.line)
-        self.error = "ERROR: " + msg
-        print(self.error)
+        if self.error == '':
+            self.error = "ERROR: " + msg
+
+        # print("Error 2: " + self.error)
         # print("ERROR: " + msg)
         #return error
-        raise Exception("ERROR: " + msg)
+        # raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type

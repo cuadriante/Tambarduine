@@ -22,8 +22,15 @@ class Editor(tk.Frame):
         self.__lineNumbers = LineNumbers(self, width=30)
         self.__codeOutput = tk.Text()
         self.__filePath = ''
+        self.__output = ''
         self.__compiler = Compiler(self.__filePath)
         self.__StartUp()
+
+    def __setCompiled(self, state):
+        self.__isCompiled = state
+
+    def __setOutput(self, output):
+        self.__output = output
 
     def __OnChange(self, event):
         self.__lineNumbers.redraw()
@@ -97,14 +104,14 @@ class Editor(tk.Frame):
         if path == '':
             self.__Save()
 
-        output = self.__compiler.compile()
+        self.__setOutput(self.__compiler.compile())
         # output = analizeCode(self.__filePath)
         self.__codeOutput.delete('1.0', END)
-        if output is None:
+        if self.__output == '':
             self.__codeOutput.insert('1.0', "Compiled")
         else:
-            print(output)
-            self.__codeOutput.insert('1.0', str(output))
+            # print("##########Starts output:\n" + str(self.__output) + "\nEnds output########")
+            self.__codeOutput.insert('1.0', str(self.__output))
 
     def __Run(self):
         path = self.__filePath
@@ -112,14 +119,15 @@ class Editor(tk.Frame):
         if path == '':
             self.__Save()
 
-        output = self.__compiler.exec()
+        self.__setOutput(self.__compiler.compile())
         # output = analizeCode(self.__filePath)
         self.__codeOutput.delete('1.0', END)
-        if output is None:
-            self.__codeOutput.insert('1.0', "Executed")
+        if self.__output == '':
+            self.__codeOutput.insert('1.0', "Compiled\nExecuting...")
+            self.__compiler.exec()
         else:
-            print(output)
-            self.__codeOutput.insert('1.0', str(output))
+            # print("Errores Run: " + self.__output + "###################")
+            self.__codeOutput.insert('1.0', str(self.__output))
 
     def __StartUp(self):
         self.__text.configure(yscrollcommand=self.__vsb.set)

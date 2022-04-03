@@ -17,7 +17,7 @@ class Compiler:
         # self.nombre_archivo = nombre_archivo
         self.nombre_archivo = "./test/" + nombre_archivo  # no borren esto o me enojo
         self.thereWasAnError = False
-        self.error = None
+        self.error = ''
         self.directives = []
         self.program = None
 
@@ -32,13 +32,14 @@ class Compiler:
         fp.close()
 
         lexer.input(arr)
-        self.print_lexer()
+        # self.print_lexer()
 
         self.program = parser.parse(arr)
-        error = None
+
         if self.program:
             run_error_checker(self.program)
-            error = eg.get_error()
+            self.error = eg.get_error()
+            # print("Inicia error: ################\n" + self.error + "\nTermina error ##############")
             self.print_arbol()
 
         if not self.thereWasAnError and not error:
@@ -58,12 +59,7 @@ class Compiler:
         print("------------------------------")
 
     def exec(self):
-        if self.program == None:
-            # ENVIAR AL IDE
-            # self.__text.insert("1.0", text)
-            return "Nada que ejecutar"
-        else:
-            return self.run_directives()
+        self.run_directives()
 
     def compile_exec(self):
         self.compile()
@@ -79,7 +75,6 @@ class Compiler:
         
 
     def run_directives(self):
-        texts = []
         for directive in self.directives:
             if directive[0] == "abanico":
                 direction = directive[1]
@@ -129,10 +124,8 @@ class Compiler:
                         text += param
                     text += " "
                 text += ")"
-                texts.append(text)
                 # self.__text.insert("1.0", text)
             enviar_instrucciones()
-            return texts
 
     def set_nombre_archivo(self, nombre):
         self.nombre_archivo = nombre
@@ -143,7 +136,7 @@ class Compiler:
             self.program.print()
 
     def send_error(self):
-        # Enviar string de self.error al IDE
+        # print("Errores: " + self.error)
         return self.error
 
     def print_directives(self):
@@ -156,9 +149,9 @@ class Compiler:
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
-archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! da error  de mismatch si se asigna la variable en if y else con tipos diferentes
+# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! da error  de mismatch si se asigna la variable en if y else con tipos diferentes
 # archivo = 'prueba_SET.tam' ###da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
-c = Compiler(archivo)  # no me lo borren por fis
-c.compile()  # tampoco este
+# c = Compiler(archivo)  # no me lo borren por fis
+# c.compile()  # tampoco este
