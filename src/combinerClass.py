@@ -38,7 +38,7 @@ class Editor(tk.Frame):
             self.__execOutput = "Executed"
         else:
             for i in execOutput:
-                self.__execOutput += (i + "\n")
+                self.__execOutput += (i + '\n')
 
     def __OnChange(self, event):
         self.__lineNumbers.redraw()
@@ -108,6 +108,7 @@ class Editor(tk.Frame):
 
     def __Compile(self):
         self.__setOutput('')
+        self.__execOutput = ''
         path = self.__filePath
 
         if path == '':
@@ -115,13 +116,14 @@ class Editor(tk.Frame):
 
         self.__setOutput(self.__compiler.compile())
         self.__codeOutput.delete('1.0', END)
-        if self.__output == '':
+        if self.__output is None:
             self.__codeOutput.insert('1.0', "Compiled")
         else:
             self.__codeOutput.insert('1.0', str(self.__output))
 
     def __Run(self):
         self.__setOutput('')
+        self.__execOutput = ''
         path = self.__filePath
 
         if path == '':
@@ -130,9 +132,9 @@ class Editor(tk.Frame):
         self.__setOutput(self.__compiler.compile())
         # output = analizeCode(self.__filePath)
         self.__codeOutput.delete('1.0', END)
-        if self.__output == '':
-            self.__execOutput = self.__compiler.exec()
-            self.__codeOutput.insert('1.0', self.__output)
+        if self.__output is None:
+            self.__setExecOutput(self.__compiler.exec())
+            self.__codeOutput.insert('1.0', self.__execOutput)
         else:
             self.__codeOutput.insert('1.0', str(self.__output))
 
@@ -168,8 +170,8 @@ class Editor(tk.Frame):
         self.__codeOutput.pack()
 
 
-# window = tk.Tk()
-# editor = Editor(window)
-# editor.pack(side="top", fill="both", expand=True)
-# editor.SetGUI(window)
-# window.mainloop()
+window = tk.Tk()
+editor = Editor(window)
+editor.pack(side="top", fill="both", expand=True)
+editor.SetGUI(window)
+window.mainloop()
