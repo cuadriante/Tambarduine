@@ -99,21 +99,21 @@ class Editor(tk.Frame):
                                             "##############################################")
 
     def __Compile(self):
+        self.__setOutput('')
         path = self.__filePath
 
         if path == '':
             self.__Save()
 
         self.__setOutput(self.__compiler.compile())
-        # output = analizeCode(self.__filePath)
         self.__codeOutput.delete('1.0', END)
         if self.__output == '':
             self.__codeOutput.insert('1.0', "Compiled")
         else:
-            # print("##########Starts output:\n" + str(self.__output) + "\nEnds output########")
             self.__codeOutput.insert('1.0', str(self.__output))
 
     def __Run(self):
+        self.__setOutput('')
         path = self.__filePath
 
         if path == '':
@@ -126,7 +126,6 @@ class Editor(tk.Frame):
             self.__codeOutput.insert('1.0', "Compiled\nExecuting...")
             self.__compiler.exec()
         else:
-            # print("Errores Run: " + self.__output + "###################")
             self.__codeOutput.insert('1.0', str(self.__output))
 
     def __StartUp(self):

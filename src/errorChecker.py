@@ -414,6 +414,9 @@ class ExceptionGenerator(Exception):
         # print("ERRORRRRR: " + self.error)
         return self.error
 
+    def set_error(self):
+        self.error = ''
+
     def raise_exception(self, exc_num, exc_spec, var=None, line=None):
         match exc_num:
             case self.INV_FUNC:

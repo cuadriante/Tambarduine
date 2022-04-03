@@ -37,6 +37,7 @@ class Compiler:
         self.program = parser.parse(arr)
 
         if self.program:
+            eg.set_error()
             run_error_checker(self.program)
             self.error = eg.get_error()
             # print("Inicia error: ################\n" + self.error + "\nTermina error ##############")
