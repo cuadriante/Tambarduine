@@ -36,6 +36,9 @@ class Compiler:
         # self.print_lexer()
 
         self.program = parser.parse(arr)
+
+        error = False
+
         if self.program:
             run_error_checker(self.program)
             error = eg.get_error()

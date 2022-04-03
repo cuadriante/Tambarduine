@@ -340,7 +340,7 @@ def get_function_body(function_name):
 
 def check_for_var_in_symbol_table(var, condition=None):
     # FALTA QUE EL BICHO RECONOZCA SI EL FOR SE RECORRE HASTA EL INFINITO
-    if parsing_symbol_table.get(var) is not None:
+    if parsing_symbol_table.is_in(var):
         return True
     else:
         if not isinstance(var, str):
@@ -493,9 +493,8 @@ class ExceptionGenerator(Exception):
         self.error = "ERROR: " + msg
         print(self.error)
         # print("ERROR: " + msg)
-        # raise Exception("ERROR: " + msg)
-        return error
-
+        #return error
+        raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type
