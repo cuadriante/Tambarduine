@@ -131,8 +131,12 @@ def check_callable_function(s):
                 if check_for_var_in_symbol_table(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, True):
                     check_line_validity(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, s.function.param.param_list[0].arith_expr_or_bool.term.factor.lineno)
     elif isinstance(s.function, metronomo):
-        if s.param.param_list[0] <= 0:
-            eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
+        if s.function.param.param_list[0]:
+            p = s.function.param.param_list
+            if not (p[0] == '"D"' or p[0] == '"I"' or p[0] == '"A"' or p[0] == '"B"' or p[0] == '"DI"' or p[0] == '"AB"'):
+                eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
+            if not isinstance(p[1], expression):
+                eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
     elif isinstance(s.function, abanico):
         for p in s.function.param.param_list:
             if not (p == '"A"' or p == '"B"'):
@@ -146,8 +150,8 @@ def check_callable_function(s):
             if not (p == '"D"' or p == '"I"'or p == '"A"' or p == '"B"' or p == '"DI"' or p == '"AB"'):
                 eg.raise_exception(eg.INV_FUNC, eg.S_PERCUTOR, None, eg.line)
     elif isinstance(s.function, golpe):
-        for p in s.function.param.param_list:
-            eg.raise_exception(eg.INV_FUNC, eg.S_PERCUTOR, None, eg.line)
+        if s.function.param:
+            eg.raise_exception(eg.INV_FUNC, eg.S_GOLPE, None, eg.line)
 
 
 

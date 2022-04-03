@@ -160,8 +160,8 @@ class Compiler:
 # archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
-# archivo = "prueba_funciones.tam"
-archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! 
+archivo = "prueba_funciones.tam"
+# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
 # archivo = 'prueba_SET.tam' ###da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 

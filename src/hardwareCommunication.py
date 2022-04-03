@@ -77,6 +77,6 @@ def vibrato_vertical(cantidad_de_repeticiones):
 def enviar_instrucciones():
     global instrucciones
     print(instrucciones)
-    puertoSerial.write(bytes(instrucciones, 'utf-8'))
+#    puertoSerial.write(bytes(instrucciones, 'utf-8'))
     instrucciones = ''
     time.sleep(3)
