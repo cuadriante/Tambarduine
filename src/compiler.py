@@ -38,18 +38,20 @@ class Compiler:
         error = None
         if self.program:
             eg.set_error()
-            run_error_checker(self.program)
+            # run_error_checker(self.program)
             self.error = eg.get_error()
             # print("Inicia error: ################\n" + self.error + "\nTermina error ##############")
             self.print_arbol()
 
         self.check_for_errors()
-        
-        if not self.thereWasAnError and error == None:
+
+        # print("There is the error: " + self.error)
+
+        if not self.thereWasAnError and self.error is None:
             # print("ejecucion")
             self.directives = self.program.exec()
             print(self.directives)
-            return None
+            return ""
 
         else:
             return self.send_error()
@@ -145,6 +147,7 @@ class Compiler:
             self.program.print()
 
     def send_error(self):
+        # print("Errorrrrrr: " + str(self.error))
         return self.error
 
     def print_directives(self):
@@ -157,9 +160,9 @@ class Compiler:
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
-archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! 
+# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
 # archivo = 'prueba_SET.tam' ###da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
-c = Compiler(archivo)  # no me lo borren por fis
-c.compile()  # tampoco este
+# c = Compiler(archivo)  # no me lo borren por fis
+# c.compile()  # tampoco este

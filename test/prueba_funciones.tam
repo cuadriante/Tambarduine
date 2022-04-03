@@ -5,5 +5,6 @@ Principal(){
     SET @var1, 5;
     Vibrato(45);
     Metronomo("A", 3/4); 
-    print("hola");
+    println!("hola");
 };
+
