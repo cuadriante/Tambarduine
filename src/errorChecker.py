@@ -126,7 +126,7 @@ def check_callable_function(s):
             if isinstance(s.function.param.param_list[0].arith_expr_or_bool.term.factor, negative):
                 eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
             else:
-                if s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor == 0:
+                if s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor <= 0:
                     eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
                 if check_for_var_in_symbol_table(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, True):
                     check_line_validity(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, s.function.param.param_list[0].arith_expr_or_bool.term.factor.lineno)
@@ -135,7 +135,16 @@ def check_callable_function(s):
             p = s.function.param.param_list
             if not (p[0] == '"D"' or p[0] == '"I"' or p[0] == '"A"' or p[0] == '"B"' or p[0] == '"DI"' or p[0] == '"AB"'):
                 eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
-            if not isinstance(p[1], expression):
+            if isinstance(p[1], expression):
+                if isinstance(p[1].arith_expr_or_bool.term.factor, negative):
+                    eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
+                if p[1].arith_expr_or_bool.term.factor.factor == 0:
+                    eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
+                if check_for_var_in_symbol_table(p[1].arith_expr_or_bool.term.factor.factor,
+                                                 True):
+                    check_line_validity(p[1].arith_expr_or_bool.term.factor.factor,
+                                        p[1].arith_expr_or_bool.term.factor.lineno)
+            else:
                 eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
     elif isinstance(s.function, abanico):
         for p in s.function.param.param_list:
@@ -504,7 +513,7 @@ class ExceptionGenerator(Exception):
         # print("Error 2: " + self.error)
         # print("ERROR: " + msg)
         #return error
-        # raise Exception("ERROR: " + msg)
+        raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type
