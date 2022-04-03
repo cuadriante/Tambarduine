@@ -98,7 +98,6 @@ def p_function_body_statements(p):
 
 def p_main(p):
     "main : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON"
-    print("numero de linea", p.lineno(1))
     p[0] = main(p[5])
 
 
@@ -156,7 +155,6 @@ def p_var_decl(p):
     line = p.lineno(3)
     parsing_symbol_table.set_lineno(p[2], line)
     parsing_symbol_table.print()
-    print("line de var", p.lineno(2))
     p[0] = var_decl(p[2], p[4], line)
 
 
@@ -296,7 +294,7 @@ def p_semi_condition(p):
                 | MORETHAN expression
                 | LESSTHANE expression
                 | MORETHANE expression"""
-    line = p.lineno(2)
+    line = p.lineno(1)
     p[0] = semi_condition(p[1], p[2], line)
 
 
@@ -346,7 +344,7 @@ def p_factor_var(p):
 
 def p_factor_expr(p):
     'factor : LPAREN arith-expression RPAREN'
-    line = p.lineno(2)
+    line = p.lineno(1)
     p[0] = factor(p[2], line)
 
 

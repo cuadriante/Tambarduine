@@ -9,7 +9,6 @@ from errorChecker import *
 from semanticAnalyzer import run_semantic_analysis
 
 from hardwareCommunication import *
-
 parser = yacc.yacc()
 
 
@@ -33,12 +32,10 @@ class Compiler:
         fp.close()
 
         lexer.input(arr)
-        # self.print_lexer()
+        self.print_lexer()
 
         self.program = parser.parse(arr)
-
-        error = False
-
+        error = None
         if self.program:
             run_error_checker(self.program)
             error = eg.get_error()
@@ -49,7 +46,7 @@ class Compiler:
             return None
 
         else:
-            self.sendErrors()
+            return self.send_error()
 
     def print_lexer(self):
         print("--------LISTA DE TOKENS-------")
@@ -66,7 +63,7 @@ class Compiler:
             # self.__text.insert("1.0", text)
             return "Nada que ejecutar"
         else:
-            self.run_directives()
+            return self.run_directives()
 
     def compile_exec(self):
         self.compile()
@@ -82,6 +79,7 @@ class Compiler:
         
 
     def run_directives(self):
+        texts = []
         for directive in self.directives:
             if directive[0] == "abanico":
                 direction = directive[1]
@@ -131,8 +129,10 @@ class Compiler:
                         text += param
                     text += " "
                 text += ")"
+                texts.append(text)
                 # self.__text.insert("1.0", text)
             enviar_instrucciones()
+            return texts
 
     def set_nombre_archivo(self, nombre):
         self.nombre_archivo = nombre
@@ -144,7 +144,7 @@ class Compiler:
 
     def send_error(self):
         # Enviar string de self.error al IDE
-        pass
+        return self.error
 
     def print_directives(self):
         print(self.directives)

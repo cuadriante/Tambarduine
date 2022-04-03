@@ -748,8 +748,6 @@ class main():
         self.statements.exec()
 
 
-
-
 class function_call():
     switch_list = None
     step = None
