@@ -38,6 +38,7 @@ tokens = (
     'FALSE',
     'STRING',
     'PARAM',
+    'PRINTLN',
 )
 
 reserved = {
@@ -61,7 +62,6 @@ reserved = {
     "FinEnCaso": "FINENCASO",
     "Exec": "EXEC",
     "Def": "DEF",
-    "print": "PRINT"
 }
 
 
@@ -146,6 +146,13 @@ def t_VAR(t):
     #     symbol_table.set(t.value, -1)
     return t
 
+
+def t_PRINTLN(t):
+    r'println!'
+    t.type = reserved.get(t.value, 'PRINTLN')  # Check for reserved words
+    # if not symbol_table.get(t.value):
+    #     symbol_table.set(t.value, -1)
+    return t
 
 def t_ID(t):
     r'[a-zA-Z_0-9?][a-zA-Z_0-9?]*'

@@ -2,7 +2,7 @@ Principal(){
     SET @var1, 4;
     SET @var6, 1;
     for @var6 to 7 Step 1{
-    print("HOla");
+    println!("HOla");
     }
     If @var1*2 == 6  {
         SET @var2, 1;
@@ -11,7 +11,7 @@ Principal(){
     {
         SET @var3, 0;
     }
-    EnCaso @var2
+    EnCaso @var1
         Cuando  == 7 EnTons{
             SET @var7, 5;
         }

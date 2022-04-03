@@ -396,7 +396,7 @@ def p_metronomo(p):
 
 
 def p_print(p):
-    "print : PRINT LPAREN params RPAREN SEMICOLON"
+    "print : PRINTLN LPAREN params RPAREN SEMICOLON"
     p[0] = printer(p[3])
 
 
