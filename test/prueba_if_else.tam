@@ -3,7 +3,7 @@ Principal(){
     If @var1*2 == 6  {
         SET @var2, False;
     } 
-    Else 
+    Else True
     {
         SET @var2, True;
     }

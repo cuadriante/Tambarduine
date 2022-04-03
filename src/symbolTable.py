@@ -1,6 +1,3 @@
-from logging import exception
-from time import process_time_ns
-from sympy import symbols
 
 
 class SymbolTable:
@@ -14,11 +11,15 @@ class SymbolTable:
         if value == None and self.child_table:
             return self.child_table.get(name)
         elif value == None and self.child_table == None:
-            # raise Exception(
-            #    "No existe una variable con el identificador " + name)
             return None
         else:
             return value
+    
+    def is_in(self, name):
+        if name in self.symbols:
+            return True
+        else:
+            return False
     
     def set_lineno(self, name, lineno):
         self.lineno[name] = lineno       

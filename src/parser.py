@@ -98,6 +98,7 @@ def p_function_body_statements(p):
 
 def p_main(p):
     "main : PRINCIPAL LPAREN RPAREN LBRACE statements RBRACE SEMICOLON"
+    print("numero de linea", p.lineno(1))
     p[0] = main(p[5])
 
 
@@ -155,6 +156,7 @@ def p_var_decl(p):
     line = p.lineno(3)
     parsing_symbol_table.set_lineno(p[2], line)
     parsing_symbol_table.print()
+    print("line de var", p.lineno(2))
     p[0] = var_decl(p[2], p[4], line)
 
 
@@ -429,8 +431,8 @@ def p_error(p):
         token = "end of file"
     else:
         token = f"{p.type}({p.value}) on line {p.lineno}"
-    raise Exception(f"Syntax error: Unexpected {token}")
-    # print(f"Syntax error: Unexpected {token}")
+    # raise Exception(f"Syntax error: Unexpected {token}")
+    print(f"Syntax error: Unexpected {token}")
 
 
 def get_parser_error():

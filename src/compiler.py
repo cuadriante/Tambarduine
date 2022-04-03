@@ -1,4 +1,5 @@
 import codecs
+from ctypes import get_last_error
 # from hardwareCommunication import *
 
 from lexer import *
@@ -32,14 +33,15 @@ class Compiler:
         fp.close()
 
         lexer.input(arr)
-        self.print_lexer()
+        # self.print_lexer()
 
         self.program = parser.parse(arr)
         if self.program:
             run_error_checker(self.program)
+            error = eg.get_error()
             self.print_arbol()
 
-        if not self.thereWasAnError:
+        if not self.thereWasAnError and not error:
             self.directives = self.program.exec()
             return None
 
@@ -66,6 +68,15 @@ class Compiler:
     def compile_exec(self):
         self.compile()
         self.exec()
+    
+    def check_for_errors(self):
+        parser_error = get_parser_error()
+        lexer_error = get_lexer_error()
+        if parser_error == True:
+            self.thereWasAnError = True
+        elif lexer_error == True:
+            self.thereWasAnError = True
+        
 
     def run_directives(self):
         for directive in self.directives:
@@ -142,9 +153,9 @@ class Compiler:
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
-# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! da error  de mismatch si se asigna la variable en if y else con tipos diferentes
+archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !! da error  de mismatch si se asigna la variable en if y else con tipos diferentes
 # archivo = 'prueba_SET.tam' ###da error sintactico
-archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
+# archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
 c = Compiler(archivo)  # no me lo borren por fis
 c.compile()  # tampoco este

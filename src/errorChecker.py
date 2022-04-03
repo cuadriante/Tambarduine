@@ -1,3 +1,4 @@
+from distutils.log import error
 from parser import parsing_symbol_table
 from functionTable import *
 from parsingStructure import *
@@ -24,6 +25,7 @@ def run_error_checker(prog):
             eg.raise_exception(eg.MISS, eg.S_PRIN)
     else:
         eg.raise_exception(eg.MISS, eg.S_PRIN)
+    
 
 
 # no se puede hacer isinstance para chequear el tipo pq ocuparia los parametros
@@ -491,7 +493,8 @@ class ExceptionGenerator(Exception):
         self.error = "ERROR: " + msg
         print(self.error)
         # print("ERROR: " + msg)
-        raise Exception("ERROR: " + msg)
+        # raise Exception("ERROR: " + msg)
+        return error
 
 
 # error types:
