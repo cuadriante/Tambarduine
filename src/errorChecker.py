@@ -21,6 +21,8 @@ def run_error_checker(prog):
                 print(indentation + "valid statement(s) found.")
                 check_statement_list(prog.block.main.statements.statement_list)
                 # eg.raise_exception("miss", "stat")
+                if not eg.metronome:
+                    eg.raise_exception(eg.MISS, eg.S_METRO, None)
         else:
             eg.raise_exception(eg.MISS, eg.S_PRIN)
     else:
@@ -63,9 +65,6 @@ def check_statement(s, isFunction=None):
         print(3 * indentation + "expression found.")
         if s.expression.arith_expr_or_bool:
             check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
-    if isinstance(s, callable_function):
-        print(3 * indentation + "en caso found.")
-        check_callable_function(s)
     else:
         print(4 * indentation + "no expression found.")
         # hacer algo
@@ -131,6 +130,7 @@ def check_callable_function(s):
                 if check_for_var_in_symbol_table(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, True):
                     check_line_validity(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, s.function.param.param_list[0].arith_expr_or_bool.term.factor.lineno)
     elif isinstance(s.function, metronomo):
+        eg.metronome = True
         if s.function.param.param_list[0]:
             p = s.function.param.param_list
             if not (p[0] == '"D"' or p[0] == '"I"' or p[0] == '"A"' or p[0] == '"B"' or p[0] == '"DI"' or p[0] == '"AB"'):
@@ -386,6 +386,7 @@ class ExceptionGenerator(Exception):
     line = 1
 
     error = ''
+    metronome = False
 
     INV_DT = "inv_dt"
     INV_DT_AP = "inv_dt_arith_proc"
@@ -421,6 +422,7 @@ class ExceptionGenerator(Exception):
     S_PERCUTOR = "perc"
     S_GOLPE = "golpe"
     S_METRO = "metro"
+    S_NOT_METRO = "metro"
 
 
     def get_error(self):
@@ -501,6 +503,8 @@ class ExceptionGenerator(Exception):
                     msg = msg + ": STATEMENT(S)."
                 if exc_spec == self.S_EXPR:
                     msg = msg + ": EXPRESSION"
+                if exc_spec == self.S_NOT_METRO:
+                    msg = msg + " FUNCTION CALL METRONOME: FUNCTION MUST BE CALLED."
             case _:
                 return 0  # 0 is the default case if x is not found
         if var:
