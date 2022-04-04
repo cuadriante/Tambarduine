@@ -27,7 +27,6 @@ def run_error_checker(prog):
             eg.raise_exception(eg.MISS, eg.S_PRIN)
     else:
         eg.raise_exception(eg.MISS, eg.S_PRIN)
-    
 
 
 # no se puede hacer isinstance para chequear el tipo pq ocuparia los parametros
@@ -82,7 +81,7 @@ def check_bool_statement(s, assignation=None, isFunction=None):
             var = get_var_value_in_symbol_table(s.var_name)
             if var is None:
                 if not isFunction:
-                    eg.raise_exception(eg.INV_VAR, eg.S_UN, s.var_name, s.lineno)
+                    eg.raise_exception(eg.INV_VAR, eg.S_UN, s.var_name, eg.line)
             else:
                 if not is_boolean(var):
                     eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
@@ -133,7 +132,7 @@ def check_callable_function(s):
         eg.metronome = True
         if s.function.param.param_list[0]:
             p = s.function.param.param_list
-            if not (p[0] == '"D"' or p[0] == '"A"'):
+            if not (p[0] == '"D"' or p[0] == '"I"' or p[0] == '"A"' or p[0] == '"B"' or p[0] == '"DI"' or p[0] == '"AB"'):
                 eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
             if isinstance(p[1], expression):
                 if isinstance(p[1].arith_expr_or_bool.term.factor, negative):
@@ -191,7 +190,6 @@ def check_en_caso(s):
 def check_for_loop(for_st):
     # ninguno de estos errores se puede probar, aun
     if is_number(for_st.to.factor, True):
-        check_line_validity(for_st.to.factor, for_st.to.lineno)
         if not isinstance(for_st.to.factor, int):
             eg.raise_exception(eg.INV_DT, eg.S_TO)
     else:
@@ -200,7 +198,6 @@ def check_for_loop(for_st):
         eg.raise_exception(eg.INV_DT, eg.S_STEP)
     if for_st.step <= 0:
         eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
-
     if is_number(for_st.var_name):
         if get_var_value_in_symbol_table(for_st.var_name) <= 0:
             eg.raise_exception(eg.INV_DT, eg.S_TO)
@@ -268,17 +265,24 @@ def check_arith_or_bool_expr(s_term):
             if isinstance(s_term.term.factor, negative):
                 if not is_number(s_term.term.factor.factor.factor, True):
                     if is_boolean(s_term.term.factor.factor.factor):  # es una variable
+                        check_for_var_in_symbol_table(s_term.term.factor.factor)
+                        check_line_validity(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
                         return False
                     else:
                         check_for_var_in_symbol_table(s_term.term.factor.factor.factor)
                         check_var(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
-
+                        check_line_validity(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
             else:
                 if not is_number(s_term.term.factor.factor, True):
                     if is_boolean(s_term.term.factor.factor):  # es una variable
+                        check_for_var_in_symbol_table(s_term.term.factor.factor)
+                        check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
                         return False
                     else:
                         check_for_var_in_symbol_table(s_term.term.factor.factor)
+                        check_var(s_term.term.factor.factor, s_term.term.factor.lineno)
+                        check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
+
                 else:
                     if check_for_var_in_symbol_table(s_term.term.factor.factor, True):
                         check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
@@ -518,7 +522,7 @@ class ExceptionGenerator(Exception):
         # print("Error 2: " + self.error)
         # print("ERROR: " + msg)
         #return error
-        raise Exception("ERROR: " + msg)
+        #raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type
