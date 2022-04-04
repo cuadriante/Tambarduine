@@ -194,11 +194,14 @@ def p_expression_boolean(p):
     'expression : BOOL'
     p[0] = expression(p[1])
 
+
 def p_type(p):
     "type : TYPE LPAREN expression RPAREN SEMICOLON"
     p[0] = type_function(p[3])
 
 # IF
+
+
 def p_if(p):
     "if_statement : IF condition LBRACE statements RBRACE"
     p[0] = if_statement(p[2], p[4])
@@ -444,7 +447,13 @@ def get_parser_error():
     # global parser_error
     return error
 
+
 def wasAnError():
     return parser_error
 
 
+def unset_error():
+    global parser_error
+    global error
+    parser_error = False
+    error = None
