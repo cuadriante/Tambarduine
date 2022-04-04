@@ -159,8 +159,8 @@ class Compiler:
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_ritmo.tam"
-# archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
-archivo = 'Prueba.tam'  # da error sintactico
+archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
+# archivo = 'Prueba.tam'  # da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
 c = Compiler(archivo)  # no me lo borren por fis

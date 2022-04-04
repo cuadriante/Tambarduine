@@ -1,7 +1,8 @@
 Principal(){
+    Metronomo("A", 1);
     SET @var1, 1;
     SET @var3, @var1;
-    If @var2*2 == 6  {
+    If @var1*6 == 6  {
         SET @var2, False;
     } 
     Else 
