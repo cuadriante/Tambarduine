@@ -522,8 +522,8 @@ class ExceptionGenerator(Exception):
 
         # print("Error 2: " + self.error)
         # print("ERROR: " + msg)
-        # return error
-        # raise Exception("ERROR: " + msg)
+        #return error
+        #raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type
