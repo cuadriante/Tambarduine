@@ -110,11 +110,11 @@ class Compiler:
                 vibrato_vertical(cantidad)
             elif directive[0] == "metronomo":
                 activate = directive[1]
+                cantidad = directive[2]
                 if activate == '"D"':
-                    cantidad = 0
+                    unset_metronomo(cantidad)
                 elif activate == '"A"':
-                    cantidad = directive[2]
-                set_metronomo(cantidad)
+                    set_metronomo(cantidad)
             elif directive[0] == "print":
                 params = directive[1]
                 text = "print( "
