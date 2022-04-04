@@ -41,6 +41,7 @@ Principal(){
     SET @var2, 7;
     Silencio();
     Exec @Ricardo(@var1, 15);
+    Exec @Adriana();
     Exec @caso(@var2);
     type(@var1);
 };

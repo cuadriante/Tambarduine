@@ -53,7 +53,7 @@ def check_statement(s, isFunction=None):
         check_if(s)
     if isinstance(s, en_caso):
         print(3 * indentation + "en caso found.")
-        check_en_caso(s)
+        check_en_caso(s, isFunction)
     if isinstance(s, for_loop):  # FOR
         print(3 * indentation + "for loop found.")
         check_for_loop(s)
@@ -165,9 +165,9 @@ def check_callable_function(s):
 
 
 
-def check_en_caso(s):
+def check_en_caso(s, isFunction=None):
     condition_type = False
-    if check_for_var_in_symbol_table(s.expression.arith_expr_or_bool.term.factor.factor):
+    if check_for_var_in_symbol_table(s.expression.arith_expr_or_bool.term.factor.factor, True):
         if not check_line_validity(s.expression.arith_expr_or_bool.term.factor.factor,
                                    s.expression.arith_expr_or_bool.term.factor.lineno):
             return eg.raise_exception(eg.INV_DT, eg.S_UN, s.expression.arith_expr_or_bool.term.factor.factor,
@@ -185,7 +185,8 @@ def check_en_caso(s):
             else:
                 eg.raise_exception(eg.INV_COMP, eg.S_DT)
     else:
-        eg.raise_exception(eg.INV_DT, eg.S_UN)
+        if not isFunction:
+            eg.raise_exception(eg.INV_DT, eg.S_UN)
 
 
 def check_for_loop(for_st):
@@ -200,11 +201,11 @@ def check_for_loop(for_st):
             eg.raise_exception(eg.INV_DT, eg.S_STEP)
         if for_st.step <= 0:
             eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
-    if is_number(for_st.var_name):
+    if is_number(for_st.var_name, True):
         if get_var_value_in_symbol_table(for_st.var_name) <= 0:
             eg.raise_exception(eg.INV_DT, eg.S_TO)
-    else:
-        eg.raise_exception(eg.INV_DT, eg.S_TO)
+    #else:
+        #eg.raise_exception(eg.INV_DT, eg.S_TO)
 
 
 def check_if(if_st):
@@ -212,7 +213,7 @@ def check_if(if_st):
     arith_semi_con = False
     eg.line += 1
     if if_st.condition_or_expression.arith_expr:
-        arith_con = check_arith_or_bool_expr(if_st.condition_or_expression.arith_expr)
+        arith_con = check_arith_or_bool_expr(if_st.condition_or_expression.arith_expr, True)
     if not if_st.condition_or_expression.semi_condition:
         pass
     else:
@@ -246,7 +247,7 @@ def check_var(s, line=None):
             pass
 
 
-def check_arith_or_bool_expr(s_term):
+def check_arith_or_bool_expr(s_term, isFunction=False):
     # ERROR, NO DEBE LLEGAR UN STRING QUE NO SEA TRUE OR FALSE
     print(4 * indentation + "arithmetic or boolean expression found.")
     valid = True
@@ -267,11 +268,11 @@ def check_arith_or_bool_expr(s_term):
             if isinstance(s_term.term.factor, negative):
                 if not is_number(s_term.term.factor.factor.factor, True):
                     if is_boolean(s_term.term.factor.factor.factor):  # es una variable
-                        check_for_var_in_symbol_table(s_term.term.factor.factor)
+                        check_for_var_in_symbol_table(s_term.term.factor.factor, isFunction)
                         check_line_validity(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
                         return False
                     else:
-                        check_for_var_in_symbol_table(s_term.term.factor.factor.factor)
+                        check_for_var_in_symbol_table(s_term.term.factor.factor.factor, isFunction)
                         check_var(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
                         check_line_validity(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
             else:
@@ -281,9 +282,10 @@ def check_arith_or_bool_expr(s_term):
                         check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
                         return False
                     else:
-                        check_for_var_in_symbol_table(s_term.term.factor.factor)
-                        check_var(s_term.term.factor.factor, s_term.term.factor.lineno)
-                        check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
+                        if not isFunction:
+                            check_for_var_in_symbol_table(s_term.term.factor.factor, True)
+                            check_var(s_term.term.factor.factor, s_term.term.factor.lineno)
+                            check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
 
                 else:
                     if check_for_var_in_symbol_table(s_term.term.factor.factor, True):
@@ -524,7 +526,7 @@ class ExceptionGenerator(Exception):
         # print("Error 2: " + self.error)
         # print("ERROR: " + msg)
         #return error
-        #raise Exception("ERROR: " + msg)
+        raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type
