@@ -1,9 +1,12 @@
 Principal(){
-    Metronomo("A", 2/5);
-    Vibrato(2);
+
     Golpe();
 
-    Vibrato(2);
-    Golpe();
+    Percutor("A");
+    Vertical("D");
 
+    Abanico("B");
+    Percutor("AB");
+    Golpe();
 };
+
