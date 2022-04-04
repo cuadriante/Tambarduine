@@ -1,7 +1,7 @@
 Principal(){
     SET @var1, 1;
     SET @var3, @var1;
-    If @var1*2 == 6  {
+    If @var2*2 == 6  {
         SET @var2, False;
     } 
     Else 
