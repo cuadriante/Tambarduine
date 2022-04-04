@@ -11,6 +11,7 @@ const byte cantidadCaracteres = 32;
 char mensaje[cantidadCaracteres];
 
 float tempo = 400;
+bool metronomoActivo = true;
 int tiempoSonido = 100;
 int anguloInicialPercutores = 155;
 
@@ -84,6 +85,9 @@ void loop() {
   }
   else if (funcionLlamada == 13){
     vibrato(parametroFuncion);
+  }
+  else if (funcionLlamada == 14){
+    unsetMetronomo(parametroFuncion);
   }
   else{
     detenerServos();
@@ -159,10 +163,18 @@ void posicionarPercutores(int angulo) {
 
 void setMetronomo(float tiempoEntreGolpes) {
   tempo = tiempoEntreGolpes / 2 * 1000;
+  metronomoActivo = true;
+}
+
+void unsetMetronomo(float tiempoEntreGolpes) {
+  tempo = tiempoEntreGolpes / 2 * 1000;
+  metronomoActivo = false;
 }
 
 void sonarMetronomo() {
-  tone(9, 1000);
+  if(metronomoActivo){
+    tone(9, 1000);
+  }
   delay(tiempoSonido); 
   noTone(9);
 }

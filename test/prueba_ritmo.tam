@@ -1,5 +1,6 @@
 Principal(){
 
+    Metronomo("D", 2/5);
     Golpe();
 
     Percutor("A");
