@@ -1,6 +1,6 @@
 Principal(){
     SET @var1, 1;
-    for @var1 to 5 Step 1{
+    for @var1 to 5{
         print("HOla");
     }
 };

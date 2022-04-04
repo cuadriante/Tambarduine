@@ -194,10 +194,11 @@ def check_for_loop(for_st):
             eg.raise_exception(eg.INV_DT, eg.S_TO)
     else:
         eg.raise_exception(eg.INV_DT, eg.S_TO)
-    if not is_number(for_st.step, True):
-        eg.raise_exception(eg.INV_DT, eg.S_STEP)
-    if for_st.step <= 0:
-        eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
+    if for_st.step:
+        if not is_number(for_st.step, True):
+            eg.raise_exception(eg.INV_DT, eg.S_STEP)
+        if for_st.step <= 0:
+            eg.raise_exception(eg.INV_DT, eg.S_STEP_N)
     if is_number(for_st.var_name):
         if get_var_value_in_symbol_table(for_st.var_name) <= 0:
             eg.raise_exception(eg.INV_DT, eg.S_TO)
