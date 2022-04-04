@@ -1,8 +1,8 @@
 import time
 import serial
 
-#puertoSerial = serial.Serial('/dev/ttyACM0', baudrate=115200, timeout=1)
-metronomo = 0.75
+# puertoSerial = serial.Serial('/dev/ttyACM0', baudrate=115200, timeout=1)
+metronomo = 0
 instrucciones = ''
 
 
@@ -77,6 +77,6 @@ def vibrato_vertical(cantidad_de_repeticiones):
 def enviar_instrucciones():
     global instrucciones
     print(instrucciones)
-#    puertoSerial.write(bytes(instrucciones, 'utf-8'))
+    # puertoSerial.write(bytes(instrucciones, 'utf-8'))
     instrucciones = ''
     time.sleep(3)

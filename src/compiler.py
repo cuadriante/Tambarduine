@@ -1,15 +1,12 @@
 import codecs
-from ctypes import get_last_error
-# from hardwareCommunication import *
 
 from lexer import *
 from parser import *
 from errorChecker import *
-# from combinerClass import *
-from semanticAnalyzer import run_semantic_analysis
 
 from hardwareCommunication import *
 parser = yacc.yacc()
+
 
 class Compiler:
     def __init__(self, nombre_archivo):
@@ -37,7 +34,7 @@ class Compiler:
         # self.print_lexer()
 
         self.program = parser.parse(arr)
-        
+
         if self.program:
             eg.set_error()
             run_error_checker(self.program)
@@ -47,9 +44,9 @@ class Compiler:
             self.print_arbol()
 
         self.check_for_errors()
-        
+
         if not self.thereWasAnError and self.error == "":
-        # if not self.thereWasAnError:
+            # if not self.thereWasAnError:
             self.directives = self.program.exec()
             print(self.directives)
             return None
@@ -68,8 +65,6 @@ class Compiler:
     def exec(self):
         return self.run_directives()
 
-
-    
     def check_for_errors(self):
         parser_error = wasAnError()
         # lexer_error = get_lexer_error()
@@ -78,7 +73,6 @@ class Compiler:
             self.thereWasAnError = True
         elif lexer_error == True:
             self.thereWasAnError = True
-        
 
     def run_directives(self):
         texts_list = []
@@ -140,7 +134,6 @@ class Compiler:
         enviar_instrucciones()
         return texts_list
 
-
     def set_nombre_archivo(self, nombre):
         self.nombre_archivo = nombre
 
@@ -161,7 +154,8 @@ class Compiler:
 # archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
 # archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
-archivo = "prueba_funciones.tam"
+# archivo = "prueba_funciones.tam"
+archivo = "prueba_ritmo.tam"
 # archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
 # archivo = 'prueba_SET.tam' ###da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable

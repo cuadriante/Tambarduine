@@ -18,7 +18,8 @@ class Editor(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
         self.__text = IDE(self)
-        self.__vsb = tk.Scrollbar(self, orient="vertical", command=self.__text.yview)
+        self.__vsb = tk.Scrollbar(
+            self, orient="vertical", command=self.__text.yview)
         self.__lineNumbers = LineNumbers(self, width=30)
         self.__codeOutput = tk.Text()
         self.__filePath = ''
@@ -89,7 +90,8 @@ class Editor(tk.Frame):
     def __Save(self):
         self.__codeOutput.delete('1.0', END)
         if self.__filePath == '':
-            path = asksaveasfilename(filetypes=[('Tambarduine files', '*.tam')])
+            path = asksaveasfilename(
+                filetypes=[('Tambarduine files', '*.tam')])
         else:
             path = self.__filePath
 
@@ -166,7 +168,7 @@ class Editor(tk.Frame):
         menuBar.add_cascade(label='File', menu=fileMenu)
         menuBar.add_cascade(label='Run', menu=runBar)
         window.config(menu=menuBar)
-        window.state('zoomed')
+        window.state('normal')
         self.__codeOutput.pack()
 
 
