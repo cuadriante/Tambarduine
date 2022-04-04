@@ -1,13 +1,30 @@
-Principal(){
+Def @funct(@par1){
+    If @par1{		
 
-    Metronomo("D", 2/5);
-    Golpe();
+        Percutor("D");
+        Golpe();
+        Percutor("A");
+	Metronomo("D", 2/5);
+    }
+    Else{
+        Percutor("I");
+        Golpe();
+        Percutor("B");
+    }
 
-    Percutor("A");
-    Vertical("D");
-
-    Abanico("B");
-    Percutor("AB");
-    Golpe();
+    for @indx to 6 Step 2{
+        Golpe();
+	Abanico("B");
+    }
 };
+
+
+Principal(){
+    Metronomo("A", 1);
+    SET @var1, true;
+    Exec @funct(@var1);
+};
+
+
+
 

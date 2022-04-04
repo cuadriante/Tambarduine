@@ -27,7 +27,6 @@ def run_error_checker(prog):
             eg.raise_exception(eg.MISS, eg.S_PRIN)
     else:
         eg.raise_exception(eg.MISS, eg.S_PRIN)
-    
 
 
 # no se puede hacer isinstance para chequear el tipo pq ocuparia los parametros
@@ -82,11 +81,11 @@ def check_bool_statement(s, assignation=None, isFunction=None):
             var = get_var_value_in_symbol_table(s.var_name)
             if var is None:
                 if not isFunction:
-                    eg.raise_exception(eg.INV_VAR, eg.S_UN, s.var_name, eg.line)
+                    eg.raise_exception(eg.INV_VAR, eg.S_UN,
+                                       s.var_name, eg.line)
             else:
                 if not is_boolean(var):
                     eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
-
 
 
 def check_function_decls(fd):
@@ -102,7 +101,8 @@ def check_function_call(f):
         check_for_func_in_function_table(f.function_name)
     if f.function_body:
         if f.function_body.statements.statement_list:
-            check_statement_list(f.function_body.statements.statement_list, True)
+            check_statement_list(
+                f.function_body.statements.statement_list, True)
     if f.function_decl_params:
         for p in f.function_decl_params.param_list:
             if check_for_var_in_symbol_table(p, True):
@@ -126,9 +126,11 @@ def check_callable_function(s):
                 eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
             else:
                 if s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor <= 0:
-                    eg.raise_exception(eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
+                    eg.raise_exception(
+                        eg.INV_FUNC, eg.S_VIBRATO, None, eg.line)
                 if check_for_var_in_symbol_table(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, True):
-                    check_line_validity(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor, s.function.param.param_list[0].arith_expr_or_bool.term.factor.lineno)
+                    check_line_validity(s.function.param.param_list[0].arith_expr_or_bool.term.factor.factor,
+                                        s.function.param.param_list[0].arith_expr_or_bool.term.factor.lineno)
     elif isinstance(s.function, metronomo):
         eg.metronome = True
         if s.function.param.param_list[0]:
@@ -156,13 +158,11 @@ def check_callable_function(s):
                 eg.raise_exception(eg.INV_FUNC, eg.S_VERTICAL, None, eg.line)
     elif isinstance(s.function, percutor):
         for p in s.function.param.param_list:
-            if not (p == '"D"' or p == '"I"'or p == '"A"' or p == '"B"' or p == '"DI"' or p == '"AB"'):
+            if not (p == '"D"' or p == '"I"' or p == '"A"' or p == '"B"' or p == '"DI"' or p == '"AB"'):
                 eg.raise_exception(eg.INV_FUNC, eg.S_PERCUTOR, None, eg.line)
     elif isinstance(s.function, golpe):
         if s.function.param:
             eg.raise_exception(eg.INV_FUNC, eg.S_GOLPE, None, eg.line)
-
-
 
 
 def check_en_caso(s):
@@ -212,7 +212,8 @@ def check_if(if_st):
     arith_semi_con = False
     eg.line += 1
     if if_st.condition_or_expression.arith_expr:
-        arith_con = check_arith_or_bool_expr(if_st.condition_or_expression.arith_expr)
+        arith_con = check_arith_or_bool_expr(
+            if_st.condition_or_expression.arith_expr)
     if not if_st.condition_or_expression.semi_condition:
         pass
     else:
@@ -239,9 +240,11 @@ def check_var(s, line=None):
         if s.expression:
             print(3 * indentation + "expression found.")
             if s.expression.arith_expr_or_bool:
-                current = check_arith_or_bool_expr(s.expression.arith_expr_or_bool)
+                current = check_arith_or_bool_expr(
+                    s.expression.arith_expr_or_bool)
                 if value != current:
-                    eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name, eg.line)
+                    eg.raise_exception(
+                        eg.INV_DT, eg.S_MISMATCH_AS, s.var_name, eg.line)
         if get_var_value_in_symbol_table(s.var_name) is None:
             pass
 
@@ -269,18 +272,22 @@ def check_arith_or_bool_expr(s_term):
                     if is_boolean(s_term.term.factor.factor.factor):  # es una variable
                         return False
                     else:
-                        check_for_var_in_symbol_table(s_term.term.factor.factor.factor)
-                        check_var(s_term.term.factor.factor.factor, s_term.term.factor.factor.lineno)
+                        check_for_var_in_symbol_table(
+                            s_term.term.factor.factor.factor)
+                        check_var(s_term.term.factor.factor.factor,
+                                  s_term.term.factor.factor.lineno)
 
             else:
                 if not is_number(s_term.term.factor.factor, True):
                     if is_boolean(s_term.term.factor.factor):  # es una variable
                         return False
                     else:
-                        check_for_var_in_symbol_table(s_term.term.factor.factor)
+                        check_for_var_in_symbol_table(
+                            s_term.term.factor.factor)
                 else:
                     if check_for_var_in_symbol_table(s_term.term.factor.factor, True):
-                        check_line_validity(s_term.term.factor.factor, s_term.term.factor.lineno)
+                        check_line_validity(
+                            s_term.term.factor.factor, s_term.term.factor.lineno)
         if not valid:
             eg.raise_exception(eg.INV_PARAM, eg.S_ARITH, None, eg.line)
         return True
@@ -424,7 +431,6 @@ class ExceptionGenerator(Exception):
     S_METRO = "metro"
     S_NOT_METRO = "metro"
 
-
     def get_error(self):
         # print("ERRORRRRR: " + self.error)
         return self.error
@@ -516,8 +522,8 @@ class ExceptionGenerator(Exception):
 
         # print("Error 2: " + self.error)
         # print("ERROR: " + msg)
-        #return error
-        raise Exception("ERROR: " + msg)
+        # return error
+        # raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type
@@ -528,6 +534,7 @@ class ExceptionGenerator(Exception):
 # FALTA QUE EL BICHO RECONOZCA SI EL FOR SE RECORRE HASTA EL INFINITO
 # se me olvido pero era muy importante
 # los de las funciones, parametros positivos
+
 
 eg = ExceptionGenerator()
 
