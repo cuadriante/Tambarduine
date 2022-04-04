@@ -1,4 +1,5 @@
+# Hola, 5 ljasdlf
 Principal(){
-    SET @var1, 35;
+    SET @var1, 4;
 };
 

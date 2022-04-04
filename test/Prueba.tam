@@ -1,0 +1,45 @@
+#Funcion que prueba el if
+Def @Ricardo(@param1, @param2){
+    If @param1  {
+        println!("entro al if 1");
+    } 
+    Else 
+    {
+        Abanico("A");
+    }
+
+    If @param2 == 5*3{
+        println!("entro al if 2");
+    }
+};
+
+#Función de for
+Def @Adriana(){
+    for @varFor to 5 Step 1{
+        Golpe();
+    }
+};
+
+#Función en caso
+Def @caso(@param1){
+    EnCaso @param1
+        Cuando  == 7 EnTons{
+            println!("Cuando 1");
+        }
+        Cuando < 4 EnTons{
+            println!("Cuando 2");
+        }
+    SiNo{
+        println!("Sino");
+    }
+    FinEnCaso;
+
+};
+
+Principal(){
+    SET @var1, True;
+    SET @var2, 7;
+    Exec @Ricardo(@var1, 15);
+    Exec @caso(@var2);
+    type(@var1);
+};

@@ -429,6 +429,10 @@ def p_params_empty(p):
     "param : empty"
     p[0] = p[1]
 
+#Comment
+def p_comment(p):
+    "com : COMMENT"
+
 
 def p_error(p):
     global parser_error, error
