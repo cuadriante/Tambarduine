@@ -1,5 +1,11 @@
 Principal(){
     SET @var1, 3;
+    Metronomo("A", 1);
+
+        for @var2 to 5 Step 1{
+        println!("HOla");
+    }
+
     EnCaso @var1
         Cuando  == 7 EnTons{
             SET @var2, 5;

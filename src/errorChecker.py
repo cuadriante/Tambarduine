@@ -82,7 +82,7 @@ def check_bool_statement(s, assignation=None, isFunction=None):
             var = get_var_value_in_symbol_table(s.var_name)
             if var is None:
                 if not isFunction:
-                    eg.raise_exception(eg.INV_VAR, eg.S_UN, s.var_name, eg.line)
+                    eg.raise_exception(eg.INV_VAR, eg.S_UN, s.var_name, s.lineno)
             else:
                 if not is_boolean(var):
                     eg.raise_exception(eg.INV_DT, eg.S_MISMATCH_AS, s.var_name)
@@ -133,7 +133,7 @@ def check_callable_function(s):
         eg.metronome = True
         if s.function.param.param_list[0]:
             p = s.function.param.param_list
-            if not (p[0] == '"D"' or p[0] == '"I"' or p[0] == '"A"' or p[0] == '"B"' or p[0] == '"DI"' or p[0] == '"AB"'):
+            if not (p[0] == '"D"' or p[0] == '"A"'):
                 eg.raise_exception(eg.INV_FUNC, eg.S_METRO, None, eg.line)
             if isinstance(p[1], expression):
                 if isinstance(p[1].arith_expr_or_bool.term.factor, negative):
@@ -191,6 +191,7 @@ def check_en_caso(s):
 def check_for_loop(for_st):
     # ninguno de estos errores se puede probar, aun
     if is_number(for_st.to.factor, True):
+        check_line_validity(for_st.to.factor, for_st.to.lineno)
         if not isinstance(for_st.to.factor, int):
             eg.raise_exception(eg.INV_DT, eg.S_TO)
     else:
@@ -517,7 +518,7 @@ class ExceptionGenerator(Exception):
         # print("Error 2: " + self.error)
         # print("ERROR: " + msg)
         #return error
-        #raise Exception("ERROR: " + msg)
+        raise Exception("ERROR: " + msg)
 
 # error types:
 # 1: invalid data type
