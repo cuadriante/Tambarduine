@@ -31,13 +31,13 @@ class Compiler:
         fp.close()
 
         lexer.input(arr)
-        # self.print_lexer()
+        self.print_lexer()
 
         self.program = parser.parse(arr)
 
         if self.program:
             eg.set_error()
-            run_error_checker(self.program)
+            # run_error_checker(self.program)
 
             self.error = eg.get_error()
             # print("Inicia error: ################\n" + self.error + "\nTermina error ##############")
@@ -105,6 +105,8 @@ class Compiler:
                     percutorAB()
             elif directive[0] == "golpe":
                 golpe()
+            elif directive[0] == "silencio":
+                silencio()
             elif directive[0] == "vibrato":
                 cantidad = int(directive[1])
                 vibrato_vertical(cantidad)
@@ -154,13 +156,27 @@ class Compiler:
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
 # archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
-archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
+# archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_ritmo.tam"
 # archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
-# archivo = 'prueba_SET.tam' ###da error sintactico
+archivo = 'Prueba.tam'  # da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
-# c = Compiler(archivo)  # no me lo borren por fis
-# c.compile()  # tampoco este
-# c.exec()
+c = Compiler(archivo)  # no me lo borren por fis
+c.compile()  # tampoco este
+c.exec()
+
+# while True:
+#     unset_metronomo(3/8)
+#     percutorA()
+#     percutorB()
+#     golpe()
+#     silencio()
+
+#     percutorD()
+#     percutorI()
+#     golpe()
+#     silencio()
+
+#     enviar_instrucciones()

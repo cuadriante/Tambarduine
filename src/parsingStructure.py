@@ -717,6 +717,18 @@ class golpe():
         function = "golpe"
         directives.append((function, None))
 
+class silencio():
+    def __init__(self, param):
+        self.param = param
+
+    def print(self, level):
+        print(indentation*level + "Silencio:")
+
+
+    def exec(self):
+        function = "silencio"
+        directives.append((function, None))
+
 
 
 class vibrato():
@@ -791,14 +803,17 @@ class function_call():
         #ERROR LA FUNCION NO EXISTE
         params = function_table.get_params(self.function_name)
         statements = function_table.get_body(self.function_name)
-        attri = self.params.exec()
+        attri = None
+        if self.params:
+            attri = self.params.exec()
         print(params)
 
         function_symbol_table = function_table.get_symbol_table()
         symbol_table.set_child_table(function_symbol_table)
 
-        for i in range(len(params)):
-            function_symbol_table.set(params[i], attri[i])
+        if attri:
+            for i in range(len(params)):
+                function_symbol_table.set(params[i], attri[i])
 
         # print(function_symbol_table.symbols)
         statements.exec(function_symbol_table)
@@ -866,7 +881,8 @@ class function_decls_param():
 
     def print(self, level):
         for param in self.param_list:
-            print(indentation*level + param)
+            if param:
+                print(indentation*level + param)
 
     def exec(self):
         param_list = []
