@@ -109,11 +109,12 @@ def check_function_call(f):
                 eg.line += 1
                 check_arith_or_bool_expr(p.arith_expr_or_bool)
     else:
-        for p in f.params.param_list:
-            if check_for_var_in_symbol_table(p, True):
-                eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
-                eg.line += 1
-                check_arith_or_bool_expr(p.arith_expr_or_bool)
+        if f.params:
+            for p in f.params.param_list:
+                if check_for_var_in_symbol_table(p, True):
+                    eg.raise_exception(eg.INV_FUNC, eg.S_FUNC_PARAM)
+                    eg.line += 1
+                    check_arith_or_bool_expr(p.arith_expr_or_bool)
 
 
 def check_callable_function(s):
