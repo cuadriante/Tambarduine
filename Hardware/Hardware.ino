@@ -89,6 +89,9 @@ void loop() {
   else if (funcionLlamada == 14){
     unsetMetronomo(parametroFuncion);
   }
+  else if (funcionLlamada == 15){
+    silencio();
+  }
   else{
     detenerServos();
   }
@@ -250,4 +253,8 @@ void vibrato (int cantidadDeRepeticiones) {
     girarSentidoAntihorario(servoVertical);
     i += 1;
   }
+}
+
+void silencio(){
+  delay(2*tempo);
 }

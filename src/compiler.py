@@ -154,13 +154,27 @@ class Compiler:
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
 # archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
-archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
+archivo = "prueba_for_loop.tam"  # FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_ritmo.tam"
 # archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!
-archivo = 'Prueba.tam' ###da error sintactico
+archivo = 'Prueba.tam'  # da error sintactico
 # archivo = 'uwu.tam' ### FUNCIONA BIEN !! no se puede asignar una variable a otra variable
 
 c = Compiler(archivo)  # no me lo borren por fis
 c.compile()  # tampoco este
 c.exec()
+
+# while True:
+#     unset_metronomo(3/8)
+#     percutorA()
+#     percutorB()
+#     golpe()
+#     silencio()
+
+#     percutorD()
+#     percutorI()
+#     golpe()
+#     silencio()
+
+#     enviar_instrucciones()

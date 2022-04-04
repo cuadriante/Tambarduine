@@ -1,29 +1,17 @@
 Def @funct(@par1){
-    If @par1{		
-
-        Percutor("D");
-        Golpe();
-        Percutor("A");
-	Metronomo("D", 2/5);
-    }
-    Else{
-        Percutor("I");
-        Golpe();
-        Percutor("B");
-    }
-
-    for @indx to 6 Step 2{
-        Golpe();
-	Abanico("B");
-    }
+   Percutor("A");
+   Percutor("B");
+   Metronomo("A", 3/4);		
+   Abanico("A");		
 };
 
 
 Principal(){
-    Metronomo("A", 1);
-    SET @var1, true;
-    Exec @funct(@var1);
+    Metronomo("A", 3/8);
+    Exec @funct(true);
 };
+
+
 
 
 
