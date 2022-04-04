@@ -717,6 +717,18 @@ class golpe():
         function = "golpe"
         directives.append((function, None))
 
+class silencio():
+    def __init__(self, param):
+        self.param = param
+
+    def print(self, level):
+        print(indentation*level + "Silencio:")
+
+
+    def exec(self):
+        function = "silencio"
+        directives.append((function, None))
+
 
 
 class vibrato():

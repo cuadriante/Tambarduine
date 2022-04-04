@@ -37,7 +37,7 @@ class Compiler:
 
         if self.program:
             eg.set_error()
-            run_error_checker(self.program)
+            # run_error_checker(self.program)
 
             self.error = eg.get_error()
             # print("Inicia error: ################\n" + self.error + "\nTermina error ##############")
@@ -105,6 +105,8 @@ class Compiler:
                     percutorAB()
             elif directive[0] == "golpe":
                 golpe()
+            elif directive[0] == "silencio":
+                silencio()
             elif directive[0] == "vibrato":
                 cantidad = int(directive[1])
                 vibrato_vertical(cantidad)
@@ -154,7 +156,7 @@ class Compiler:
 # archivo = "prueba_bool_statements.tam" ### FUNCIONA BIEN ###
 # archivo = 'prueba_def.tam'
 # archivo = "prueba_en_caso.tam"  ### FUNCIONA BIEN ###
-archivo = "prueba_for_loop.tam"  # FUNCIONA BIEN ###
+# archivo = "prueba_for_loop.tam" ### FUNCIONA BIEN ###
 # archivo = "prueba_funciones.tam"
 # archivo = "prueba_ritmo.tam"
 # archivo = "prueba_if_else.tam" ### FUNCIONA BIEN !!

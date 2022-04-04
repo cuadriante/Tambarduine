@@ -39,6 +39,7 @@ Def @caso(@param1){
 Principal(){
     SET @var1, True;
     SET @var2, 7;
+    Silencio();
     Exec @Ricardo(@var1, 15);
     Exec @caso(@var2);
     type(@var1);

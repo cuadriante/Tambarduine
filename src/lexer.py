@@ -48,6 +48,7 @@ reserved = {
     "Vertical": "VERTICAL",
     "Percutor": "PERCUTOR",
     "Golpe": "GOLPE",
+    "Silencio" : "SILENCIO",
     "Vibrato": "VIBRATO",
     "Metronomo": "METRONOMO",
     "If": "IF",

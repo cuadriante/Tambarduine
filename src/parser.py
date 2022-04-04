@@ -392,6 +392,10 @@ def p_golpe(p):
     "golpe : GOLPE LPAREN params RPAREN SEMICOLON"
     p[0] = golpe(p[3])
 
+def p_silencio(p):
+    "golpe : SILENCIO LPAREN params RPAREN SEMICOLON"
+    p[0] = silencio(p[3])
+
 
 def p_vibrato(p):
     "vibrato : VIBRATO LPAREN params RPAREN SEMICOLON"
